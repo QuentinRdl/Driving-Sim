@@ -12,6 +12,9 @@ class Car {
   } Vector2D = {0, 0};
 
 public:
+
+    Car(int identifier, double mass, double weight, double horsePower, double torque double tireGripCoefficient, bool isTraction);
+
     int tick; // TODO Will be moved to another class later
     const float dT;
 
