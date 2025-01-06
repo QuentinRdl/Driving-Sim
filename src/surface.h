@@ -7,7 +7,6 @@ namespace Driving_Sim {
 
 class surface {
 
-private:
     std::string name_;
     double frictionCoeff_ = 0;
 
