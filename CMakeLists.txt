@@ -8,4 +8,6 @@ include_directories(src)
 add_executable(Driving_Sim
         src/utils.cpp
         src/utils.h
-        src/car.h)
+        src/car.h
+        src/surface.cpp
+        src/surface.h)
