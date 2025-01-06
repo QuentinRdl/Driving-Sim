@@ -27,7 +27,7 @@ namespace Driving_Sim {
  *
  * @return 0
  */
-int main() {
+/*int main() {
 
     const Driving_Sim::surface asphalte("Asphalte", 0.85);
     const Driving_Sim::surface sable("Sable", 0.6);
@@ -47,4 +47,4 @@ int main() {
 
 
     return 0;
-}
+}*/
