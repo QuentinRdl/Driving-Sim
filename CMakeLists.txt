@@ -10,4 +10,6 @@ add_executable(Driving_Sim
         src/utils.h
         src/car.h
         src/surface.cpp
-        src/surface.h)
+        src/surface.h
+        src/main.cpp
+        src/main.h)
