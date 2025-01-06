@@ -4,9 +4,7 @@
 
 #include <string>
 #include <bits/stdc++.h> // For vector usage
-#include <iostream>
-#include <math.h>
-#include <fstream>
+
 class Car {
 
   struct {

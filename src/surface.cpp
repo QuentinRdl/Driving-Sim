@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 
-namespace std {
+namespace Driving_Sim {
     surface::surface(std::string name, const double frictionCoeff) : name_(std::move(name)), frictionCoeff_(frictionCoeff) {}
 
     std::string surface::getName() const {

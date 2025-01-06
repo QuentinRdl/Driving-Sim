@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-namespace std {
+namespace Driving_Sim {
 
 class utils {
 public:

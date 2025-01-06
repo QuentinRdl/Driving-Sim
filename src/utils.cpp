@@ -1,6 +1,6 @@
 #include "utils.h"
 
-namespace std {
+namespace Driving_Sim {
     double utils::kw_to_hp(const double kw) {
         return CONVERSION_FACTOR_KW_TO_HP * kw;
     }
