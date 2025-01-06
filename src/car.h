@@ -3,7 +3,7 @@
 #define CAR_H
 
 #include <string>
-#include <bits/stdc++.h> // For vector usage
+#include <vector>
 
 namespace Driving_Sim {
     class Car {
