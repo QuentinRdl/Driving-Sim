@@ -44,7 +44,7 @@ namespace Driving_Sim {
            positionX.push_back(posXUpdated);
 
 
-           double posYUpdated = positionY[i] + dT * (speed[i] * cos(heading[i] + slipAngle));
+           double posYUpdated = positionY[i] + dT * (speed[i] * sin(heading[i] + slipAngle));
            positionY.push_back(posYUpdated);
 
            std::cout << speed[i] << std::endl;

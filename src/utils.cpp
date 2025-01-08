@@ -36,7 +36,6 @@ namespace Driving_Sim {
 
         int ch;
         while ((ch = getch()) != 27) {
-            if (ch == 10) continue;
             switch (ch) {
                 case 259:
                 case 122: printf("↑\n"); break;
