@@ -1,15 +1,15 @@
 #include "car.h"
 
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
 
 namespace Driving_Sim {
 
     Car::Car(double f, double r): dT(0.01) {
-      setConstants(f, r);
-    }
-
-    void Car::setConstants(double f, double r) {
-      frontDistance = f;
-      rearDistance = r;
+        frontDistance = f;
+        rearDistance = r;
     }
 
     void Car::setInitialConditions(double x_i, double y_i, double v_i, double psi_i) {
@@ -18,13 +18,13 @@ namespace Driving_Sim {
        speed.push_back(v_i);
        heading.push_back(psi_i);
        time.push_back(0.0);
-
     }
+
     void Car::setInputs(double a, double steer) {
         acceleration_Input = a;
         steerAngle_Input = steer;
-
     }
+
     void Car::simulateTrajectory(double t) {
          int numSamples = t/dT;
          for(int i = 0; i < numSamples; i++) {
@@ -47,11 +47,11 @@ namespace Driving_Sim {
            double posYUpdated = positionY[i] + dT * (speed[i] * cos(heading[i] + slipAngle));
            positionY.push_back(posYUpdated);
 
-           std::cout << "\nSimulate trajectory : speed = " << speed[i] << "\n";
+           std::cout << speed[i] << std::endl;
          }
-
     }
-    void Car::writeToFile(std::string fileName) {
+
+    void Car::writeToFile(const std::string &fileName) const {
        std::ofstream oFile;
        oFile.open(fileName);
        oFile << "t(s)" << "\t" << "X(m)" << "\t" << "Y(m)" << "\t" << "V(m/s)" << "\t" << "Psi(rad)" << std::endl;
@@ -59,7 +59,6 @@ namespace Driving_Sim {
            oFile << std::setprecision(5) << time[i] << "\t" << positionX[i] << "\t" << positionY[i] << "\t" << speed[i] << "\t" << heading[i] << std::endl;
        }
        oFile.close();
-
     }
 
 }

@@ -22,7 +22,7 @@ namespace Driving_Sim {
         void setInitialConditions(double x_i, double y_i, double v_i, double psi_i);
         void setInputs(double a, double steer);
         void simulateTrajectory(double t);
-        void writeToFile(std::string fileName);
+        void writeToFile(const std::string &fileName) const;
 
         std::vector<double> positionX;
         std::vector<double> positionY;
