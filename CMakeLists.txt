@@ -5,6 +5,9 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(src)
 
+find_package(Curses REQUIRED) # For the key pressed.
+include_directories(${CURSES_INCLUDE_DIR})
+
 add_executable(Driving_Sim
         src/utils.cpp
         src/utils.h
@@ -13,3 +16,5 @@ add_executable(Driving_Sim
         src/surface.cpp
         src/surface.h
         src/main.cpp)
+
+target_link_libraries(Driving_Sim ${CURSES_LIBRARIES})

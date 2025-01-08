@@ -12,6 +12,8 @@ public:
 
     static double kw_to_hp(double kw);
     static double hp_to_kw(double hp);
+
+    static void registerKeys();
 };
 
 } // std
