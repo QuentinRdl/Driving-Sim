@@ -1,9 +1,11 @@
 // Car.h
 #ifndef CAR_H
 #define CAR_H
+#define GRAVITY 9.81
 
 #include <string>
 #include <vector>
+
 
 namespace Driving_Sim {
     class Car {
@@ -16,12 +18,14 @@ namespace Driving_Sim {
 
         // Car(int identifier, double mass, double weight, double horsePower, double torque, double tireGripCoefficient, bool isTraction);
         Car(double f, double r);
+        Car(double f, double r, double m, double mu);
 
         // Methods
         void setConstants(double f, double r);
         void setInitialConditions(double x_i, double y_i, double v_i, double psi_i);
         void setInputs(double a, double steer);
         void simulateTrajectory(double t);
+        void simulateAdvancedTrajectory(double t);
         void writeToFile(const std::string &fileName) const;
 
         std::vector<double> positionX;
@@ -30,15 +34,20 @@ namespace Driving_Sim {
         std::vector<double> heading;
         std::vector<double> time;
 
+        double mass;
+        double tireFrictionCoefficient;
+        double maxTractionForce;
 
         // int tick; // TODO Will be moved to another class later
 
         // Data
         int identifier;
-        double mass;
+        // double mass;
         double weight;
         double horsePower;
         double torque; // Couple
+
+
         // std::vector<struct Vector2D> velocity;
         int frontWheelAngle;
         // std::vector<struct Vector2D> acceleration;
