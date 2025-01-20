@@ -29,7 +29,7 @@ add_executable(Driving_Sim
         src/car.h
         src/surface.cpp
         src/surface.h
-        src/main.cpp
+        src/mainUnusedForNow.cpp
         src/VehiculeDynamics.cpp
         src/VehiculeDynamics.h)
 

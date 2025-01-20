@@ -75,6 +75,7 @@ void plotOutputs(const IOData& data, const std::string& title) {
     plt::show();
 }
 
+
 // Main function
 int main() {
     // Load high tire stiffness data
