@@ -11,7 +11,7 @@ include_directories(/usr/include/eigen3)
 
 # Include matplotlibcpp (update the path to where matplotlibcpp is located)
 # TODO : How to make same for every user ??
-include_directories(/home/keiris/matplotlib-cpp)
+# include_directories(/home/keiris/matplotlib-cpp)
 
 # Find and link the Curses library (used for key input)
 find_package(Curses REQUIRED)
@@ -31,7 +31,9 @@ add_executable(Driving_Sim
         src/surface.h
         src/mainUnusedForNow.cpp
         src/VehiculeDynamics.cpp
-        src/VehiculeDynamics.h)
+        src/VehiculeDynamics.h
+        src/matplotlib_test.cpp
+        src/matplotlibcpp.h)
 
 # Link libraries
 target_link_libraries(Driving_Sim ${CURSES_LIBRARIES} ${Python3_LIBRARIES})

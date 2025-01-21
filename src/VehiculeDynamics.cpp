@@ -19,7 +19,7 @@ struct IOData {
     double sampleTime;
 };
 
-// Function to load data (placeholder for your actual data-loading logic)
+// Function to load data TODO : (make a placeholder for the actual data-loading logic)
 IOData loadVehicleData(const std::string& type) {
     IOData data;
     if (type == "high") {
@@ -77,7 +77,12 @@ void plotOutputs(const IOData& data, const std::string& title) {
 
 
 // Main function
-int main() {
+// TODO : Rename maine
+/*
+int maine() {
+    matplotlibcpp::subplot(1, 1, 1);
+    matplotlibcpp::show();
+    return 0;
     // Load high tire stiffness data
     IOData highStiffnessData = loadVehicleData("high");
 
@@ -103,6 +108,7 @@ int main() {
 
     return 0;
 }
+*/
 
 
 
