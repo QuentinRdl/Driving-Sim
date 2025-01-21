@@ -2339,6 +2339,7 @@ inline void axis(const std::string &axisstr)
 {
     detail::_interpreter::get();
 
+
     PyObject* str = PyString_FromString(axisstr.c_str());
     PyObject* args = PyTuple_New(1);
     PyTuple_SetItem(args, 0, str);
