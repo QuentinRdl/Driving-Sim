@@ -11,7 +11,12 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 
 add_executable(Driving_Sim
-        src/main.cpp)
+        src/main.cpp
+        src/game.h
+        src/game.cpp
+        src/circuit.h
+        src/circuit.cpp)
+
 
 target_link_libraries(Driving_Sim ${CURSES_LIBRARIES})
 target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
