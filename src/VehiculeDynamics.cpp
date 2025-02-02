@@ -37,6 +37,7 @@ IOData loadVehicleData(const std::string& type) {
 
 // Function to plot inputs
 void plotInputs(const IOData& data, const std::string& title) {
+    std::cout << "HERE 0";
     for (int i = 0; i < data.inputs.cols(); ++i) {
         std::vector<double> time(data.inputs.rows());
         std::vector<double> values(data.inputs.rows());
@@ -46,13 +47,17 @@ void plotInputs(const IOData& data, const std::string& title) {
             values[j] = data.inputs(j, i);
         }
 
+        std::cout << "HERE 1";
         plt::subplot(data.inputs.cols(), 1, i + 1);
         plt::plot(time, values);
         plt::title("Input #" + std::to_string(i + 1));
         plt::tight_layout();
+        std::cout << "HERE 2";
     }
+    std::cout << "HERE 3";
     plt::xlabel("Time (s)");
     plt::show();
+    std::cout << "HERE 4";
 }
 
 // Function to plot outputs
@@ -64,6 +69,9 @@ void plotOutputs(const IOData& data, const std::string& title) {
         for (int j = 0; j < data.outputs.rows(); ++j) {
             time[j] = j * data.sampleTime;
             values[j] = data.outputs(j, i);
+            // Debug info :
+            std::cout << "values [i] = ";
+            std::cout << values[i] << std::endl;
         }
 
         plt::subplot(data.outputs.cols(), 1, i + 1);
@@ -71,6 +79,7 @@ void plotOutputs(const IOData& data, const std::string& title) {
         plt::title("Output #" + std::to_string(i + 1));
         plt::tight_layout();
     }
+
     plt::xlabel("Time (s)");
     plt::show();
 }
@@ -78,18 +87,22 @@ void plotOutputs(const IOData& data, const std::string& title) {
 
 // Main function
 // TODO : Rename maine
-/*
 int maine() {
-    matplotlibcpp::subplot(1, 1, 1);
-    matplotlibcpp::show();
-    return 0;
+    //plt::plot({1,3,100,4});
+    // plt::show();
     // Load high tire stiffness data
     IOData highStiffnessData = loadVehicleData("high");
+
+    // Print the content of highStiffnessData TODO : REMOVE THIS DEBUG ONCE FIXED
+    std::cout << "Sample time = ";
+    std::cout << highStiffnessData.sampleTime << std::endl;
+
+
 
     // Plot inputs and outputs for high tire stiffness data
     std::cout << "Plotting inputs for high tire stiffness data..." << std::endl;
     plotInputs(highStiffnessData, "High Tire Stiffness Inputs");
-
+    return 0;
     std::cout << "Plotting outputs for high tire stiffness data..." << std::endl;
     plotOutputs(highStiffnessData, "High Tire Stiffness Outputs");
 
@@ -108,7 +121,6 @@ int maine() {
 
     return 0;
 }
-*/
 
 
 
