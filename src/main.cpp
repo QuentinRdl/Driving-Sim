@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.h"
+#include "GraphicsUtils/segmenttype.h"
 
 int main() {
     Game game;

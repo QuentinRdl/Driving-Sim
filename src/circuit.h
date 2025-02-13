@@ -1,31 +1,38 @@
 #ifndef CIRCUIT_H
 #define CIRCUIT_H
+#define debug
 
-#define SPRITE_SCALE 0.2f
-
-#include "game.h"
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "GraphicsUtils/RoadTextureGenerator.h"
 
 class Circuit {
+public:
 
+    Circuit(const Game *game);
+
+    const Game *game;
 
     struct Segment {
         int id;
-        Game::RoadTexture* texture;
+        RoadTexture* texture;
         float rotation; // Rotation in degrees
-        sf::Vector2f point1;
-        sf::Vector2f point2;
+        sf::Vector2f realPoint1;
+        sf::Vector2f realPoint2;
     };
 
     std::map<int, Segment> segments;
 
-    static sf::Vector2f rotatePoint(const sf::Vector2f& point, float angle);
+    static sf::Vector2f rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, float angle);
 
-public:
-    void set(int id, Game::RoadTexture* texture, float x, float y);
-    void join(int fromId, int toId, Game::RoadTexture* texture, float rotation = 0);
-    void render(sf::RenderWindow& window) const;
+    void set(int id, RoadTexture *texture);
+    void set(int id, RoadTexture *texture, sf::Vector2f originPoint);
+    void join(int fromId, int toId, RoadTexture *road_texture, float rotation = 0);
+    void renderOn(sf::RenderWindow& window) const;
+
+#ifdef debug
+    static sf::CircleShape createCircle(sf::Color color, float radius); // TODO DELETE
+#endif
 };
 
 #endif // CIRCUIT_H

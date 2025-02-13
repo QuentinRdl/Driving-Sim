@@ -3,7 +3,6 @@
 
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 
 /**
@@ -12,43 +11,30 @@
  */
 class Game {
 
-
-
-    sf::RenderWindow* window{};
     sf::VideoMode videoMode;
     sf::Event event{};
+    float zoom_factor;
 
 
     void initVariables();
-    void initTextures() const;
     void initWindow();
 
 
 public:
+    sf::RenderWindow* window{}; // TODO move to private part.
 
     Game();
     virtual ~Game();
 
     void manageEvents();
 
+    float getZoomFactor() const;
+
     void update();
     void render() const;
 
     // Accessors
     bool running() const;
-
-    struct RoadTexture {
-        sf::Sprite sprite;
-        sf::Texture texture;
-        sf::Vector2f point1;
-        sf::Vector2f point2;
-    };
-
-    RoadTexture *straight;
-    RoadTexture *small_turn;
-    RoadTexture *medium_turn;
-    RoadTexture *large_turn;
-    void renderRoadTexture(RoadTexture &rt) const;
 
 };
 

@@ -1,41 +1,15 @@
 #include "game.h"
-
 #include "circuit.h"
+#include "GraphicsUtils/RoadTextureGenerator.h"
 
 /**
  * Private
  */
 void Game::initVariables() {
     this->window = nullptr;
-    this->straight = new RoadTexture;
-    this->small_turn = new RoadTexture;
-    this->medium_turn = new RoadTexture;
-    this->large_turn = new RoadTexture;
+    this->zoom_factor = 0.2;
 }
 
-void Game::initTextures() const {
-    const std::string basePath = "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/images/cropped/";
-
-    this->straight->texture.loadFromFile(basePath + "road_straight.png");
-    this->straight->sprite.setTexture(this->straight->texture);
-    this->straight->point1 = {0, 170};
-    this->straight->point2 = {463, 170};
-
-    this->small_turn->texture.loadFromFile(basePath + "small_turn.png");
-    this->small_turn->sprite.setTexture(this->small_turn->texture);
-    this->small_turn->point1 = {0, 0};
-    this->small_turn->point2 = {0, 0};
-
-    this->medium_turn->texture.loadFromFile(basePath + "medium_turn.png");
-    this->medium_turn->sprite.setTexture(this->medium_turn->texture);
-    this->medium_turn->point1 = {0, 0};
-    this->medium_turn->point2 = {0, 0};
-
-    this->large_turn->texture.loadFromFile(basePath + "large_turn.png");
-    this->large_turn->sprite.setTexture(this->large_turn->texture);
-    this->large_turn->point1 = {0, 0};
-    this->large_turn->point2 = {0, 0};
-}
 
 /**
  * Private
@@ -45,9 +19,12 @@ void Game::initWindow() {
     this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
 }
 
-void Game::renderRoadTexture(RoadTexture& rt) const {
-    rt.sprite.setPosition(rt.point1.x, rt.point1.y);
-    this->window->draw(rt.sprite);
+/**
+ * Let the user use '+' or '-' to zoom or zoom out in the wind.
+ * @return the zoom factor.
+ */
+float Game::getZoomFactor() const {
+    return this->zoom_factor;
 }
 
 /**
@@ -56,7 +33,6 @@ void Game::renderRoadTexture(RoadTexture& rt) const {
 Game::Game() {
     this->initVariables();
     this->initWindow();
-    this->initTextures();
 }
 
 /**
@@ -64,16 +40,14 @@ Game::Game() {
  */
 Game::~Game() {
     delete this->window;
-    delete this->straight;
-    delete this->small_turn;
-    delete this->medium_turn;
-    delete this->large_turn;
 }
 
 void Game::manageEvents() {
     while (this->window->pollEvent(this->event)) {
         switch (this->event.type) {
             case sf::Event::KeyPressed:
+                if (this->event.key.code == sf::Keyboard::Add) this->zoom_factor += 0.01;
+                if (this->event.key.code == sf::Keyboard::Subtract) this->zoom_factor -= 0.01;
                 if (this->event.key.code != sf::Keyboard::Escape) break;
             case sf::Event::Closed:
                 this->window->close();
@@ -89,15 +63,29 @@ void Game::update() {
 }
 
 void Game::render() const {
-    this->window->clear(sf::Color(43, 45, 48));
+    this->window->clear();
 
-    Circuit circ;
-    circ.set(1, this->straight, 0, 0);
-    circ.join(1, 2, this->small_turn);
-    circ.join(2, 3, this->straight, 90);
-    circ.join(3, 4, this->straight, 45);
+    Circuit circ(this);
 
-    circ.render(*this->window);
+    RoadTexture rt_straight1 = generate_road_texture(SegmentType::Value::LONG_STRAIGHT);
+    RoadTexture rt_turn1 = generate_road_texture(SegmentType::Value::LARGE_TURN);
+    RoadTexture rt_straight2 = generate_road_texture(SegmentType::Value::SMALL_STRAIGHT);
+    RoadTexture rt_turn2 = generate_road_texture(SegmentType::Value::SMALL_TURN);
+    RoadTexture rt_straight3 = generate_road_texture(SegmentType::Value::LONG_STRAIGHT);
+    RoadTexture rt_turn3 = generate_road_texture(SegmentType::Value::LARGE_TURN);
+    RoadTexture rt_straight4 = generate_road_texture(SegmentType::Value::SMALL_STRAIGHT);
+    RoadTexture rt_turn4 = generate_road_texture(SegmentType::Value::SMALL_TURN);
+
+    circ.set(1, &rt_straight1, {500.f, 10.f});
+    circ.join(1, 2, &rt_turn1, 0);
+    circ.join(2, 3, &rt_straight2, 90);
+    circ.join(3, 4, &rt_turn2, 90);
+    circ.join(4, 5, &rt_straight3, 180);
+    circ.join(5, 6, &rt_turn3, 180);
+    circ.join(6, 7, &rt_straight4, 270);
+    circ.join(7, 8, &rt_turn4, 270);
+
+    circ.renderOn(*this->window);
 
     this->window->display();
 }
