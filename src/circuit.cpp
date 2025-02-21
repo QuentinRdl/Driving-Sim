@@ -22,29 +22,26 @@ sf::Vector2f Circuit::rotatePoint(const sf::Vector2f& origin, const sf::Vector2f
     };
 }
 
-void Circuit::setOrigin(const SegmentType::Value& segment) {
-    setOrigin(segment, {0.f, 0.f});
-}
-
 // Define a segment in the circuit
-void Circuit::setOrigin(const SegmentType::Value& segment, const sf::Vector2f originPoint) {
-    RoadTexture road_texture = generate_road_texture(segment);
-    lastId = 1;
-    constexpr int id = 1;
+void Circuit::setOrigin(const SegmentType::Value& segment, const sf::Vector2f originPoint = {0.f, 0.f}, const float rotation = 0) {
+    RoadTexture road_texture = generate_road_texture(game->texture_manager, segment);
 
-    segments[id] = { id, road_texture, 0 };
-    sf::Sprite* spr = &road_texture.sprite;
-    const sf::Vector2f& scale = spr->getScale();
-    spr->setScale(scale.x * game->getZoomFactor(), scale.y * game->getZoomFactor());
+    const sf::Vector2f & scale = road_texture.sprite.getScale();
+    road_texture.sprite.setScale(scale.x * game->getZoomFactor(), scale.y * game->getZoomFactor());
     // printf("Scale of segment %d: %f, %f\n", id, scale.x, scale.y);
-    spr->setPosition(originPoint);
+    road_texture.sprite.setPosition(originPoint);
+
+    constexpr int id = 1;
+    segments[id] = { id, road_texture, rotation };
     segments[id].realPoint1 = originPoint + road_texture.point1 * game->getZoomFactor();
     segments[id].realPoint2 = originPoint + road_texture.point2 * game->getZoomFactor();
+
+    lastId = id;
 }
 
 // Connect two segments
 void Circuit::join(const SegmentType::Value& segment, const float rotation) {
-    RoadTexture road_texture = generate_road_texture(segment);
+    RoadTexture road_texture = generate_road_texture(game->texture_manager, segment);
 
     // Get the ending point and rotation of the 'from' segment
     const auto& fromSegment = segments[lastId];
@@ -78,10 +75,10 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
         << "id: " << segment.id << " / rotation: " << segment.rotation
         << " / RP1: " << segment.realPoint1.x << ";" << segment.realPoint1.y
         << " / RP2: " << segment.realPoint2.x << ";" << segment.realPoint2.y
-        << " / Texture size: " << segment.texture.texture.getSize().x << ";" << segment.texture.texture.getSize().y
+        << " / Texture size: " << segment.texture.texture->getSize().x << ";" << segment.texture.texture->getSize().y
             << std::endl;
     }
-/*#ifdef debug
+#ifdef debug
     for (const auto& [id, segment] : segments) {
         constexpr float radius = 10.f;
         sf::CircleShape redCirc = createCircle(sf::Color::Red, radius);
@@ -93,7 +90,7 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
         window.draw(greenCirc);
         window.draw(redCirc);
     }
-#endif*/
+#endif
 }
 
 #ifdef debug

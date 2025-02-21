@@ -35,8 +35,7 @@ public:
 
     static sf::Vector2f rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, float angle);
 
-    void setOrigin(const SegmentType::Value &segment);
-    void setOrigin(const SegmentType::Value &segment, sf::Vector2f originPoint);
+    void setOrigin(const SegmentType::Value &segment, sf::Vector2f originPoint, float rotation);
     void join(const SegmentType::Value &segment, float rotation = 0);
     void renderOn(sf::RenderWindow& window) const;
 
