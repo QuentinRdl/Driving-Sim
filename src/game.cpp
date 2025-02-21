@@ -1,7 +1,7 @@
 #include "game.h"
 
 #include "circuit.h"
-#include "GraphicsUtils/RoadTextureGenerator.h"
+#include "GraphicsUtils/roadtexturegenerator.h"
 
 
 /**
