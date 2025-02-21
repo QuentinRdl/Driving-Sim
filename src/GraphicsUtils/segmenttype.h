@@ -1,9 +1,10 @@
 #ifndef SEGMENTTYPE_H
 #define SEGMENTTYPE_H
+
 #include <string>
+#include <stdexcept> // for the std::invalid_argument exception.
 
 #define BASE_PATH "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/images/"
-
 
 struct SegmentType final {
 
@@ -23,6 +24,7 @@ struct SegmentType final {
     }
 
 private:
+
     explicit SegmentType(const Value v): value(v) {}
     Value value;
 
