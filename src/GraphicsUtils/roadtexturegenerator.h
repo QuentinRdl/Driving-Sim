@@ -1,8 +1,6 @@
 #ifndef ROADTEXTUREGENERATOR_H
 #define ROADTEXTUREGENERATOR_H
 
-#include <iostream>
-
 #include "game.h"
 #include "segmenttype.h"
 #include "texturemanager.h"
