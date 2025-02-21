@@ -16,17 +16,15 @@ float Game::getZoomFactor() const {
  * Constructor
  */
 Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
-    this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
-    this->window->setFramerateLimit(30); // todo increase fps.
-    this->texture_manager = {};
+    window = std::make_unique<sf::RenderWindow>(videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
+    window->setFramerateLimit(30); // todo increase fps.
+    texture_manager = {};
 }
 
 /**
  * Destructor
  */
-Game::~Game() {
-    delete this->window;
-}
+Game::~Game() = default;
 
 void Game::manageEvents() {
     while (this->window->pollEvent(this->event)) {

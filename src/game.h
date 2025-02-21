@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -18,7 +19,8 @@ class Game final {
 
 
 public:
-    sf::RenderWindow* window{}; // TODO move to private part.
+    std::unique_ptr<sf::RenderWindow> window; // TODO move to private part. ??????
+    // sf::RenderWindow* window{};
     TextureManager texture_manager;
 
     Game();
