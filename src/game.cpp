@@ -18,9 +18,7 @@ float Game::getZoomFactor() const {
  * Constructor
  */
 Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
-
-    this->window = std::make_unique<sf::RenderWindow>(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close).get();
-    // this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
 }
 
