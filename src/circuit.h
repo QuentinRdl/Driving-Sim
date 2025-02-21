@@ -4,7 +4,7 @@
 
 #include <map>
 #include <SFML/Graphics.hpp>
-#include "GraphicsUtils/RoadTextureGenerator.h"
+#include "GraphicsUtils/roadtexturegenerator.h"
 
 class Circuit {
 
