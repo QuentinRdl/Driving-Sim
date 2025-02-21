@@ -7,16 +7,26 @@
 #include "GraphicsUtils/RoadTextureGenerator.h"
 
 class Circuit {
+
+    int lastId;
+
 public:
+    explicit Circuit(const Game *game): lastId(0), game(game) {
+        segments = {};
+    }
 
-    Circuit(const Game *game);
+    /** Default Constructor */
+    ~Circuit() = default;
 
-    const Game *game;
+    /** Default copy operator */
+    Circuit& operator=(const Circuit& other) = default;
+
+    const Game* game;
 
     struct Segment {
         int id;
-        RoadTexture* texture;
-        float rotation; // Rotation in degrees
+        RoadTexture texture;
+        float rotation{}; // Rotation in degrees
         sf::Vector2f realPoint1;
         sf::Vector2f realPoint2;
     };
@@ -25,9 +35,9 @@ public:
 
     static sf::Vector2f rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, float angle);
 
-    void set(int id, RoadTexture *texture);
-    void set(int id, RoadTexture *texture, sf::Vector2f originPoint);
-    void join(int fromId, int toId, RoadTexture *road_texture, float rotation = 0);
+    void setOrigin(const SegmentType::Value &segment);
+    void setOrigin(const SegmentType::Value &segment, sf::Vector2f originPoint);
+    void join(const SegmentType::Value &segment, float rotation = 0);
     void renderOn(sf::RenderWindow& window) const;
 
 #ifdef debug

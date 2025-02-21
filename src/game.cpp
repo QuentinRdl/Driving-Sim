@@ -1,26 +1,13 @@
 #include "game.h"
+
+#include <memory>
+
 #include "circuit.h"
 #include "GraphicsUtils/RoadTextureGenerator.h"
 
-/**
- * Private
- */
-void Game::initVariables() {
-    this->window = nullptr;
-    this->zoom_factor = 0.2;
-}
-
 
 /**
- * Private
- */
-void Game::initWindow() {
-    this->videoMode = sf::VideoMode::getDesktopMode();
-    this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
-}
-
-/**
- * Let the user use '+' or '-' to zoom or zoom out in the wind.
+ * Let the user use '+' or '-' to zoom or zoom out in the window.
  * @return the zoom factor.
  */
 float Game::getZoomFactor() const {
@@ -30,9 +17,11 @@ float Game::getZoomFactor() const {
 /**
  * Constructor
  */
-Game::Game() {
-    this->initVariables();
-    this->initWindow();
+Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
+
+    this->window = std::make_unique<sf::RenderWindow>(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close).get();
+    // this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
+    this->window->setFramerateLimit(60);
 }
 
 /**
@@ -67,23 +56,14 @@ void Game::render() const {
 
     Circuit circ(this);
 
-    RoadTexture rt_straight1 = generate_road_texture(SegmentType::Value::LONG_STRAIGHT);
-    RoadTexture rt_turn1 = generate_road_texture(SegmentType::Value::LARGE_TURN);
-    RoadTexture rt_straight2 = generate_road_texture(SegmentType::Value::SMALL_STRAIGHT);
-    RoadTexture rt_turn2 = generate_road_texture(SegmentType::Value::SMALL_TURN);
-    RoadTexture rt_straight3 = generate_road_texture(SegmentType::Value::LONG_STRAIGHT);
-    RoadTexture rt_turn3 = generate_road_texture(SegmentType::Value::LARGE_TURN);
-    RoadTexture rt_straight4 = generate_road_texture(SegmentType::Value::SMALL_STRAIGHT);
-    RoadTexture rt_turn4 = generate_road_texture(SegmentType::Value::SMALL_TURN);
-
-    circ.set(1, &rt_straight1, {500.f, 10.f});
-    circ.join(1, 2, &rt_turn1, 0);
-    circ.join(2, 3, &rt_straight2, 90);
-    circ.join(3, 4, &rt_turn2, 90);
-    circ.join(4, 5, &rt_straight3, 180);
-    circ.join(5, 6, &rt_turn3, 180);
-    circ.join(6, 7, &rt_straight4, 270);
-    circ.join(7, 8, &rt_turn4, 270);
+    circ.setOrigin(SegmentType::Value::LONG_STRAIGHT, {500.f, 10.f});
+    circ.join(SegmentType::Value::LARGE_TURN, 0);
+    circ.join(SegmentType::Value::SMALL_STRAIGHT, 90);
+    circ.join(SegmentType::Value::SMALL_TURN, 90);
+    // circ.join(SegmentType::Value::LONG_STRAIGHT, 180);
+    // circ.join(SegmentType::Value::LARGE_TURN, 180);
+    // circ.join(SegmentType::Value::SMALL_STRAIGHT, 270);
+    // circ.join(SegmentType::Value::SMALL_TURN, 270);
 
     circ.renderOn(*this->window);
 
