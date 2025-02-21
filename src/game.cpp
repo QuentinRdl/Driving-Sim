@@ -20,6 +20,7 @@ float Game::getZoomFactor() const {
 Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
     this->window = new sf::RenderWindow(this->videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
+    this->texture_manager = {};
 }
 
 /**

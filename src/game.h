@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "texturemanager.h"
+
 /**
  * Class that acts as the game engine.
  * Wrapper class.
@@ -17,6 +19,7 @@ class Game final {
 
 public:
     sf::RenderWindow* window{}; // TODO move to private part.
+    TextureManager texture_manager;
 
     Game();
 
