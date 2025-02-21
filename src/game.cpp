@@ -1,7 +1,5 @@
 #include "game.h"
 
-#include <memory>
-
 #include "circuit.h"
 #include "GraphicsUtils/RoadTextureGenerator.h"
 
