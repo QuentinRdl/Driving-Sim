@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "segmenttype.h"
+#include "texturemanager.h"
 
 struct RoadTexture {
     sf::Sprite sprite;
@@ -49,16 +50,14 @@ inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const b
     return extremities;
 }
 
-inline RoadTexture generate_road_texture(const SegmentType::Value type, const bool mirrorX = false, const bool mirrorY = false) {
-    const sf::Vector2f *extremities = getExtremities(type, mirrorX, mirrorY);
+inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const SegmentType::Value type, const bool mirror_x = false, const bool mirror_y = false) {
+    const sf::Vector2f *extremities = getExtremities(type, mirror_x, mirror_y);
 
     RoadTexture road_texture;
     road_texture.point1 = extremities[0];
     road_texture.point2 = extremities[1];
-    if (!road_texture.texture.loadFromFile(SegmentType::getPath(type))) {
-        std::cerr << "The texture at " << SegmentType::getPath(type) << " failed to load" << std::endl;
-    }
-    road_texture.sprite = sf::Sprite(road_texture.texture);
+    road_texture.texture = &texture_manager.getTexture(type);
+    road_texture.sprite = sf::Sprite(*road_texture.texture);
 
     return road_texture;
 }
