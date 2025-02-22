@@ -31,7 +31,7 @@ void Game::manageEvents() {
         switch (this->event.type) {
             case sf::Event::KeyPressed:
                 if (this->event.key.code == sf::Keyboard::Add) this->zoom_factor += 0.01;
-                if (this->event.key.code == sf::Keyboard::Subtract) this->zoom_factor -= 0.01;
+                if (this->event.key.code == sf::Keyboard::Subtract) this->zoom_factor > 0 ? this->zoom_factor -= 0.01 : this->zoom_factor = 0;
                 if (this->event.key.code != sf::Keyboard::Escape) break;
             case sf::Event::Closed:
                 this->window->close();
