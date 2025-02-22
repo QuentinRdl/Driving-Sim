@@ -80,8 +80,17 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
         sf::CircleShape greenCirc = createCircle(sf::Color::Green, radius*2);
         greenCirc.setPosition(segment.realPoint2);
 
+        sf::RectangleShape p1 = createSquare(sf::Color::Red, radius*2);
+        p1.setPosition(segment.texture.sprite.getPosition());
+
+        sf::RectangleShape p2 = createSquare(sf::Color::Green, radius*2);
+        p2.setPosition(segment.texture.sprite.getPosition() + segment.texture.sprite.getGlobalBounds().getSize());
+
+
         window.draw(greenCirc);
         window.draw(redCirc);
+        window.draw(p1);
+        window.draw(p2);
     }
 #endif
 }
