@@ -8,8 +8,8 @@
 #include "texturemanager.h"
 
 struct RoadTexture {
-    sf::Sprite sprite;
     const sf::Texture *texture = nullptr;
+    sf::Sprite sprite;
     sf::Vector2f point1;
     sf::Vector2f point2;
 };
