@@ -35,12 +35,14 @@ public:
 
     static sf::Vector2f rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, float angle);
 
-    void setOrigin(const SegmentType::Value &segment, sf::Vector2f originPoint, float rotation);
-    void join(const SegmentType::Value &segment, float rotation = 0);
+    void setOrigin(const SegmentType::Value &segment_type, sf::Vector2f originPoint = {0.f, 0.f}, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
+    void join(const SegmentType::Value &segment, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
     void renderOn(sf::RenderWindow& window) const;
 
 #ifdef debug
-    static sf::CircleShape createCircle(sf::Color color, float radius); // TODO DELETE
+    /* Debug function for the sprite */
+    static sf::CircleShape createCircle(sf::Color color, float radius);
+    static sf::RectangleShape createSquare(sf::Color color, float length);
 #endif
 };
 
