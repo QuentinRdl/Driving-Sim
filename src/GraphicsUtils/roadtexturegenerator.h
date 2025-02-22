@@ -70,6 +70,16 @@ inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const s
     return extremities;
 }
 
+/**
+ * Generate a `RoadTexture` object from a `SegmentType::Value`.
+ * Need a `TextureManager` to get the texture.
+ *
+ * @param texture_manager The texture manager to get a `sf::Texture` from a `SegmentType::Value`
+ * @param segment_type The segment type to get the texture from
+ * @param mirror_x true if the texture should be mirrored on the x-axis, false otherwise
+ * @param mirror_y true if the texture should be mirrored on the y-axis, false otherwise
+ * @return a `RoadTexture` object containing the sprite, the texture and its extremities
+ */
 inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const SegmentType::Value segment_type,
                                          const bool mirror_x = false, const bool mirror_y = false) {
     const sf::Texture& baseTexture = texture_manager.getTexture(segment_type);

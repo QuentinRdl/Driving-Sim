@@ -7,7 +7,9 @@
 #define BASE_PATH "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/images/"
 
 struct SegmentType final {
-
+    /**
+     * Enum representing the different types of segments.
+     */
     enum Value {
         SMALL_STRAIGHT,
         LONG_STRAIGHT,
@@ -18,6 +20,11 @@ struct SegmentType final {
         U_TURN
     };
 
+    /**
+     * Get the path to the image corresponding to the segment type.
+     * @param value the segment type
+     * @return the path to the image corresponding to the segment type
+     */
     static std::string getPath(const Value value) {
         const SegmentType type(value);
         return type.getPath();
@@ -28,6 +35,10 @@ private:
     explicit SegmentType(const Value v): value(v) {}
     Value value;
 
+    /**
+     * Get the path to the image corresponding to the segment type.
+     * @return the path to the image corresponding to the segment type
+     */
     [[nodiscard]] std::string getPath() const {
         std::string filename;
         switch (this->value) {
@@ -55,7 +66,6 @@ private:
             default: throw std::invalid_argument("Invalid segmentType: not implemented yet maybe ?");
         }
 
-        // std::cout << "Call of segmenttype.h::getPath() => res = " << BASE_PATH + filename << std::endl;
         return BASE_PATH + filename;
     }
 };
