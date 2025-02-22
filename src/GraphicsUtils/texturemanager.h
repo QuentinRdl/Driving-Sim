@@ -33,8 +33,7 @@ public:
             return it->second;
         }
         sf::Texture text;
-        const std::string path = SegmentType::getPath(type);
-        if (!text.loadFromFile(path)) {
+        if (const std::string path = SegmentType::getPath(type); !text.loadFromFile(path)) {
             throw std::runtime_error("Error while getting the texture in " + path);
         }
         const auto [insert_iterator, success] = textures.emplace(type, std::move(text));
