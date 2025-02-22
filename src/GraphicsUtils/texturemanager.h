@@ -5,7 +5,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "segmenttype.h"
-#include <iostream>
 
 
 /**
