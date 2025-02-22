@@ -25,7 +25,7 @@ public:
      *
      * @param type The segment type for which to retrieve the texture.
      * @return A const reference to the requested texture.
-     * @throws std::runtime_error if the texture cannot be loaded from th efile.
+     * @throws std::runtime_error if the texture cannot be loaded from the file.
      */
     const sf::Texture& getTexture(const SegmentType::Value type) const {
         if (const auto it = textures.find(type); it != textures.end()) {
