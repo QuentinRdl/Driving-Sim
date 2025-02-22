@@ -2,7 +2,13 @@
 #include <cmath>
 
 
-// Helper to rotate a point around the origin
+/**
+ * Rotate a point around an origin by a given angle.
+ * @param origin The origin point.
+ * @param point The point to rotate.
+ * @param angle The angle in degrees.
+ * @return The rotated point.
+ */
 sf::Vector2f Circuit::rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, const float angle) {
     if (angle == 0) return point;
 
@@ -22,33 +28,41 @@ sf::Vector2f Circuit::rotatePoint(const sf::Vector2f& origin, const sf::Vector2f
     };
 }
 
-// Define a segment in the circuit
-auto Circuit::setOrigin(const SegmentType::Value &segment_type, const sf::Vector2f originPoint,
-                        const float rotation, const bool mirror_x, const bool mirror_y) -> void {
+/**
+ * @param segment_type the type of the segment
+ * @param originPoint the origin point of the segment
+ * @param rotation the rotation of the segment
+ * @param mirror_x true if the segment should be mirrored on the x-axis, false otherwise
+ * @param mirror_y true if the segment should be mirrored on the y-axis, false otherwise
+ */
+void Circuit::setOrigin(const SegmentType::Value &segment_type, const sf::Vector2f originPoint,
+                        const float rotation, const bool mirror_x, const bool mirror_y) {
     RoadTexture road_texture = generate_road_texture(game->texture_manager, segment_type, mirror_x, mirror_y);
 
     const sf::Vector2f & scale = road_texture.sprite.getScale();
     road_texture.sprite.setScale(scale.x * game->getZoomFactor(), scale.y * game->getZoomFactor());
-    // printf("Scale of segment %d: %f, %f\n", id, scale.x, scale.y);
     road_texture.sprite.setPosition(originPoint);
 
-    constexpr int id = 1;
-    segments[id] = { id, road_texture, rotation };
-    segments[id].realPoint1 = originPoint + road_texture.point1 * game->getZoomFactor();
-    segments[id].realPoint2 = originPoint + road_texture.point2 * game->getZoomFactor();
+    RoadSegment rs = {road_texture, rotation};
+    rs.realPoint1 = originPoint + road_texture.point1 * game->getZoomFactor();
+    rs.realPoint2 = originPoint + road_texture.point2 * game->getZoomFactor();
 
-    lastId = id;
+    segments.push_back(rs);
 }
 
-// Connect two segments
-void Circuit::join(const SegmentType::Value& segment, const float rotation, const bool mirror_x, const bool mirror_y) {
-    RoadTexture road_texture = generate_road_texture(game->texture_manager, segment, mirror_x, mirror_y);
+/**
+ * @param segment_type the type of segment
+ * @param rotation the rotation of the segment
+ * @param mirror_x true if the segment should be mirrored on the x-axis, false otherwise
+ * @param mirror_y true if the segment should be mirrored on the y-axis, false otherwise
+ */
+void Circuit::join(const SegmentType::Value& segment_type, const float rotation, const bool mirror_x, const bool mirror_y) {
+    RoadTexture road_texture = generate_road_texture(game->texture_manager, segment_type, mirror_x, mirror_y);
 
-    // Get the ending point and rotation of the 'from' segment
-    const auto& fromSegment = segments[lastId];
+    // get the ending point and rotation of the 'from' segment
+    const auto& fromSegment = segments.back();
     const auto& fromPoint2 = fromSegment.realPoint2;
 
-    // Set texture properties
     sf::Sprite* spr = &road_texture.sprite;
     const sf::Vector2f& scale = spr->getScale();
     spr->setScale(scale.x * game->getZoomFactor(), scale.y * game->getZoomFactor());
@@ -61,15 +75,12 @@ void Circuit::join(const SegmentType::Value& segment, const float rotation, cons
 
     spr->setRotation(rotation); // the rotation part should be after the calc of beforeOffsetPoint or its rotate twice and bad
 
-    lastId += 1;
-
-    // Add to segments
-    segments[lastId] = { lastId, road_texture, rotation, fromPoint2, rotatedPoint};
+    segments.push_back({ road_texture, rotation, fromPoint2, rotatedPoint});
 }
 
 void Circuit::renderOn(sf::RenderWindow& window) const {
-    for (const auto& [id, segment] : segments) {
-        window.draw(segment.texture.sprite);
+    for (const auto& seg : segments) {
+        window.draw(seg.texture.sprite);
     }
 #ifdef debug
     for (const auto& [id, segment] : segments) {
