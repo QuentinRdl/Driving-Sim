@@ -22,7 +22,7 @@ struct RoadTexture {
  * @param mirror_y true if the texture should be mirrored on the y-axis, false otherwise
  * @return an array of two `sf::Vector2f`, the graphic extremities of the segment
  */
-inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const sf::Vector2u& size, const bool mirror_x = false, const bool mirror_y = false) {
+[[nodiscard]] inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const sf::Vector2u& size, const bool mirror_x = false, const bool mirror_y = false) {
     static sf::Vector2f extremities[2];
     switch (type) {
         case SegmentType::SMALL_STRAIGHT:
@@ -80,7 +80,7 @@ inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const s
  * @param mirror_y true if the texture should be mirrored on the y-axis, false otherwise
  * @return a `RoadTexture` object containing the sprite, the texture and its extremities
  */
-inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const SegmentType::Value segment_type,
+[[nodiscard]] inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const SegmentType::Value segment_type,
                                          const bool mirror_x = false, const bool mirror_y = false) {
     const sf::Texture& baseTexture = texture_manager.getTexture(segment_type);
 
