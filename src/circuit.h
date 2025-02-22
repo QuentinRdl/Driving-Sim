@@ -2,7 +2,6 @@
 #define CIRCUIT_H
 // #define debug
 
-#include <map>
 #include <SFML/Graphics.hpp>
 #include "GraphicsUtils/roadtexturegenerator.h"
 
