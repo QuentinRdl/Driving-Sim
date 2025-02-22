@@ -51,14 +51,13 @@ void Game::render() const {
 
     Circuit circ(this);
 
-    circ.setOrigin(SegmentType::Value::LONG_STRAIGHT, {500.f, 10.f}, 0.f);
+
+    circ.setOrigin(SegmentType::Value::LARGE_TURN,
+        { static_cast<float>(window->getSize().x) / 3, static_cast<float>(window->getSize().y) / 3 },
+                   0.f, true, true);
+    circ.join(SegmentType::Value::LARGE_TURN, 270);
     circ.join(SegmentType::Value::LARGE_TURN, 0);
-    circ.join(SegmentType::Value::SMALL_STRAIGHT, 90);
-    circ.join(SegmentType::Value::SMALL_TURN, 90);
-    circ.join(SegmentType::Value::LONG_STRAIGHT, 180);
-    circ.join(SegmentType::Value::LARGE_TURN, 180);
-    circ.join(SegmentType::Value::SMALL_STRAIGHT, 270);
-    circ.join(SegmentType::Value::SMALL_TURN, 270);
+    circ.join(SegmentType::Value::LARGE_TURN, 90);
 
     circ.renderOn(*this->window);
 
