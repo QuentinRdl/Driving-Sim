@@ -20,7 +20,7 @@ class Game final {
 
 public:
     std::unique_ptr<sf::RenderWindow> window; // TODO move to private part. ??????
-    // sf::RenderWindow* window{};
+
     TextureManager texture_manager;
 
     Game();
