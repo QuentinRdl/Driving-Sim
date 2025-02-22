@@ -83,7 +83,7 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
         window.draw(seg.texture.sprite);
     }
 #ifdef debug
-    for (const auto& [id, segment] : segments) {
+    for (const auto& segment : segments) {
         constexpr float radius = 10.f;
         sf::CircleShape redCirc = createCircle(sf::Color::Red, radius);
         redCirc.setPosition(segment.realPoint1);
