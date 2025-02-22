@@ -44,25 +44,25 @@ private:
         switch (this->value) {
             case SMALL_STRAIGHT:
                 filename = "small_straight.png";
-            break;
+                break;
             case LONG_STRAIGHT:
                 filename = "long_straight.png";
-            break;
+                break;
             case SMALL_TURN:
                 filename = "small_turn.png";
-            break;
+                break;
             case MEDIUM_TURN:
                 filename = "medium_turn.png";
-            break;
+                break;
             case LARGE_TURN:
                 filename = "large_turn.png";
-            break;
+                break;
             case S_TURN:
                 filename = "s_turn.png";
-            break;
+                break;
             case U_TURN:
                 filename = "u_turn.png";
-            break;
+                break;
             default: throw std::invalid_argument("Invalid segmentType: not implemented yet maybe ?");
         }
 
