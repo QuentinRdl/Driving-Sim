@@ -22,9 +22,19 @@ public:
     double vy;  // Vitesse latérale [m/s]
     double r;   // Taux de lacet (vitesse angulaire) [rad/s]
     double I;   // Moment d'inertie effectif pour le lacet
+    double Cx;  // Rigidité longitudinale [N]
+    double Cy;  // Rigidité latérale [N/rad]
 
+    // Constructeur étape 1
     Vehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
       : m(mass), a(a_front), b(b_rear), CA(airRes), vx(0.0), vy(0.0), r(0.0)
+    {
+        I = m * std::pow(0.5 * (a + b), 2);
+    }
+
+    // Constructeur étape 2
+    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0)
     {
         I = m * std::pow(0.5 * (a + b), 2);
     }
@@ -49,9 +59,37 @@ public:
         vy += ay * dt;
         r  += r_dot * dt;
     }
+
+    void updateBicycle(double dt, double delta, double slip)
+    {
+        // Calculer les angles de glissement pour les pneus avant (alpha_F) et arrière (alpha_R)
+        double alpha_F = 0.0, alpha_R = 0.0;
+        if (vx > 0.01) { // évite la division par zéro
+            alpha_F = delta - (vy + a * r) / vx;
+            alpha_R = -(vy - b * r) / vx;
+        }
+
+        // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
+        double F_x_front = 2.0 * Cx * slip;  // Force longitudinale sur l'essieu avant (drive wheels)
+        double F_x_rear  = 0.0;                // Pas de force longitudinale à l'arrière
+        double F_y_front = 2.0 * Cy * alpha_F; // Force latérale sur l'essieu avant
+        double F_y_rear  = 2.0 * Cy * alpha_R;  // Force latérale sur l'essieu arrière
+
+        // Calcul des accélérations selon le modèle "bicycle"
+        double ax = vy * r + 1.0/m * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
+        double ay = -vx * r + 1.0/m * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+        double r_dot = 1.0 / I * (a * (F_x_front * sin(delta) + F_y_front * cos(delta)) - b * F_y_rear);
+
+        // Mise à jour des états par intégration d'Euler
+        vx += ax * dt;
+        vy += ay * dt;
+        r  += r_dot * dt;
+    }
+
+
 };
 
-int main() {
+void etape1() {
     // Initialisation du véhicule (m=1700 kg, a=1.5 m, b=1.5 m, CA=0.5)
     Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5);
 
@@ -60,7 +98,7 @@ int main() {
     double Fy = 200.0;     // Force latérale (N)
     double torque = -150.0; // Moment de lacet (Nm)
     double dt = 0.1;       // Pas de temps (s)
-    int steps = 100;       // Simulation sur 10 secondes
+    int steps = 10000;       // Simulation sur 10 secondes
 
     // Vecteurs pour stocker les données : paire (temps, valeur)
     std::vector<std::pair<double, double>> vx_data, vy_data, r_data;
@@ -112,7 +150,73 @@ int main() {
     gp.send1d(r_data);
     gp << "unset output\n";
     gp.flush();
+}
+void etape2() {
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0);
+
+    double dt = 0.1;
+    int steps = 100;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    double delta = 0.05; // en radians
+    double slip  = 0.1;  // valeur de glissement
+
+    // Vecteurs pour stocker les données (temps, valeur)
+    std::vector<std::pair<double,double>> vx_data, vy_data, r_data;
+
+    for (int i = 0; i <= steps; ++i) {
+        double t = i * dt;
+        vx_data.push_back({t, myVehicle.vx});
+        vy_data.push_back({t, myVehicle.vy});
+        r_data.push_back({t, myVehicle.r});
+
+        // Mise à jour de la dynamique avec le modèle Bicycle
+        myVehicle.updateBicycle(dt, delta, slip);
+    }
+
+    // Création d'un objet Gnuplot pour générer les fichiers images
+    Gnuplot gp;
+
+    // Plot de vx
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'vx_bicycle.png'\n";
+    gp << "set title 'Vitesse Longitudinale (vx) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vx (m/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vx'\n";
+    gp.send1d(vx_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Plot de vy
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'vy_bicycle.png'\n";
+    gp << "set title 'Vitesse Latérale (vy) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vy (m/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vy'\n";
+    gp.send1d(vy_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Plot de r (taux de lacet)
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'r_bicycle.png'\n";
+    gp << "set title 'Taux de Lacet (r) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'r (rad/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'r'\n";
+    gp.send1d(r_data);
+    gp << "unset output\n";
+    gp.flush();
+}
 
 
+int main() {
+    etape2();
     return 0;
 }
