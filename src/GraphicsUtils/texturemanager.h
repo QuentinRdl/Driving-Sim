@@ -30,7 +30,6 @@ public:
      */
     const sf::Texture& getTexture(const SegmentType::Value type) const {
         if (const auto it = textures.find(type); it != textures.end()) {
-            std::cout << "texture " << type << "found, giving a move" << std::endl;
             return it->second;
         }
         sf::Texture text;
@@ -39,7 +38,6 @@ public:
             throw std::runtime_error("Error while getting the texture in " + path);
         }
         const auto [insert_iterator, success] = textures.emplace(type, std::move(text));
-        std::cout << "Didn't found "<< path << " in the TM, creating one and giving the move." << std::endl;
         return insert_iterator->second;
     }
 };
