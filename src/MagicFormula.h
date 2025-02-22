@@ -4,7 +4,7 @@
 #include <cmath>
 #include <string>
 #include <utility>
-#include "gnuplot-iostream.h"  // Make sure this header is accessible
+#include "gnuplot-iostream.h"
 
 // Structure to hold road surface parameters
 struct RoadSurface {

@@ -3,184 +3,158 @@
 //
 
 #include "VehiculeDynamics.h"
-#include <cmath>
 
 #include <iostream>
+#include <cmath>
 #include <vector>
-#include <Eigen/Dense>
-#include "matplotlibcpp.h"
+#include <fstream>
+#include <cstdio>
 
-namespace plt = matplotlibcpp;
+#include "gnuplot-iostream.h"
 
-// Structure to hold input-output data
-struct IOData {
-    Eigen::MatrixXd inputs;
-    Eigen::MatrixXd outputs;
-    double sampleTime;
+using namespace std;
+
+
+// Structure pour stocker les paramètres du véhicule
+struct VehicleParams {
+    double m;    // Masse du véhicule [kg]
+    double a;    // Distance du COG à l'essieu avant [m]
+    double b;    // Distance du COG à l'essieu arrière [m]
+    double Cx;   // Raideur longitudinale [N]
+    double Cy;   // Raideur latérale [N/rad]
+    double CA;   // Coefficient de résistance de l'air [1/m]
 };
 
-// Function to load data TODO : (make a placeholder for the actual data-loading logic)
-IOData loadVehicleData(const std::string& type) {
-    IOData data;
-    if (type == "high") {
-        // Simulated high tire stiffness data
-        data.inputs = Eigen::MatrixXd::Random(100, 5);  // Replace with real data
-        data.outputs = Eigen::MatrixXd::Random(100, 3); // Replace with real data
-    } else if (type == "low") {
-        // Simulated low tire stiffness data
-        data.inputs = Eigen::MatrixXd::Random(100, 5);  // Replace with real data
-        data.outputs = Eigen::MatrixXd::Random(100, 3); // Replace with real data
-    }
-    data.sampleTime = 0.1;
-    return data;
+// Fonction pour calculer les dérivées de l'état (compute_dx)
+vector<double> compute_dx(const vector<double>& x, const vector<double>& u, const VehicleParams& p) {
+    // x[0]: v_x, x[1]: v_y, x[2]: r
+    // u[0]: s_FL, u[1]: s_FR, u[2]: s_RL, u[3]: s_RR, u[4]: delta
+    vector<double> dx(3, 0.0);
+
+    double v_x = x[0];
+    double v_y = x[1];
+    double r   = x[2];
+    double delta = u[4];
+
+    // Calcul des fonctions trigonométriques pour delta
+    double cos_delta = cos(delta);
+    double sin_delta = sin(delta);
+
+    // Équation pour la dérivée de la vitesse longitudinale
+    dx[0] = v_y * r
+            + (1.0 / p.m) * (
+                p.Cx * (u[0] + u[1]) * cos_delta
+                - 2.0 * p.Cy * (u[4] - (v_y + p.a * r) / v_x) * sin_delta
+                + p.Cx * (u[2] + u[3])
+                - p.CA * v_x * v_x
+            );
+
+    // Équation pour la dérivée de la vitesse latérale
+    dx[1] = -v_x * r
+            + (1.0 / p.m) * (
+                p.Cx * (u[0] + u[1]) * sin_delta
+                + 2.0 * p.Cy * (u[4] - (v_y + p.a * r) / v_x) * cos_delta
+                + 2.0 * p.Cy * (p.b * r - v_y) / v_x
+            );
+
+    // Pour la dérivée du taux de lacet, le dénominateur est : m * ((a+b)/2)^2
+    double denom = p.m * pow((p.a + p.b) / 2.0, 2);
+    dx[2] = (1.0 / denom) * (
+                p.a * ( p.Cx * (u[0] + u[1]) * sin_delta
+                        + 2.0 * p.Cy * (u[4] - (v_y + p.a * r) / v_x) * cos_delta )
+                - 2.0 * p.b * p.Cy * (p.b * r - v_y) / v_x
+            );
+
+    return dx;
 }
 
-// Function to plot inputs
-void plotInputs(const IOData& data, const std::string& title) {
-    std::cout << "HERE 0";
-    for (int i = 0; i < data.inputs.cols(); ++i) {
-        std::vector<double> time(data.inputs.rows());
-        std::vector<double> values(data.inputs.rows());
+// Fonction pour calculer les sorties du système (compute_y)
+vector<double> compute_y(const vector<double>& x, const vector<double>& u, const VehicleParams& p) {
+    vector<double> y(3, 0.0);
 
-        for (int j = 0; j < data.inputs.rows(); ++j) {
-            time[j] = j * data.sampleTime;
-            values[j] = data.inputs(j, i);
+    double v_x = x[0];
+    double v_y = x[1];
+    double r   = x[2];
+    double delta = u[4];
+
+    double sin_delta = sin(delta);
+    double cos_delta = cos(delta);
+
+    // Sortie 1 : vitesse longitudinale
+    y[0] = v_x;
+    // Sortie 2 : accélération latérale
+    y[1] = (1.0 / p.m) * (
+                p.Cx * (u[0] + u[1]) * sin_delta
+                + 2.0 * p.Cy * (u[4] - (v_y + p.a * r) / v_x) * cos_delta
+                + 2.0 * p.Cy * (p.b * r - v_y) / v_x
+           );
+    // Sortie 3 : taux de lacet
+    y[2] = r;
+
+    return y;
+}
+
+int main() {
+    // Définition des paramètres du véhicule (valeurs issues de l'exemple)
+    VehicleParams p = {
+        1700,      // m
+        1.5,       // a
+        1.5,       // b
+        150000,    // Cx
+        40000,     // Cy
+        0.5        // CA
+    };
+
+    // Conditions initiales (par exemple, x1 > 0 pour la validité du modèle)
+    vector<double> x = {1.0, 0.0, 0.0};  // [v_x, v_y, r]
+
+    // Simulation : définir le pas de temps et la durée finale
+    double dt = 0.1;      // Pas de temps (secondes)
+    double t_final = 10;  // Durée totale de la simulation (secondes)
+
+    std::ofstream dataFile("data.txt");
+
+    // Boucle de simulation avec intégration par la méthode d'Euler
+    for (double t = 0; t < t_final; t += dt) {
+        // Définir les entrées u à chaque itération.
+        // Pour cet exemple, nous utilisons des valeurs constantes.
+        // u = [s_FL, s_FR, s_RL, s_RR, delta]
+        vector<double> u = {0.01, 0.01, 0.0, 0.0, 0.05};  // Exemple d'entrées
+
+        // Calculer le vecteur dérivé (dx/dt) à partir de l'état actuel
+        vector<double> dx = compute_dx(x, u, p);
+
+        // Intégration Euler : mise à jour de l'état
+        for (size_t i = 0; i < x.size(); i++) {
+            x[i] += dt * dx[i];
         }
 
-        std::cout << "HERE 1";
-        plt::subplot(data.inputs.cols(), 1, i + 1);
-        plt::plot(time, values);
-        plt::title("Input #" + std::to_string(i + 1));
-        plt::tight_layout();
-        std::cout << "HERE 2";
+        // Calculer la sortie à partir de l'état mis à jour
+        vector<double> y = compute_y(x, u, p);
+
+        // Afficher les résultats pour chaque instant t
+        cout << "t = " << t
+             << " | v_x = " << y[0]
+             << " | a_y = " << y[1]
+             << " | r = " << y[2]
+             << endl;
+
+        // Write to file
+        dataFile << t << " " << y[0] << " " << y[1] << " " << y[2] << "\n";
+
     }
-    std::cout << "HERE 3";
-    plt::xlabel("Time (s)");
-    plt::show();
-    std::cout << "HERE 4";
-}
 
-// Function to plot outputs
-void plotOutputs(const IOData& data, const std::string& title) {
-    for (int i = 0; i < data.outputs.cols(); ++i) {
-        std::vector<double> time(data.outputs.rows());
-        std::vector<double> values(data.outputs.rows());
+        dataFile.close();
 
-        for (int j = 0; j < data.outputs.rows(); ++j) {
-            time[j] = j * data.sampleTime;
-            values[j] = data.outputs(j, i);
-            // Debug info :
-            std::cout << "values [i] = ";
-            std::cout << values[i] << std::endl;
+        // Puis, pour afficher le plot avec Gnuplot, utilisez un pipe pour envoyer les commandes :
+        FILE* gp = popen("gnuplot -persistent", "w");
+        if (gp) {
+            fprintf(gp, "set title 'Simulation de dynamique du véhicule'\n");
+            fprintf(gp, "set xlabel 'Temps (s)'\n");
+            fprintf(gp, "set ylabel 'Vitesse Longitudinale (m/s)'\n");
+            // Pour tracer, par exemple, la vitesse longitudinale en fonction du temps :
+            fprintf(gp, "plot 'data.txt' using 1:2 with lines title 'v_x'\n");
+            pclose(gp);
         }
-
-        plt::subplot(data.outputs.cols(), 1, i + 1);
-        plt::plot(time, values);
-        plt::title("Output #" + std::to_string(i + 1));
-        plt::tight_layout();
-    }
-
-    plt::xlabel("Time (s)");
-    plt::show();
-}
-
-
-// Main function
-// TODO : Rename maine
-int maine() {
-    //plt::plot({1,3,100,4});
-    // plt::show();
-    // Load high tire stiffness data
-    IOData highStiffnessData = loadVehicleData("high");
-
-    // Print the content of highStiffnessData TODO : REMOVE THIS DEBUG ONCE FIXED
-    std::cout << "Sample time = ";
-    std::cout << highStiffnessData.sampleTime << std::endl;
-
-
-
-    // Plot inputs and outputs for high tire stiffness data
-    std::cout << "Plotting inputs for high tire stiffness data..." << std::endl;
-    plotInputs(highStiffnessData, "High Tire Stiffness Inputs");
     return 0;
-    std::cout << "Plotting outputs for high tire stiffness data..." << std::endl;
-    plotOutputs(highStiffnessData, "High Tire Stiffness Outputs");
-
-    // Load low tire stiffness data
-    IOData lowStiffnessData = loadVehicleData("low");
-
-    // Plot inputs and outputs for low tire stiffness data
-    std::cout << "Plotting inputs for low tire stiffness data..." << std::endl;
-    plotInputs(lowStiffnessData, "Low Tire Stiffness Inputs");
-
-    std::cout << "Plotting outputs for low tire stiffness data..." << std::endl;
-    plotOutputs(lowStiffnessData, "Low Tire Stiffness Outputs");
-
-    // Placeholder for model simulation, parameter estimation, and comparison logic
-    // Implement as needed based on your specific requirements
-
-    return 0;
-}
-
-
-
-void VehicleDynamics::computeStateDerivatives(const std::vector<double> &state,
-                                              const std::vector<double> &inputs,
-                                              std::vector<double> &derivatives) const {
-    // State variables
-    double vx = state[0];
-    double vy = state[1];
-    double r = state[2];
-
-    // Input variables
-    double sFL = inputs[0];
-    double sFR = inputs[1];
-    double sRL = inputs[2];
-    double sRR = inputs[3];
-    double delta = inputs[4];
-
-    // Compute derivatives
-    derivatives[0] = vy * r + (1 / m) * (Cx * (sFL + sFR) * cos(delta)
-                                         - 2 * Cy * (delta - (vy + a * r) / vx) * sin(delta)
-                                         + Cx * (sRL + sRR) - CA * pow(vx, 2));
-    derivatives[1] = -vx * r + (1 / m) * (Cx * (sFL + sFR) * sin(delta)
-                                          + 2 * Cy * (delta - (vy + a * r) / vx) * cos(delta)
-                                          + 2 * Cy * (b * r - vy) / vx);
-    derivatives[2] = (1 / (pow((a + b) / 2, 2) * m)) * (a * (Cx * (sFL + sFR) * sin(delta)
-                                                             + 2 * Cy * (delta - (vy + a * r) / vx) * cos(delta))
-                                                        - 2 * b * Cy * (b * r - vy) / vx);
-}
-
-void VehicleDynamics::computeOutputs(const std::vector<double> &state,
-                                     const std::vector<double> &inputs,
-                                     std::vector<double> &outputs) const {
-    double vx = state[0];
-    double vy = state[1];
-    double r = state[2];
-    double delta = inputs[4];
-
-    outputs[0] = vx;
-    outputs[1] = (1 / m) * (Cx * (inputs[0] + inputs[1]) * sin(delta)
-                            + 2 * Cy * (delta - (vy + a * r) / vx) * cos(delta)
-                            + 2 * Cy * (b * r - vy) / vx);
-    outputs[2] = r;
-}
-
-void simulate(VehicleDynamics &vehicle, double dt, double totalTime) {
-    std::vector<double> state = {0.0, 0.0, 0.0}; // Initial state
-    std::vector<double> inputs = {0.0, 0.0, 0.0, 0.0, 0.1}; // Example inputs
-    std::vector<double> derivatives(3);
-    std::vector<double> outputs(3);
-
-    for (double t = 0; t < totalTime; t += dt) {
-        vehicle.computeStateDerivatives(state, inputs, derivatives);
-
-        // Update state using Euler integration
-        for (size_t i = 0; i < state.size(); ++i) {
-            state[i] += derivatives[i] * dt;
-        }
-
-        vehicle.computeOutputs(state, inputs, outputs);
-        // TODO : Print or log the outputs
-    }
 }
