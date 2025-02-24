@@ -72,14 +72,14 @@ void Game::update() {
 void Game::render() const {
     this->window->clear();
 
-    Circuit circ(this);
+    Circuit circuit(this);
 
-    circ.setOrigin(ResourceType::Value::SEGMENT_LARGE_TURN, { 500, 500 }, 0.f, true, true);
-    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 270);
-    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 0);
-    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 90);
+    circuit.setOrigin(ResourceType::Value::SEGMENT_LARGE_TURN, { 500, 500 }, 0.f, true, true);
+    circuit.join(ResourceType::Value::SEGMENT_LARGE_TURN, 270);
+    circuit.join(ResourceType::Value::SEGMENT_LARGE_TURN, 0);
+    circuit.join(ResourceType::Value::SEGMENT_LARGE_TURN, 90);
 
-    circ.renderOn(*this->window);
+    circuit.renderOn(*this->window);
 
     fps_counter.renderOn(*this->window);
 
