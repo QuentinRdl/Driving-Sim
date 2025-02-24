@@ -2,7 +2,6 @@
 #define FPSCOUNTER_H
 
 #include <SFML/Graphics.hpp>
-#include <string>
 
 
 class FPSCounter {

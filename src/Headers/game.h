@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-#include "main_classes.h"
 
 #include <memory>
 #include <SFML/Graphics.hpp>
