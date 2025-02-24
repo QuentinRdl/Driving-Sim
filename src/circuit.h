@@ -1,16 +1,16 @@
 #ifndef CIRCUIT_H
 #define CIRCUIT_H
-// #define debug
 
+// #define debug
 #include <SFML/Graphics.hpp>
 #include "GraphicsUtils/roadtexturegenerator.h"
 
-class Circuit {
+struct Circuit {
 
-    int lastId;
-
-public:
-    explicit Circuit(const Game *game): lastId(0), game(game) {
+    /**
+     * @param game a pointer to the main game instance.
+     */
+    explicit Circuit(const Game *game): game(game) {
         segments = {};
     }
 
