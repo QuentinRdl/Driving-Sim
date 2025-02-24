@@ -3,8 +3,7 @@
 
 #include <complex>
 
-#include "game.h"
-#include "ResourceType.h"
+#include "resourcetype.h"
 #include "texturemanager.h"
 
 struct RoadTexture {
