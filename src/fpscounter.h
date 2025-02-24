@@ -6,12 +6,10 @@
 #define FPSCOUNTER_H
 
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 #include <string>
 
 
 class FPSCounter {
-
     sf::Clock clock;
     float timeAccumulator;
     int frameCount;
@@ -32,7 +30,6 @@ public:
 
     int getFPS() const;
 };
-
 
 
 #endif //FPSCOUNTER_H
