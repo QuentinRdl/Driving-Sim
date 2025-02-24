@@ -49,6 +49,3 @@ int FPSCounter::getFPS() const {
     }
     return currentFPS;
 }
-
-
-
