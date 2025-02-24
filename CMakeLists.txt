@@ -10,15 +10,6 @@ endif()
 
 include_directories(src)
 
-find_package(Curses REQUIRED) # For the key pressed.
-if (NOT Curses_FOUND)
-    if (EXISTS "/etc/arch-release")
-        execute_process(COMMAND sudo pacman -S ncurses --noconfirm)
-    else()
-        execute_process(COMMAND sudo apt-get install libncurses-dev -y)
-    endif()
-endif()
-
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 if (NOT SFML_FOUND)
     if (EXISTS "/etc/arch-release")
@@ -28,7 +19,6 @@ if (NOT SFML_FOUND)
     endif()
 endif()
 
-include_directories(${CURSES_INCLUDE_DIR})
 
 add_executable(Driving_Sim
         src/main.cpp
@@ -43,8 +33,6 @@ target_include_directories(Driving_Sim PRIVATE
     src/Headers/GraphicsUtils
 )
 
-
-target_link_libraries(Driving_Sim ${CURSES_LIBRARIES})
 target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
 
 # Copier les assets dans le dossier de sortie
