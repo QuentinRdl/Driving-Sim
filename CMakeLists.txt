@@ -17,7 +17,9 @@ include_directories(${CURSES_INCLUDE_DIR})
 add_executable(Driving_Sim
         src/main.cpp
         src/game.cpp
-        src/circuit.cpp)
+        src/circuit.cpp
+        src/fpscounter.cpp
+        src/fpscounter.h)
 
 target_include_directories(Driving_Sim PRIVATE
     src
