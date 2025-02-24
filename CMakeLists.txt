@@ -23,8 +23,8 @@ add_executable(Driving_Sim
 )
 
 target_include_directories(Driving_Sim PRIVATE
-    src
-    src/GraphicsUtils
+    src/Headers
+    src/Headers/GraphicsUtils
 )
 
 

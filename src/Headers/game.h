@@ -1,11 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
+#include "main_classes.h"
 
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
 #include "car.h"
+#include "circuit.h"
 #include "fpscounter.h"
 #include "texturemanager.h"
 
@@ -15,11 +17,11 @@
  */
 class Game final {
 
-    sf::VideoMode videoMode;
     sf::Event event{};
     float zoom_factor;
 
     FPSCounter fps_counter;
+    std::unique_ptr<Circuit> circuit;
     std::unique_ptr<Car> car;
     std::unique_ptr<sf::RenderWindow> window;
 
@@ -37,6 +39,8 @@ public:
     [[nodiscard]] float getZoomFactor() const;
 
     void update();
+    void updateCircuit() const;
+
     void render() const;
 
     // Accessors

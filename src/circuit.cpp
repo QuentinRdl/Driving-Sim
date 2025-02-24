@@ -1,7 +1,7 @@
 #include "circuit.h"
 #include <cmath>
 
-#include "SciCalcHelper.h"
+#include "calculationhelper.h"
 
 
 /**
@@ -106,6 +106,10 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
         window.draw(p2);
     }
 #endif
+}
+
+void Circuit::resetSegments() {
+    segments = {};
 }
 
 #ifdef debug

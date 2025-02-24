@@ -4,14 +4,14 @@
 
 #ifndef CAR_H
 #define CAR_H
+#include "main_classes.h"
 
 #include <SFML/Graphics.hpp>
 
-#include "texturemanager.h"
 #include "vehicle.h"
 
 class Car {
-    Vehicle vehicle;
+    const Game* game;
 
     float currentDelta;
     float currentSlip;
@@ -23,13 +23,13 @@ class Car {
 
     sf::Sprite sprite;
 public:
-
+    Vehicle vehicle;
 
     /**
-     * @param tm the texture manager
+     * @param game the game instance
      * @param vehicle the vehicle (physic model) to use
      */
-    Car(const TextureManager& tm, const Vehicle &vehicle);
+    Car(const Game* game, const Vehicle &vehicle);
 
     /**
      * Handle the keyboard input to update the car 
