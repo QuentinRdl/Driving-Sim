@@ -68,9 +68,7 @@ void Game::render() const {
 
     Circuit circ(this);
 
-    circ.setOrigin(SegmentType::Value::LARGE_TURN,
-        { static_cast<float>(window->getSize().x) / 3, static_cast<float>(window->getSize().y) / 3 },
-                   0.f, true, true);
+    circ.setOrigin(SegmentType::Value::LARGE_TURN, { 500, 500 }, 0.f, true, true);
     circ.join(SegmentType::Value::LARGE_TURN, 270);
     circ.join(SegmentType::Value::LARGE_TURN, 0);
     circ.join(SegmentType::Value::LARGE_TURN, 90);
