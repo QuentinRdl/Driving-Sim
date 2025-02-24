@@ -4,7 +4,7 @@
 #include <string>
 #include <stdexcept> // for the std::invalid_argument exception.
 
-#define BASE_PATH "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/images/"
+#define BASE_PATH "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/assets/images/"
 
 struct SegmentType final {
     /**
