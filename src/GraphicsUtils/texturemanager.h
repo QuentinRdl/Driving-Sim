@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 
-#include "segmenttype.h"
+#include "ResourceType.h"
 
 
 /**
@@ -16,7 +16,7 @@ class TextureManager {
      * A mutable unordered_map to store the loaded textures.
      * Declared mutable to allow modification from getTexture function as it's a const one.
      */
-    mutable std::unordered_map<SegmentType::Value, sf::Texture> textures;
+    mutable std::unordered_map<ResourceType::Value, sf::Texture> textures;
 
 public:
     /**
@@ -27,12 +27,12 @@ public:
      * @return A const reference to the requested texture.
      * @throws std::runtime_error if the texture cannot be loaded from the file.
      */
-    const sf::Texture& getTexture(const SegmentType::Value type) const {
+    const sf::Texture& getTexture(const ResourceType::Value type) const {
         if (const auto it = textures.find(type); it != textures.end()) {
             return it->second;
         }
         sf::Texture text;
-        if (const std::string path = SegmentType::getPath(type); !text.loadFromFile(path)) {
+        if (const std::string path = ResourceType::getPath(type); !text.loadFromFile(path)) {
             throw std::runtime_error("Error while getting the texture in " + path);
         }
         const auto [insert_iterator, success] = textures.emplace(type, std::move(text));
