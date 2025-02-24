@@ -3,14 +3,13 @@
 //
 
 #include "fpscounter.h"
+#include "arial_ttf.h"
 
 #include <iostream>
 
-#define ARIAL_FONT_PATH "assets/arial.ttf"
-
 FPSCounter::FPSCounter(): timeAccumulator(0.f), frameCount(0), currentFPS(0), enabled(true) {
-    if (!font.loadFromFile(ARIAL_FONT_PATH)) {
-        throw std::runtime_error("Failed to load Arial font path.");
+    if (!font.loadFromMemory(arial_ttf, arial_ttf_len)) {
+        throw std::runtime_error("Failed to load Arial font from memory.");
     }
     text.setFont(font);
     text.setCharacterSize(20);
