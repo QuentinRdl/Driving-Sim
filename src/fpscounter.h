@@ -20,14 +20,32 @@ class FPSCounter {
     bool enabled;
 
 public:
+    /**
+     * Constructor
+     */
     FPSCounter();
 
+    /**
+     * Update the FPS counter<br>
+     * Note: if the FPSCounter is disabled, this function does nothing.
+     */
     void update();
 
+    /**
+     * Note: if the FPSCounter is disabled, this function does nothing.
+     * @param window the window to draw the FPS counter on
+     */
     void draw(sf::RenderWindow &window) const;
 
+    /**
+     * Toggle the FPS counter on/off
+     */
     void toggle();
 
+    /**
+     * Get the current FPS
+     * @return the current FPS if enabled, -1 otherwise
+     */
     int getFPS() const;
 };
 
