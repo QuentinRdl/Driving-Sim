@@ -17,7 +17,7 @@ float Game::getZoomFactor() const {
  */
 Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
     window = std::make_unique<sf::RenderWindow>(videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
-    window->setFramerateLimit(30); // todo increase fps.
+    window->setFramerateLimit(200); // todo increase fps.
     texture_manager = {};
 }
 
