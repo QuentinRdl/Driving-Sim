@@ -15,8 +15,8 @@
 class Vehicle {
 public:
     double weight;   // Masse [kg]
-    double distance_cog_front_axle;   // Distance COG - essieu avant [m]
-    double distance_cog_rear_axle;   // Distance COG - essieu arrière [m]
+    double cog_dist_front_axle;   // Distance COG - essieu avant [m]
+    double cog_dist_rear_axle;   // Distance COG - essieu arrière [m]
     double CA;  // Coefficient de résistance de l'air
     double vx;  // Vitesse longitudinale [m/s]
     double vy;  // Vitesse latérale [m/s]
@@ -30,13 +30,24 @@ public:
     double y;
     double psi;
 
-    // Constructeur étape 2
+    /**
+     * @param mass the mass of the vehicle
+     * @param distance_cog_front_axle the distance between the center of gravity and the front axle
+     * @param distance_cog_rear_axle the distance between the center of gravity and the rear axle
+     * @param airRes the air resistance coefficient
+     * @param cx rigidity in the longitudinal direction (in N)
+     * @param cy rigidity in the lateral direction (in N/rad)
+     * @param x the x position of the vehicle
+     * @param y the y position of the vehicle
+     * @param r the yaw rate of the vehicle
+     */
     Vehicle(const double mass,
-        const double distance_cog_front_axle, const double distance_cog_rear_axle,
-        const double airRes,
-        const double cx, const double cy,
-        const double x, const double y, const double r)
-    : weight(mass), distance_cog_front_axle(distance_cog_front_axle), distance_cog_rear_axle(distance_cog_rear_axle), CA(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0)
+            const double distance_cog_front_axle, const double distance_cog_rear_axle,
+            const double airRes,
+            const double cx, const double cy,
+            const double x, const double y, const double r)
+    : weight(mass), cog_dist_front_axle(distance_cog_front_axle), cog_dist_rear_axle(distance_cog_rear_axle),
+    CA(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0)
     {
         I = weight * std::pow(0.5 * (distance_cog_front_axle + distance_cog_rear_axle), 2);
     }
@@ -67,8 +78,8 @@ public:
         // Calculer les angles de glissement pour les pneus avant (alpha_F) et arrière (alpha_R)
         double alpha_F = 0.0, alpha_R = 0.0;
         if (vx > 0.01) { // évite la division par zéro
-            alpha_F = delta - (vy + distance_cog_front_axle * r) / vx;
-            alpha_R = -(vy - distance_cog_rear_axle * r) / vx;
+            alpha_F = delta - (vy + cog_dist_front_axle * r) / vx;
+            alpha_R = -(vy - cog_dist_rear_axle * r) / vx;
         }
 
         // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
@@ -80,7 +91,7 @@ public:
         // Calcul des accélérations selon le modèle "bicycle"
         const double ax = vy * r + 1.0/weight * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
         const double ay = -vx * r + 1.0/weight * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
-        const double r_dot = 1.0 / I * (distance_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - distance_cog_rear_axle * F_y_rear);
+        const double r_dot = 1.0 / I * (cog_dist_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - cog_dist_rear_axle * F_y_rear);
 
         // Mise à jour des états par intégration d'Euler
         vx += ax * dt;
