@@ -26,25 +26,42 @@ Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
  */
 Game::~Game() = default;
 
+/**
+ * Manage the events
+ * Here is the list of events that are managed (KeyPressed : Description):
+ * => F : toggle the FPS counter
+ * => ESC : close the window
+ * Zoom is managed from the mouse wheel.
+ */
 void Game::manageEvents() {
     while (this->window->pollEvent(this->event)) {
         switch (this->event.type) {
             case sf::Event::KeyPressed:
-                if (this->event.key.code == sf::Keyboard::Add) this->zoom_factor += 0.01;
-                if (this->event.key.code == sf::Keyboard::Subtract) this->zoom_factor > 0 ? this->zoom_factor -= 0.01 : this->zoom_factor = 0;
-                if (this->event.key.code == sf::Keyboard::F) fps_counter.toggle();
-                if (this->event.key.code != sf::Keyboard::Escape) break;
+                    if (this->event.key.code == sf::Keyboard::F)
+                        fps_counter.toggle();
+                    else if (this->event.key.code == sf::Keyboard::Escape)
+                        this->window->close();
+            break;
+            case sf::Event::MouseWheelScrolled:
+                    if (this->event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+                        if (this->event.mouseWheelScroll.delta > 0)
+                            this->zoom_factor += 0.01;
+                        else
+                            this->zoom_factor = (this->zoom_factor > 0 ? this->zoom_factor - 0.01 : 0);
+                    }
+            break;
             case sf::Event::Closed:
                 this->window->close();
-                break;
+            break;
             default:
                 break;
         }
     }
 
-    // Update the FPS counter
+    // Mise à jour du compteur de FPS
     fps_counter.update();
 }
+
 
 void Game::update() {
     this->manageEvents();
@@ -54,7 +71,6 @@ void Game::render() const {
     this->window->clear();
 
     Circuit circ(this);
-
 
     circ.setOrigin(SegmentType::Value::LARGE_TURN,
         { static_cast<float>(window->getSize().x) / 3, static_cast<float>(window->getSize().y) / 3 },
