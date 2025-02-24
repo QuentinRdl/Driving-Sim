@@ -29,3 +29,8 @@ target_include_directories(Driving_Sim PRIVATE
 
 target_link_libraries(Driving_Sim ${CURSES_LIBRARIES})
 target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
+
+# Copier les assets dans le dossier de sortie
+add_custom_command(TARGET Driving_Sim POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Driving_Sim>/assets)

@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#define ARIAL_FONT_PATH "/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/arial.ttf"
+#define ARIAL_FONT_PATH "assets/arial.ttf"
 
 FPSCounter::FPSCounter(): timeAccumulator(0.f), frameCount(0), currentFPS(0), enabled(true) {
     if (!font.loadFromFile(ARIAL_FONT_PATH)) {
