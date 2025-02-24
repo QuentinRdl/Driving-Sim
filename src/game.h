@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "fpscounter.h"
 #include "texturemanager.h"
 
 /**
@@ -16,6 +17,8 @@ class Game final {
     sf::VideoMode videoMode;
     sf::Event event{};
     float zoom_factor;
+
+    FPSCounter fps_counter;
 
 
 public:

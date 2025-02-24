@@ -32,6 +32,7 @@ void Game::manageEvents() {
             case sf::Event::KeyPressed:
                 if (this->event.key.code == sf::Keyboard::Add) this->zoom_factor += 0.01;
                 if (this->event.key.code == sf::Keyboard::Subtract) this->zoom_factor > 0 ? this->zoom_factor -= 0.01 : this->zoom_factor = 0;
+                if (this->event.key.code == sf::Keyboard::F) fps_counter.toggle();
                 if (this->event.key.code != sf::Keyboard::Escape) break;
             case sf::Event::Closed:
                 this->window->close();
@@ -40,6 +41,9 @@ void Game::manageEvents() {
                 break;
         }
     }
+
+    // Update the FPS counter
+    fps_counter.update();
 }
 
 void Game::update() {
@@ -60,6 +64,8 @@ void Game::render() const {
     circ.join(SegmentType::Value::LARGE_TURN, 90);
 
     circ.renderOn(*this->window);
+
+    fps_counter.draw(*this->window);
 
     this->window->display();
 }
