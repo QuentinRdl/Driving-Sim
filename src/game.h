@@ -21,12 +21,11 @@ class Game final {
 
     FPSCounter fps_counter;
     std::unique_ptr<Car> car;
+    std::unique_ptr<sf::RenderWindow> window;
 
     sf::Clock clock;
 
 public:
-    std::unique_ptr<sf::RenderWindow> window; // TODO move to private part. ??????
-
     TextureManager texture_manager;
 
     Game();
