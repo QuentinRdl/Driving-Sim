@@ -37,7 +37,7 @@ sf::Vector2f Circuit::rotatePoint(const sf::Vector2f& origin, const sf::Vector2f
  * @param mirror_x true if the segment should be mirrored on the x-axis, false otherwise
  * @param mirror_y true if the segment should be mirrored on the y-axis, false otherwise
  */
-void Circuit::setOrigin(const SegmentType::Value &segment_type, const sf::Vector2f originPoint,
+void Circuit::setOrigin(const ResourceType::Value &segment_type, const sf::Vector2f originPoint,
                         const float rotation, const bool mirror_x, const bool mirror_y) {
     RoadTexture road_texture = generate_road_texture(game->texture_manager, segment_type, mirror_x, mirror_y);
 
@@ -58,7 +58,7 @@ void Circuit::setOrigin(const SegmentType::Value &segment_type, const sf::Vector
  * @param mirror_x true if the segment should be mirrored on the x-axis, false otherwise
  * @param mirror_y true if the segment should be mirrored on the y-axis, false otherwise
  */
-void Circuit::join(const SegmentType::Value& segment_type, const float rotation, const bool mirror_x, const bool mirror_y) {
+void Circuit::join(const ResourceType::Value& segment_type, const float rotation, const bool mirror_x, const bool mirror_y) {
     RoadTexture road_texture = generate_road_texture(game->texture_manager, segment_type, mirror_x, mirror_y);
 
     // get the ending point and rotation of the 'from' segment

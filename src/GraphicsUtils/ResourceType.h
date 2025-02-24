@@ -6,7 +6,7 @@
 
 #define ASSETS_PATH "assets/images/"
 
-struct resourcetype final {
+struct ResourceType final {
     /**
      * Enum representing the different types of segments.
      */
@@ -30,13 +30,13 @@ struct resourcetype final {
      * @return the path to the image corresponding to the resource
      */
     static std::string getPath(const Value value) {
-        const resourcetype type(value);
+        const ResourceType type(value);
         return type.getPath();
     }
 
 private:
 
-    explicit resourcetype(const Value v): value(v) {}
+    explicit ResourceType(const Value v): value(v) {}
     Value value;
 
     /**

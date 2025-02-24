@@ -4,7 +4,7 @@
 #include <complex>
 
 #include "game.h"
-#include "segmenttype.h"
+#include "ResourceType.h"
 #include "texturemanager.h"
 
 struct RoadTexture {
@@ -22,34 +22,34 @@ struct RoadTexture {
  * @param mirror_y true if the texture should be mirrored on the y-axis, false otherwise
  * @return an array of two `sf::Vector2f`, the graphic extremities of the segment
  */
-[[nodiscard]] inline const sf::Vector2f *getExtremities(const SegmentType::Value type, const sf::Vector2u& size, const bool mirror_x = false, const bool mirror_y = false) {
+[[nodiscard]] inline const sf::Vector2f *getExtremities(const ResourceType::Value type, const sf::Vector2u& size, const bool mirror_x = false, const bool mirror_y = false) {
     static sf::Vector2f extremities[2];
     switch (type) {
-        case SegmentType::SMALL_STRAIGHT:
+        case ResourceType::SEGMENT_SMALL_STRAIGHT:
             extremities[0] = {0.f, 185.f};
             extremities[1] = {442.f, 185.f};
             break;
-        case SegmentType::LONG_STRAIGHT:
+        case ResourceType::SEGMENT_LONG_STRAIGHT:
             extremities[0] = {0.f, 188.f};
             extremities[1] = {935.f, 188.f};
             break;
-        case SegmentType::SMALL_TURN:
+        case ResourceType::SEGMENT_SMALL_TURN:
             extremities[0] = {0.f, 182.f};
             extremities[1] = {345.f, 531.f};
             break;
-        case SegmentType::MEDIUM_TURN:
+        case ResourceType::SEGMENT_MEDIUM_TURN:
             extremities[0] = {0.f, 184.f};
             extremities[1] = {712.f, 879.f};
             break;
-        case SegmentType::LARGE_TURN:
+        case ResourceType::SEGMENT_LARGE_TURN:
             extremities[0] = {0.f, 191.f};
             extremities[1] = {1076.f, 1269.f};
             break;
-        case SegmentType::S_TURN:
+        case ResourceType::SEGMENT_S_TURN:
             extremities[0] = {0.f, 188.f};
             extremities[1] = {700.f, 915.f};
             break;
-        case SegmentType::U_TURN:
+        case ResourceType::SEGMENT_U_TURN:
             extremities[0] = {0.f, 218.f};
             extremities[1] = {0.f, 947.f};
             break;
@@ -80,7 +80,7 @@ struct RoadTexture {
  * @param mirror_y true if the texture should be mirrored on the y-axis, false otherwise
  * @return a `RoadTexture` object containing the sprite, the texture and its extremities
  */
-[[nodiscard]] inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const SegmentType::Value segment_type,
+[[nodiscard]] inline RoadTexture generate_road_texture(const TextureManager &texture_manager, const ResourceType::Value segment_type,
                                          const bool mirror_x = false, const bool mirror_y = false) {
     const sf::Texture& baseTexture = texture_manager.getTexture(segment_type);
 

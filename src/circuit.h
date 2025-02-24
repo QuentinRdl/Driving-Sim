@@ -33,8 +33,8 @@ struct Circuit {
 
     static sf::Vector2f rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, float angle);
 
-    void setOrigin(const SegmentType::Value &segment_type, sf::Vector2f originPoint = {0.f, 0.f}, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
-    void join(const SegmentType::Value &segment_type, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
+    void setOrigin(const ResourceType::Value &segment_type, sf::Vector2f originPoint = {0.f, 0.f}, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
+    void join(const ResourceType::Value &segment_type, float rotation = 0, bool mirror_x = false, bool mirror_y = false);
     void renderOn(sf::RenderWindow& window) const;
 
 #ifdef debug
