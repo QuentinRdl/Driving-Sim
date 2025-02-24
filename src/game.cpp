@@ -74,10 +74,10 @@ void Game::render() const {
 
     Circuit circ(this);
 
-    circ.setOrigin(SegmentType::Value::LARGE_TURN, { 500, 500 }, 0.f, true, true);
-    circ.join(SegmentType::Value::LARGE_TURN, 270);
-    circ.join(SegmentType::Value::LARGE_TURN, 0);
-    circ.join(SegmentType::Value::LARGE_TURN, 90);
+    circ.setOrigin(ResourceType::Value::SEGMENT_LARGE_TURN, { 500, 500 }, 0.f, true, true);
+    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 270);
+    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 0);
+    circ.join(ResourceType::Value::SEGMENT_LARGE_TURN, 90);
 
     circ.renderOn(*this->window);
 
