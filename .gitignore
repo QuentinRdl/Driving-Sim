@@ -35,3 +35,4 @@
 .idea/
 
 cmake-build-*
+prepare_to_md*
