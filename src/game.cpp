@@ -19,6 +19,9 @@ Game::Game(): videoMode(sf::VideoMode::getDesktopMode()), zoom_factor(0.2) {
     window = std::make_unique<sf::RenderWindow>(videoMode, "Interface Graphique", sf::Style::Titlebar | sf::Style::Close);
     window->setFramerateLimit(200); // todo increase fps.
     texture_manager = {};
+
+    Vehicle vehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, 500, 500);
+    car = std::make_unique<Car>(texture_manager, vehicle);
 }
 
 /**
@@ -62,6 +65,8 @@ void Game::update() {
 
     this->manageEvents();
     fps_counter.update(dt);
+
+    car->update(dt);
 }
 
 void Game::render() const {
@@ -77,6 +82,7 @@ void Game::render() const {
     circ.renderOn(*this->window);
 
     fps_counter.draw(*this->window);
+    car->renderOn(*this->window);
 
     this->window->display();
 }

@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "car.h"
 #include "fpscounter.h"
 #include "texturemanager.h"
 
@@ -19,6 +20,7 @@ class Game final {
     float zoom_factor;
 
     FPSCounter fps_counter;
+    std::unique_ptr<Car> car;
 
     sf::Clock clock;
 
