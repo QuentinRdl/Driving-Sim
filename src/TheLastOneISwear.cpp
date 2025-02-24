@@ -160,16 +160,17 @@ public:
         y += v_global_y * dt;
     }
 };
-void plot_etape_2(
+void plot_etape(
     std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
-    std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data)
+    std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
+    std::vector<std::pair<double,double>> slip_data, std::string path)
     {
     // Création d'un objet Gnuplot pour générer les fichiers images
     Gnuplot gp;
     // Plot de vx
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/vx_bicycle.png'\n";
+    gp << "set output '" << path << "/vx_bicycle.png'\n";
     gp << "set title 'Vitesse Longitudinale (vx) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'vx (m/s)'\n";
@@ -182,7 +183,7 @@ void plot_etape_2(
     // Plot de vy
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/vy_bicycle.png'\n";
+    gp << "set output '" << path << "/vy_bicycle.png'\n";
     gp << "set title 'Vitesse Latérale (vy) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'vy (m/s)'\n";
@@ -194,7 +195,7 @@ void plot_etape_2(
     // Plot de r (taux de lacet)
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/r_bicycle.png'\n";
+    gp << "set output '" << path << "/r_bicycle.png'\n";
     gp << "set title 'Taux de Lacet (r) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'r (rad/s)'\n";
@@ -206,12 +207,29 @@ void plot_etape_2(
     // Plot de la trajectoire (x en fonction de y)
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/trajectory.png'\n";
+    gp << "set output '" << path << "/trajectory.png'\n";
     gp << "set title 'Trajectoire du Véhicule'\n";
     gp << "set xlabel 'Position X (m)'\n";
     gp << "set ylabel 'Position Y (m)'\n";
     gp << "plot '-' with lines lw 2 title 'Trajectoire'\n";
     gp.send1d(traj_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    if (slip_data.empty() == true) {
+        std::cout << "Plotting slip data is not possible, as the data is empty" << std::endl;
+        return;
+    }
+
+    // Plot de slip_data (si possible)
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output '" << path << "/slip_data.png'\n";
+    gp << "set title 'Donnés sur le slip angle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'Slip (rad)'\n";
+    gp << "plot '-' with lines lw 2 title 'vy'\n";
+    gp.send1d(slip_data);
     gp << "unset output\n";
     gp.flush();
 
@@ -293,7 +311,7 @@ void etape2() {
     double slip  = 0.1;  // valeur de glissement
 
     // Vecteurs pour stocker les données (temps, valeur)
-    std::vector<std::pair<double,double>> vx_data, vy_data, r_data;
+    std::vector<std::pair<double,double>> vx_data, vy_data, r_data, slip_data;
     std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
 
 
@@ -311,7 +329,7 @@ void etape2() {
         myVehicle.updateBicycle(dt, delta, slip);
     }
 
-    plot_etape_2(vx_data, vy_data, r_data, traj_data);
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape2");
 }
 
 void etape3() {
@@ -343,16 +361,17 @@ void etape3() {
         vy_data.push_back({t, myVehicle.vy});
         r_data.push_back({t, myVehicle.r});
         traj_data.push_back({myVehicle.x, myVehicle.y});
-        // slip_data.push_back({t, myVehicle.slip});
+        slip_data.push_back({t, myVehicle.slip});
 
         // Mise à jour de la dynamique avec le modèle Bicycle
         myVehicle.updateBicycleEtape3(dt, delta);
     }
 
-    plot_etape_2(vx_data, vy_data, r_data, traj_data);
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape3");
 }
 
 int main() {
+    etape2();
     etape3();
     return 0;
 }
