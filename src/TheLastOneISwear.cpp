@@ -25,6 +25,11 @@ public:
     double Cx;  // Rigidité longitudinale [N]
     double Cy;  // Rigidité latérale [N/rad]
 
+    // Pour gérer la position du Véhicule
+    double x;
+    double y;
+    double psi;
+
     // Constructeur étape 1
     Vehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
       : m(mass), a(a_front), b(b_rear), CA(airRes), vx(0.0), vy(0.0), r(0.0)
@@ -34,7 +39,7 @@ public:
 
     // Constructeur étape 2
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0), x(0.0), y(0.0), psi(0.0)
     {
         I = m * std::pow(0.5 * (a + b), 2);
     }
@@ -84,6 +89,17 @@ public:
         vx += ax * dt;
         vy += ay * dt;
         r  += r_dot * dt;
+
+        psi += r * dt; // Integration du taux de lacet pour obtenir l'angle de direction
+
+        // Transformation des vitesses locales en vitesses globales :
+        double v_global_x = vx * cos(psi) - vy * sin(psi);
+        double v_global_y = vx * sin(psi) + vy * cos(psi);
+
+        // Mise a jour des positions globales par intégration :
+        x += v_global_x * dt;
+        y += v_global_y * dt;
+
     }
 
 
@@ -151,25 +167,33 @@ void etape1() {
     gp << "unset output\n";
     gp.flush();
 }
+
+
 void etape2() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0);
 
     double dt = 0.1;
-    int steps = 100;
+    int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     double delta = 0.05; // en radians
     double slip  = 0.1;  // valeur de glissement
 
     // Vecteurs pour stocker les données (temps, valeur)
     std::vector<std::pair<double,double>> vx_data, vy_data, r_data;
+    std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+
 
     for (int i = 0; i <= steps; ++i) {
+        if (i == 500) {
+            delta = -delta;
+        }
         double t = i * dt;
         vx_data.push_back({t, myVehicle.vx});
         vy_data.push_back({t, myVehicle.vy});
         r_data.push_back({t, myVehicle.r});
+        traj_data.push_back({myVehicle.x, myVehicle.y});
 
         // Mise à jour de la dynamique avec le modèle Bicycle
         myVehicle.updateBicycle(dt, delta, slip);
@@ -211,6 +235,18 @@ void etape2() {
     gp << "set ylabel 'r (rad/s)'\n";
     gp << "plot '-' with lines lw 2 title 'r'\n";
     gp.send1d(r_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Plot de la trajectoire (x en fonction de y)
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'trajectory.png'\n";
+    gp << "set title 'Trajectoire du Véhicule'\n";
+    gp << "set xlabel 'Position X (m)'\n";
+    gp << "set ylabel 'Position Y (m)'\n";
+    gp << "plot '-' with lines lw 2 title 'Trajectoire'\n";
+    gp.send1d(traj_data);
     gp << "unset output\n";
     gp.flush();
 }
