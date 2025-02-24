@@ -10,7 +10,6 @@
 
 
 class FPSCounter {
-    sf::Clock clock;
     float timeAccumulator;
     int frameCount;
     int currentFPS;
@@ -28,8 +27,9 @@ public:
     /**
      * Update the FPS counter<br>
      * Note: if the FPSCounter is disabled, this function does nothing.
+     * @param dt the time elapsed since the last frame (in seconds)
      */
-    void update();
+    void update(float dt);
 
     /**
      * Note: if the FPSCounter is disabled, this function does nothing.

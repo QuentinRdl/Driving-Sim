@@ -20,6 +20,7 @@ class Game final {
 
     FPSCounter fps_counter;
 
+    sf::Clock clock;
 
 public:
     std::unique_ptr<sf::RenderWindow> window; // TODO move to private part. ??????

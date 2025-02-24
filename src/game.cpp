@@ -54,13 +54,14 @@ void Game::manageEvents() {
         }
     }
 
-    // Mise à jour du compteur de FPS
-    fps_counter.update();
 }
 
 
 void Game::update() {
+    const float dt = clock.restart().asSeconds();
+
     this->manageEvents();
+    fps_counter.update(dt);
 }
 
 void Game::render() const {

@@ -17,9 +17,8 @@ FPSCounter::FPSCounter(): timeAccumulator(0.f), frameCount(0), currentFPS(0), en
     text.setPosition(10.f, 10.f);
 }
 
-void FPSCounter::update() {
+void FPSCounter::update(const float dt) {
     if (!enabled) return;
-    const float dt = clock.restart().asSeconds();
     timeAccumulator += dt;
     frameCount++;
 
