@@ -1,7 +1,3 @@
-//
-// Created by rgld_ on 24/02/25.
-//
-
 #ifndef CAR_H
 #define CAR_H
 #include "main_classes.h"

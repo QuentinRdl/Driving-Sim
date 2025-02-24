@@ -1,7 +1,3 @@
-//
-// Created by rgld_ on 24/02/25.
-//
-
 #ifndef FPSCOUNTER_H
 #define FPSCOUNTER_H
 
