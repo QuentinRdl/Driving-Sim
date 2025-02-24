@@ -88,7 +88,7 @@ public:
         // Mise à jour des états par intégration d'Euler
         vx += ax * dt;
         vy += ay * dt;
-        r  += r_dot * dt;
+        r += r_dot * dt;
 
         psi += r * dt; // Integration du taux de lacet pour obtenir l'angle de direction
 
@@ -104,6 +104,63 @@ public:
 
 
 };
+
+void plot_etape_2(
+    std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
+    std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data)
+    {
+    // Création d'un objet Gnuplot pour générer les fichiers images
+    Gnuplot gp;
+    // Plot de vx
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'Images/vx_bicycle.png'\n";
+    gp << "set title 'Vitesse Longitudinale (vx) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vx (m/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vx'\n";
+    gp.send1d(vx_data);
+    gp << "unset output\n";
+    gp.flush();
+
+
+    // Plot de vy
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'Images/vy_bicycle.png'\n";
+    gp << "set title 'Vitesse Latérale (vy) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vy (m/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vy'\n";
+    gp.send1d(vy_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Plot de r (taux de lacet)
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'Images/r_bicycle.png'\n";
+    gp << "set title 'Taux de Lacet (r) - Modèle Bicycle'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'r (rad/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'r'\n";
+    gp.send1d(r_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Plot de la trajectoire (x en fonction de y)
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'Images/trajectory.png'\n";
+    gp << "set title 'Trajectoire du Véhicule'\n";
+    gp << "set xlabel 'Position X (m)'\n";
+    gp << "set ylabel 'Position Y (m)'\n";
+    gp << "plot '-' with lines lw 2 title 'Trajectoire'\n";
+    gp.send1d(traj_data);
+    gp << "unset output\n";
+    gp.flush();
+
+}
 
 void etape1() {
     // Initialisation du véhicule (m=1700 kg, a=1.5 m, b=1.5 m, CA=0.5)
@@ -174,7 +231,7 @@ void etape2() {
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0);
 
-    double dt = 0.1;
+    double dt = 0.2;
     int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     double delta = 0.05; // en radians
@@ -199,56 +256,7 @@ void etape2() {
         myVehicle.updateBicycle(dt, delta, slip);
     }
 
-    // Création d'un objet Gnuplot pour générer les fichiers images
-    Gnuplot gp;
-    // Plot de vx
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/vx_bicycle.png'\n";
-    gp << "set title 'Vitesse Longitudinale (vx) - Modèle Bicycle'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'vx (m/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'vx'\n";
-    gp.send1d(vx_data);
-    gp << "unset output\n";
-    gp.flush();
-
-
-    // Plot de vy
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/vy_bicycle.png'\n";
-    gp << "set title 'Vitesse Latérale (vy) - Modèle Bicycle'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'vy (m/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'vy'\n";
-    gp.send1d(vy_data);
-    gp << "unset output\n";
-    gp.flush();
-
-    // Plot de r (taux de lacet)
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/r_bicycle.png'\n";
-    gp << "set title 'Taux de Lacet (r) - Modèle Bicycle'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'r (rad/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'r'\n";
-    gp.send1d(r_data);
-    gp << "unset output\n";
-    gp.flush();
-
-    // Plot de la trajectoire (x en fonction de y)
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'Images/trajectory.png'\n";
-    gp << "set title 'Trajectoire du Véhicule'\n";
-    gp << "set xlabel 'Position X (m)'\n";
-    gp << "set ylabel 'Position Y (m)'\n";
-    gp << "plot '-' with lines lw 2 title 'Trajectoire'\n";
-    gp.send1d(traj_data);
-    gp << "unset output\n";
-    gp.flush();
+    plot_etape_2(vx_data, vy_data, r_data, traj_data);
 }
 
 
