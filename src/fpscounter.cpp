@@ -31,7 +31,7 @@ void FPSCounter::update(const float dt) {
     }
 }
 
-void FPSCounter::draw(sf::RenderWindow &window) const {
+void FPSCounter::renderOn(sf::RenderWindow &window) const {
     if (enabled)
         window.draw(text);
 }

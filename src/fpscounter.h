@@ -35,7 +35,7 @@ public:
      * Note: if the FPSCounter is disabled, this function does nothing.
      * @param window the window to draw the FPS counter on
      */
-    void draw(sf::RenderWindow &window) const;
+    void renderOn(sf::RenderWindow &window) const;
 
     /**
      * Toggle the FPS counter on/off
