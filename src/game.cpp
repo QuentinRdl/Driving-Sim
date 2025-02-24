@@ -81,7 +81,8 @@ void Game::render() const {
 
     circ.renderOn(*this->window);
 
-    fps_counter.draw(*this->window);
+    fps_counter.renderOn(*this->window);
+
     car->renderOn(*this->window);
 
     this->window->display();
