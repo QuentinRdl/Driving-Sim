@@ -44,7 +44,7 @@ void FPSCounter::toggle() {
 
 int FPSCounter::getFPS() const {
     if (!enabled) {
-        std::cerr << "getFPS() triggered while the FPSCounter is disabled." << std::endl;
+        std::cerr << "FPSCounter::getFPS() triggered while the FPSCounter is disabled." << std::endl;
         return -1;
     }
     return currentFPS;
