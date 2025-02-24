@@ -11,7 +11,23 @@ endif()
 include_directories(src)
 
 find_package(Curses REQUIRED) # For the key pressed.
+if (NOT Curses_FOUND)
+    if (EXISTS "/etc/arch-release")
+        execute_process(COMMAND sudo pacman -S ncurses --noconfirm)
+    else()
+        execute_process(COMMAND sudo apt-get install libncurses-dev -y)
+    endif()
+endif()
+
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
+if (NOT SFML_FOUND)
+    if (EXISTS "/etc/arch-release")
+        execute_process(COMMAND sudo pacman -S sfml --noconfirm)
+    else()
+        execute_process(COMMAND sudo apt-get install libsfml-dev -y)
+    endif()
+endif()
+
 include_directories(${CURSES_INCLUDE_DIR})
 
 add_executable(Driving_Sim
