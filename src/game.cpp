@@ -37,24 +37,20 @@ void Game::manageEvents() {
     while (this->window->pollEvent(this->event)) {
         switch (this->event.type) {
             case sf::Event::KeyPressed:
-                    if (this->event.key.code == sf::Keyboard::F)
-                        fps_counter.toggle();
-                    else if (this->event.key.code == sf::Keyboard::Escape)
-                        this->window->close();
-            break;
+                if (this->event.key.code == sf::Keyboard::F)            fps_counter.toggle();
+                else if (this->event.key.code == sf::Keyboard::Escape)  this->window->close();
+                break;
             case sf::Event::MouseWheelScrolled:
-                    if (this->event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-                        if (this->event.mouseWheelScroll.delta > 0)
+                if (this->event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
+                    if (this->event.mouseWheelScroll.delta > 0)
                             this->zoom_factor += 0.01;
-                        else
-                            this->zoom_factor = (this->zoom_factor > 0 ? this->zoom_factor - 0.01 : 0);
-                    }
-            break;
+                    else    this->zoom_factor = (this->zoom_factor > 0 ? this->zoom_factor - 0.01 : 0);
+                }
+                break;
             case sf::Event::Closed:
                 this->window->close();
-            break;
-            default:
                 break;
+            default: break;
         }
     }
 
