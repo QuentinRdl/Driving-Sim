@@ -201,11 +201,10 @@ void etape2() {
 
     // Création d'un objet Gnuplot pour générer les fichiers images
     Gnuplot gp;
-
     // Plot de vx
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'vx_bicycle.png'\n";
+    gp << "set output 'Images/vx_bicycle.png'\n";
     gp << "set title 'Vitesse Longitudinale (vx) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'vx (m/s)'\n";
@@ -217,7 +216,7 @@ void etape2() {
     // Plot de vy
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'vy_bicycle.png'\n";
+    gp << "set output 'Images/vy_bicycle.png'\n";
     gp << "set title 'Vitesse Latérale (vy) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'vy (m/s)'\n";
@@ -229,7 +228,7 @@ void etape2() {
     // Plot de r (taux de lacet)
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'r_bicycle.png'\n";
+    gp << "set output 'Images/r_bicycle.png'\n";
     gp << "set title 'Taux de Lacet (r) - Modèle Bicycle'\n";
     gp << "set xlabel 'Temps (s)'\n";
     gp << "set ylabel 'r (rad/s)'\n";
@@ -241,7 +240,7 @@ void etape2() {
     // Plot de la trajectoire (x en fonction de y)
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'trajectory.png'\n";
+    gp << "set output 'Images/trajectory.png'\n";
     gp << "set title 'Trajectoire du Véhicule'\n";
     gp << "set xlabel 'Position X (m)'\n";
     gp << "set ylabel 'Position Y (m)'\n";

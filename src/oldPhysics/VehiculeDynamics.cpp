@@ -10,7 +10,7 @@
 #include <fstream>
 #include <cstdio>
 
-#include "gnuplot-iostream.h"
+#include "../gnuplot-iostream.h"
 
 using namespace std;
 
