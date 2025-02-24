@@ -9,7 +9,7 @@
 #include "calculationhelper.h"
 
 
-Car::Car(const Game* game, const Vehicle &vehicle): game(game), vehicle(vehicle), currentDelta(0.f), currentSlip(0.f) {
+Car::Car(const Game* game, const Vehicle &vehicle): game(game), currentDelta(0.05f), currentSlip(0.1f), vehicle(vehicle) {
     sprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
     const sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -58,7 +58,7 @@ void Car::update(const float dt) {
     sprite.setPosition(vehicle.x, vehicle.y);
     sprite.setRotation(radToDeg(vehicle.psi));
     sf::Vector2f scale = sprite.getScale();
-    scale = scale.x == 0 && scale.y == 0 ? scale : sf::Vector2f(1.f, 1.f);
+    scale = (scale.x == 0 && scale.y == 0 ? scale : sf::Vector2f(1.f, 1.f));
     const float& zoom = game->getZoomFactor();
     sprite.setScale(scale.x * zoom, scale.y * zoom);
 }
