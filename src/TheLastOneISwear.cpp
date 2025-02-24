@@ -213,6 +213,7 @@ void etape2() {
     gp << "unset output\n";
     gp.flush();
 
+
     // Plot de vy
     gp << "reset\n";
     gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
