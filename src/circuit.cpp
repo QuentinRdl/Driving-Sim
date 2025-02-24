@@ -1,6 +1,8 @@
 #include "circuit.h"
 #include <cmath>
 
+#include "SciCalcHelper.h"
+
 
 /**
  * Rotate a point around an origin by a given angle.
@@ -12,7 +14,7 @@
 sf::Vector2f Circuit::rotatePoint(const sf::Vector2f& origin, const sf::Vector2f &point, const float angle) {
     if (angle == 0) return point;
 
-    const float rad = angle * M_PIf / 180.0f;
+    const float rad = degToRad(angle);
     const float cosA = std::cos(rad);
     const float sinA = std::sin(rad);
 
