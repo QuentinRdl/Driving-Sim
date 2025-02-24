@@ -116,7 +116,12 @@ public:
 
     void updateBicycleEtape3(double dt, double delta) {
         // Mise a jour dynamique du slip => Eq 1st degree
-        double slip_dot = (s_desired - slip) / slip;
+        if (slip_tau == 0) {
+            // We don't want to divide by zero
+            std::cerr << "Error: slip_tau cannot be zero" << std::endl;
+            return;
+        }
+        double slip_dot = (s_desired - slip) / slip_tau;
         slip += slip_dot * dt;
 
 
@@ -322,7 +327,7 @@ void etape3() {
     int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     double delta = 0.05; // en radians
-    double slip  = 0.1;  // valeur de glissement
+    // double slip  = 0.1;  // valeur de glissement
 
     // Vecteurs pour stocker les données (temps, valeur)
     std::vector<std::pair<double,double>> vx_data, vy_data, r_data, slip_data;
@@ -338,7 +343,7 @@ void etape3() {
         vy_data.push_back({t, myVehicle.vy});
         r_data.push_back({t, myVehicle.r});
         traj_data.push_back({myVehicle.x, myVehicle.y});
-        slip_data.push_back({t, myVehicle.slip});
+        // slip_data.push_back({t, myVehicle.slip});
 
         // Mise à jour de la dynamique avec le modèle Bicycle
         myVehicle.updateBicycleEtape3(dt, delta);
@@ -348,6 +353,6 @@ void etape3() {
 }
 
 int main() {
-    etape2();
+    etape3();
     return 0;
 }
