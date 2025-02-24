@@ -14,9 +14,9 @@
  */
 class Vehicle {
 public:
-    double m;   // Masse [kg]
-    double a;   // Distance COG - essieu avant [m]
-    double b;   // Distance COG - essieu arrière [m]
+    double weight;   // Masse [kg]
+    double distance_cog_front_axle;   // Distance COG - essieu avant [m]
+    double distance_cog_rear_axle;   // Distance COG - essieu arrière [m]
     double CA;  // Coefficient de résistance de l'air
     double vx;  // Vitesse longitudinale [m/s]
     double vy;  // Vitesse latérale [m/s]
@@ -30,28 +30,21 @@ public:
     double y;
     double psi;
 
-    // Constructeur étape 1
-    Vehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
-      : m(mass), a(a_front), b(b_rear), CA(airRes), vx(0.0), vy(0.0), r(0.0)
-    {
-        I = m * std::pow(0.5 * (a + b), 2);
-    }
-
     // Constructeur étape 2
     Vehicle(const double mass,
-        const double a_front, const double b_rear,
+        const double distance_cog_front_axle, const double distance_cog_rear_axle,
         const double airRes,
         const double cx, const double cy,
         const double x, const double y, const double r)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(r), x(x), y(y), psi(0.0)
+    : weight(mass), distance_cog_front_axle(distance_cog_front_axle), distance_cog_rear_axle(distance_cog_rear_axle), CA(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0)
     {
-        I = m * std::pow(0.5 * (a + b), 2);
+        I = weight * std::pow(0.5 * (distance_cog_front_axle + distance_cog_rear_axle), 2);
     }
 
     // Loi de Newton pour la translation
     void computeTranslation(const double Fx, const double Fy, double& ax, double& ay) const {
-        ax = Fx / m;
-        ay = Fy / m;
+        ax = Fx / weight;
+        ay = Fy / weight;
     }
 
     // Loi de Newton pour la rotation (lacet)
@@ -74,8 +67,8 @@ public:
         // Calculer les angles de glissement pour les pneus avant (alpha_F) et arrière (alpha_R)
         double alpha_F = 0.0, alpha_R = 0.0;
         if (vx > 0.01) { // évite la division par zéro
-            alpha_F = delta - (vy + a * r) / vx;
-            alpha_R = -(vy - b * r) / vx;
+            alpha_F = delta - (vy + distance_cog_front_axle * r) / vx;
+            alpha_R = -(vy - distance_cog_rear_axle * r) / vx;
         }
 
         // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
@@ -85,9 +78,9 @@ public:
         const double F_y_rear  = 2.0 * Cy * alpha_R; // Force latérale sur l'essieu arrière
 
         // Calcul des accélérations selon le modèle "bicycle"
-        const double ax = vy * r + 1.0/m * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
-        const double ay = -vx * r + 1.0/m * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
-        const double r_dot = 1.0 / I * (a * (F_x_front * sin(delta) + F_y_front * cos(delta)) - b * F_y_rear);
+        const double ax = vy * r + 1.0/weight * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
+        const double ay = -vx * r + 1.0/weight * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+        const double r_dot = 1.0 / I * (distance_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - distance_cog_rear_axle * F_y_rear);
 
         // Mise à jour des états par intégration d'Euler
         vx += ax * dt;
@@ -103,9 +96,7 @@ public:
         // Mise à jour des positions globales par intégration :
         x += v_global_x * dt;
         y += v_global_y * dt;
-
     }
-
 
 };
 
