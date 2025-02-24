@@ -14,10 +14,10 @@
  */
 class Vehicle {
 public:
-    double weight;   // Masse [kg]
+    double mass;   // Masse [kg]
     double dist_cog_front_axle;   // Distance COG - essieu avant [m]
     double dist_cog_rear_axle;   // Distance COG - essieu arrière [m]
-    double CA;  // Coefficient de résistance de l'air
+    double airRes;  // Coefficient de résistance de l'air
     double vx;  // Vitesse longitudinale [m/s]
     double vy;  // Vitesse latérale [m/s]
     double r;   // Taux de lacet (vitesse angulaire) [rad/s]
@@ -46,32 +46,11 @@ public:
             const double airRes,
             const double cx, const double cy,
             const double x, const double y, const double r)
-    : weight(mass), dist_cog_front_axle(distance_cog_front_axle), dist_cog_rear_axle(distance_cog_rear_axle),
-    CA(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0)
-    {
-        I = weight * std::pow(0.5 * (distance_cog_front_axle + distance_cog_rear_axle), 2);
+    : mass(mass), dist_cog_front_axle(distance_cog_front_axle), dist_cog_rear_axle(distance_cog_rear_axle),
+    airRes(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0) {
+        I = mass * std::pow(0.5 * (distance_cog_front_axle + distance_cog_rear_axle), 2);
     }
 
-    // Loi de Newton pour la translation
-    void computeTranslation(const double Fx, const double Fy, double& ax, double& ay) const {
-        ax = Fx / weight;
-        ay = Fy / weight;
-    }
-
-    // Loi de Newton pour la rotation (lacet)
-    double computeYawAcceleration(const double torque) const {
-        return torque / I;
-    }
-
-    // Mise à jour des états par intégration d'Euler
-    void update(double dt, double Fx, double Fy, double torque) {
-        double ax, ay;
-        computeTranslation(Fx, Fy, ax, ay);
-        double r_dot = computeYawAcceleration(torque);
-        vx += ax * dt;
-        vy += ay * dt;
-        r  += r_dot * dt;
-    }
 
     void updateBicycle(const double dt, const double delta, const double slip)
     {
@@ -89,8 +68,8 @@ public:
         const double F_y_rear  = 2.0 * Cy * alpha_R; // Force latérale sur l'essieu arrière
 
         // Calcul des accélérations selon le modèle "bicycle"
-        const double ax = vy * r + 1.0/weight * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
-        const double ay = -vx * r + 1.0/weight * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+        const double ax = vy * r + 1.0/mass * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - airRes * vx * vx);
+        const double ay = -vx * r + 1.0/mass * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
         const double r_dot = 1.0 / I * (dist_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - dist_cog_rear_axle * F_y_rear);
 
         // Mise à jour des états par intégration d'Euler
