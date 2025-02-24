@@ -14,7 +14,7 @@ struct ResourceType final {
         /* Car */
         CAR,
 
-        /* Segment Part*/
+        /* Segment Part */
         SEGMENT_SMALL_STRAIGHT,
         SEGMENT_LONG_STRAIGHT,
         SEGMENT_SMALL_TURN,
