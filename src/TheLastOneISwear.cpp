@@ -57,7 +57,7 @@ public:
 
     // Constructeur étape 3
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(200.0), vy(100.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0), vy(0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
     {
         I = m * std::pow(0.5 * (a + b), 2);
         // std::cout << "Inertia is " << I << std::endl;
@@ -65,9 +65,10 @@ public:
 
     // Constructeur étape 4
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired, double mu_front, double mu_rear, double g)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(200.0), vy(100.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0), vy(0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
     {
         I = m * std::pow(0.5 * (a + b), 2);
+        std::cout << "Building object for step 4 !\n";
         // std::cout << "Inertia is " << I << std::endl;
     }
 
@@ -451,9 +452,9 @@ void etape4() {
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     double initSlip = 0;
     double initSlip_tau = 0.5;
-    double initS_desired = 1; // Valeur cible de slip
+    double initS_desired = 0.5; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 1, 1, 9.81);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.5, 0.5, 9.81);
 
     double dt = 0.2;
     int steps = 1000;

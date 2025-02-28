@@ -85,12 +85,12 @@ clean: CMakeFiles/Driving_Sim.dir/clean
 CMakeFiles/Driving_Sim.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target Driving_Sim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=1,2 "Built target Driving_Sim"
 .PHONY : CMakeFiles/Driving_Sim.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Driving_Sim.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Driving_Sim.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles 0
 .PHONY : CMakeFiles/Driving_Sim.dir/rule
@@ -102,7 +102,7 @@ Driving_Sim: CMakeFiles/Driving_Sim.dir/rule
 # codegen rule for target.
 CMakeFiles/Driving_Sim.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target Driving_Sim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=1,2 "Finished codegen for target Driving_Sim"
 .PHONY : CMakeFiles/Driving_Sim.dir/codegen
 
 # clean rule for target.

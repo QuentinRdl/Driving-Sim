@@ -129,125 +129,29 @@ Driving_Sim/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/build
 .PHONY : Driving_Sim/fast
 
-src/VehiculeDynamics.o: src/VehiculeDynamics.cpp.o
-.PHONY : src/VehiculeDynamics.o
+src/TheLastOneISwear.o: src/TheLastOneISwear.cpp.o
+.PHONY : src/TheLastOneISwear.o
 
 # target to build an object file
-src/VehiculeDynamics.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o
-.PHONY : src/VehiculeDynamics.cpp.o
+src/TheLastOneISwear.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o
+.PHONY : src/TheLastOneISwear.cpp.o
 
-src/VehiculeDynamics.i: src/VehiculeDynamics.cpp.i
-.PHONY : src/VehiculeDynamics.i
-
-# target to preprocess a source file
-src/VehiculeDynamics.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.i
-.PHONY : src/VehiculeDynamics.cpp.i
-
-src/VehiculeDynamics.s: src/VehiculeDynamics.cpp.s
-.PHONY : src/VehiculeDynamics.s
-
-# target to generate assembly for a file
-src/VehiculeDynamics.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.s
-.PHONY : src/VehiculeDynamics.cpp.s
-
-src/car.o: src/car.cpp.o
-.PHONY : src/car.o
-
-# target to build an object file
-src/car.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/car.cpp.o
-.PHONY : src/car.cpp.o
-
-src/car.i: src/car.cpp.i
-.PHONY : src/car.i
+src/TheLastOneISwear.i: src/TheLastOneISwear.cpp.i
+.PHONY : src/TheLastOneISwear.i
 
 # target to preprocess a source file
-src/car.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/car.cpp.i
-.PHONY : src/car.cpp.i
+src/TheLastOneISwear.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.i
+.PHONY : src/TheLastOneISwear.cpp.i
 
-src/car.s: src/car.cpp.s
-.PHONY : src/car.s
-
-# target to generate assembly for a file
-src/car.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/car.cpp.s
-.PHONY : src/car.cpp.s
-
-src/mainUnusedForNow.o: src/mainUnusedForNow.cpp.o
-.PHONY : src/mainUnusedForNow.o
-
-# target to build an object file
-src/mainUnusedForNow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o
-.PHONY : src/mainUnusedForNow.cpp.o
-
-src/mainUnusedForNow.i: src/mainUnusedForNow.cpp.i
-.PHONY : src/mainUnusedForNow.i
-
-# target to preprocess a source file
-src/mainUnusedForNow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.i
-.PHONY : src/mainUnusedForNow.cpp.i
-
-src/mainUnusedForNow.s: src/mainUnusedForNow.cpp.s
-.PHONY : src/mainUnusedForNow.s
+src/TheLastOneISwear.s: src/TheLastOneISwear.cpp.s
+.PHONY : src/TheLastOneISwear.s
 
 # target to generate assembly for a file
-src/mainUnusedForNow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.s
-.PHONY : src/mainUnusedForNow.cpp.s
-
-src/surface.o: src/surface.cpp.o
-.PHONY : src/surface.o
-
-# target to build an object file
-src/surface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/surface.cpp.o
-.PHONY : src/surface.cpp.o
-
-src/surface.i: src/surface.cpp.i
-.PHONY : src/surface.i
-
-# target to preprocess a source file
-src/surface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/surface.cpp.i
-.PHONY : src/surface.cpp.i
-
-src/surface.s: src/surface.cpp.s
-.PHONY : src/surface.s
-
-# target to generate assembly for a file
-src/surface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/surface.cpp.s
-.PHONY : src/surface.cpp.s
-
-src/utils.o: src/utils.cpp.o
-.PHONY : src/utils.o
-
-# target to build an object file
-src/utils.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/utils.cpp.o
-.PHONY : src/utils.cpp.o
-
-src/utils.i: src/utils.cpp.i
-.PHONY : src/utils.i
-
-# target to preprocess a source file
-src/utils.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/utils.cpp.i
-.PHONY : src/utils.cpp.i
-
-src/utils.s: src/utils.cpp.s
-.PHONY : src/utils.s
-
-# target to generate assembly for a file
-src/utils.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/utils.cpp.s
-.PHONY : src/utils.cpp.s
+src/TheLastOneISwear.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Driving_Sim.dir/build.make CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.s
+.PHONY : src/TheLastOneISwear.cpp.s
 
 # Help Target
 help:
@@ -258,21 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Driving_Sim"
-	@echo "... src/VehiculeDynamics.o"
-	@echo "... src/VehiculeDynamics.i"
-	@echo "... src/VehiculeDynamics.s"
-	@echo "... src/car.o"
-	@echo "... src/car.i"
-	@echo "... src/car.s"
-	@echo "... src/mainUnusedForNow.o"
-	@echo "... src/mainUnusedForNow.i"
-	@echo "... src/mainUnusedForNow.s"
-	@echo "... src/surface.o"
-	@echo "... src/surface.i"
-	@echo "... src/surface.s"
-	@echo "... src/utils.o"
-	@echo "... src/utils.i"
-	@echo "... src/utils.s"
+	@echo "... src/TheLastOneISwear.o"
+	@echo "... src/TheLastOneISwear.i"
+	@echo "... src/TheLastOneISwear.s"
 .PHONY : help
 
 

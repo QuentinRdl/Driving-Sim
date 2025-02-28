@@ -72,97 +72,37 @@ include CMakeFiles/Driving_Sim.dir/flags.make
 CMakeFiles/Driving_Sim.dir/codegen:
 .PHONY : CMakeFiles/Driving_Sim.dir/codegen
 
-CMakeFiles/Driving_Sim.dir/src/utils.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
-CMakeFiles/Driving_Sim.dir/src/utils.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/utils.cpp
-CMakeFiles/Driving_Sim.dir/src/utils.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Driving_Sim.dir/src/utils.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/utils.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/utils.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/utils.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/utils.cpp
+CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
+CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/TheLastOneISwear.cpp
+CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/TheLastOneISwear.cpp
 
-CMakeFiles/Driving_Sim.dir/src/utils.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/utils.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/utils.cpp > CMakeFiles/Driving_Sim.dir/src/utils.cpp.i
+CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/TheLastOneISwear.cpp > CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.i
 
-CMakeFiles/Driving_Sim.dir/src/utils.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/utils.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/utils.cpp -o CMakeFiles/Driving_Sim.dir/src/utils.cpp.s
-
-CMakeFiles/Driving_Sim.dir/src/car.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
-CMakeFiles/Driving_Sim.dir/src/car.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/car.cpp
-CMakeFiles/Driving_Sim.dir/src/car.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Driving_Sim.dir/src/car.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/car.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/car.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/car.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/car.cpp
-
-CMakeFiles/Driving_Sim.dir/src/car.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/car.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/car.cpp > CMakeFiles/Driving_Sim.dir/src/car.cpp.i
-
-CMakeFiles/Driving_Sim.dir/src/car.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/car.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/car.cpp -o CMakeFiles/Driving_Sim.dir/src/car.cpp.s
-
-CMakeFiles/Driving_Sim.dir/src/surface.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
-CMakeFiles/Driving_Sim.dir/src/surface.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/surface.cpp
-CMakeFiles/Driving_Sim.dir/src/surface.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Driving_Sim.dir/src/surface.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/surface.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/surface.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/surface.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/surface.cpp
-
-CMakeFiles/Driving_Sim.dir/src/surface.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/surface.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/surface.cpp > CMakeFiles/Driving_Sim.dir/src/surface.cpp.i
-
-CMakeFiles/Driving_Sim.dir/src/surface.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/surface.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/surface.cpp -o CMakeFiles/Driving_Sim.dir/src/surface.cpp.s
-
-CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
-CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/mainUnusedForNow.cpp
-CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/mainUnusedForNow.cpp
-
-CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/mainUnusedForNow.cpp > CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.i
-
-CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/mainUnusedForNow.cpp -o CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.s
-
-CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o: CMakeFiles/Driving_Sim.dir/flags.make
-CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o: /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/VehiculeDynamics.cpp
-CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o -MF CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o.d -o CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o -c /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/VehiculeDynamics.cpp
-
-CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/VehiculeDynamics.cpp > CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.i
-
-CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/VehiculeDynamics.cpp -o CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.s
+CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/src/TheLastOneISwear.cpp -o CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.s
 
 # Object files for target Driving_Sim
 Driving_Sim_OBJECTS = \
-"CMakeFiles/Driving_Sim.dir/src/utils.cpp.o" \
-"CMakeFiles/Driving_Sim.dir/src/car.cpp.o" \
-"CMakeFiles/Driving_Sim.dir/src/surface.cpp.o" \
-"CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o" \
-"CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o"
+"CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o"
 
 # External object files for target Driving_Sim
 Driving_Sim_EXTERNAL_OBJECTS =
 
-Driving_Sim: CMakeFiles/Driving_Sim.dir/src/utils.cpp.o
-Driving_Sim: CMakeFiles/Driving_Sim.dir/src/car.cpp.o
-Driving_Sim: CMakeFiles/Driving_Sim.dir/src/surface.cpp.o
-Driving_Sim: CMakeFiles/Driving_Sim.dir/src/mainUnusedForNow.cpp.o
-Driving_Sim: CMakeFiles/Driving_Sim.dir/src/VehiculeDynamics.cpp.o
+Driving_Sim: CMakeFiles/Driving_Sim.dir/src/TheLastOneISwear.cpp.o
 Driving_Sim: CMakeFiles/Driving_Sim.dir/build.make
 Driving_Sim: CMakeFiles/Driving_Sim.dir/compiler_depend.ts
 Driving_Sim: /usr/lib/libpython3.13.so
+Driving_Sim: /usr/lib/libboost_iostreams.so.1.87.0
+Driving_Sim: /usr/lib/libboost_random.so.1.87.0
+Driving_Sim: /usr/lib/libboost_regex.so.1.87.0
+Driving_Sim: /usr/lib/libboost_system.so.1.87.0
 Driving_Sim: CMakeFiles/Driving_Sim.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable Driving_Sim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/keiris/Desktop/.uni/Cours/Projets/Driving-Sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Driving_Sim"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Driving_Sim.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
