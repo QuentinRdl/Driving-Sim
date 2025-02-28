@@ -52,9 +52,10 @@ public:
 
     // Constructeur étape 3
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(200.0), vy(100.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
     {
         I = m * std::pow(0.5 * (a + b), 2);
+        // std::cout << "Inertia is " << I << std::endl;
     }
 
     // Loi de Newton pour la translation
@@ -307,7 +308,7 @@ void etape2() {
     double dt = 0.2;
     int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
-    double delta = 0.05; // en radians
+    double delta = 0.00; // en radians
     double slip  = 0.1;  // valeur de glissement
 
     // Vecteurs pour stocker les données (temps, valeur)
@@ -337,14 +338,15 @@ void etape3() {
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     double initSlip = 0;
     double initSlip_tau = 0.5;
-    double initS_desired = 0.1; // Valeur cible de slip
+    double initS_desired = 0; // Valeur cible de slip
 
     Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired);
 
     double dt = 0.2;
     int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
-    double delta = 0.05; // en radians
+    //double delta = 0.05; // en radians
+    double delta = 0.00; // en radians
     // double slip  = 0.1;  // valeur de glissement
 
     // Vecteurs pour stocker les données (temps, valeur)
