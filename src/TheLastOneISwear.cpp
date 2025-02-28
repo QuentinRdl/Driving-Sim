@@ -40,6 +40,7 @@ public:
     double mu_rear; // Coefficient de friction pour l'essieu arriere
     double g; // Acceleration due a la gravite
 
+    size_t count; // TODO : Remove !!!
 
     // Constructeur étape 1
     Vehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
@@ -65,10 +66,11 @@ public:
 
     // Constructeur étape 4
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired, double mu_front, double mu_rear, double g)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0), vy(0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(1), vy(1), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
     {
         I = m * std::pow(0.5 * (a + b), 2);
         std::cout << "Building object for step 4 !\n";
+        count = 0;
         // std::cout << "Inertia is " << I << std::endl;
     }
 
@@ -234,6 +236,121 @@ public:
         x += v_global_x * dt;
         y += v_global_y * dt;
     }
+
+
+    void updateBicycleRK4(double dt, double delta) {
+        // État vectoriel : [slip, vx, vy, r, psi, x, y]
+        double state[7] = {slip, vx, vy, r, psi, x, y};
+        double k1[7], k2[7], k3[7], k4[7], temp[7];
+
+        // Fonction lambda pour calculer les dérivées d'état pour une donnée configuration
+        auto computeDerivatives = [this, delta](const double s[7], double dsdt[7]) {
+            // Extraction des états
+            double slip_val = s[0];
+            double vx_val = s[1];
+            double vy_val = s[2];
+            double r_val = s[3];
+            double psi_val = s[4];
+            // s[5] = x, s[6] = y
+
+            // Dynamique du slip
+            dsdt[0] = (s_desired - slip_val) / slip_tau;
+
+            // Calcul des angles de glissement (éviter division par zéro)
+            double alpha_F = 0.0, alpha_R = 0.0;
+            if (vx_val > 0.01) {
+                alpha_F = delta - (vy_val + a * r_val) / vx_val;
+                alpha_R = -(vy_val - b * r_val) / vx_val;
+            }
+
+            // Forces longitudinales
+            double F_x_front = 2.0 * Cx * slip_val;
+            double F_x_rear = 0.0;
+
+            // Charges verticales sur chaque essieu
+            double Fz_front = m * g * (b / (a + b));
+            double Fz_rear = m * g * (a / (a + b));
+            double F_y_max_front = mu_front * Fz_front;
+            double F_y_max_rear = mu_rear * Fz_rear;
+
+            // Forces latérales linéaires
+            double F_y_front_linear = 2.0 * Cy * alpha_F;
+            double F_y_rear_linear = 2.0 * Cy * alpha_R;
+
+            double ratio_front = F_y_front_linear / F_y_max_front;
+            double ratio_rear  = F_y_rear_linear  / F_y_max_rear;
+
+            // Force saturée
+            // Saturation via tanh pour modéliser la limite des pneus
+            double F_y_front = F_y_max_front * tanh(ratio_front);
+            double F_y_rear  = F_y_max_rear  * tanh(ratio_rear);
+
+            // Affichage console si on est en saturation
+            if (std::fabs(ratio_front) > 1.0) {
+                // std::cout << "[SAT FRONT] ratio = " << ratio_front
+                          // << " => F_y_front_linear=" << F_y_front_linear
+                          // << " N, F_y_front=" << F_y_front << " N\n";
+                count++;
+            }
+            if (std::fabs(ratio_rear) > 1.0) {
+                // std::cout << "[SAT REAR] ratio = " << ratio_rear
+                  //         << " => F_y_rear_linear=" << F_y_rear_linear
+                    //      << " N, F_y_rear=" << F_y_rear << " N\n";
+                count++;
+            }
+
+            // Accélérations (modèle bicycle)
+            double ax = vy_val * r_val + (1.0 / m) * (
+                            F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx_val * vx_val);
+            double ay = -vx_val * r_val + (1.0 / m) * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+            double r_dot = 1.0 / I * (a * (F_x_front * sin(delta) + F_y_front * cos(delta)) - b * F_y_rear);
+
+            dsdt[1] = ax;
+            dsdt[2] = ay;
+            dsdt[3] = r_dot;
+            dsdt[4] = r_val; // d(psi)/dt = r
+
+            // Transformation en vitesses globales
+            double v_global_x = vx_val * cos(psi_val) - vy_val * sin(psi_val);
+            double v_global_y = vx_val * sin(psi_val) + vy_val * cos(psi_val);
+            dsdt[5] = v_global_x; // dx/dt
+            dsdt[6] = v_global_y; // dy/dt
+        };
+
+        // Calcul de k1
+        computeDerivatives(state, k1);
+        // Calcul de k2
+        for (int i = 0; i < 7; i++) {
+            temp[i] = state[i] + 0.5 * dt * k1[i];
+        }
+        computeDerivatives(temp, k2);
+        // Calcul de k3
+        for (int i = 0; i < 7; i++) {
+            temp[i] = state[i] + 0.5 * dt * k2[i];
+        }
+        computeDerivatives(temp, k3);
+        // Calcul de k4
+        for (int i = 0; i < 7; i++) {
+            temp[i] = state[i] + dt * k3[i];
+        }
+        computeDerivatives(temp, k4);
+
+        // Combinaison pour obtenir le nouvel état
+        for (int i = 0; i < 7; i++) {
+            state[i] = state[i] + dt / 6.0 * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]);
+        }
+        // Mise à jour des variables membres
+        slip = state[0];
+        vx = state[1];
+        vy = state[2];
+        r = state[3];
+        psi = state[4];
+        x = state[5];
+        y = state[6];
+    }
+
+
+
 };
 
 void plot_etape(
@@ -415,7 +532,7 @@ void etape3() {
     double initSlip_tau = 0.5;
     double initS_desired = 0.1; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 0, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired);
 
     double dt = 0.2;
     int steps = 1000;
@@ -445,19 +562,21 @@ void etape3() {
     }
 
     plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape3");
+
 }
+
 
 void etape4() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     double initSlip = 0;
     double initSlip_tau = 0.5;
-    double initS_desired = 0.5; // Valeur cible de slip
+    double initS_desired = 0.1; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.5, 0.5, 9.81);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 6, 6, 9.81);
 
-    double dt = 0.2;
-    int steps = 1000;
+    double dt = 0.02;
+    int steps = 10000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     //double delta = 0.05; // en radians
     double delta = 0.05; // en radians
@@ -468,8 +587,15 @@ void etape4() {
     std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
 
 
+    int change = steps / 2;
     for (int i = 0; i <= steps; ++i) {
-        if (i == 500) {
+        if (i == 1000) {
+            delta = 0;
+        }
+        if (i == 1100) {
+            delta = 0.05;
+        }
+        if (i == change) {
             delta = -delta; // Pour creer un changement de direction
         }
         double t = i * dt;
@@ -480,10 +606,13 @@ void etape4() {
         slip_data.push_back({t, myVehicle.slip});
 
         // Mise à jour de la dynamique avec le modèle Bicycle
-        myVehicle.updateBicycleEtape4(dt, delta);
+        // myVehicle.updateBicycleEtape4(dt, delta);
+        myVehicle.updateBicycleRK4(dt, delta);
     }
 
     plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape4");
+    // We print count (Number of time saturation is reached)
+    std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }
 
 
