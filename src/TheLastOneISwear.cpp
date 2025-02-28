@@ -35,6 +35,11 @@ public:
     double slip_tau; // Constante de temps pour la dynamique du slip
     double s_desired; // Valeur de slip désirée
 
+    // Données pour étape 4 :
+    double mu_front; // Coefficient de friction pour l'essieu avant
+    double mu_rear; // Coefficient de friction pour l'essieu arriere
+    double g; // Acceleration due a la gravite
+
 
     // Constructeur étape 1
     Vehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
@@ -53,6 +58,14 @@ public:
     // Constructeur étape 3
     Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired)
   : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(200.0), vy(100.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
+    {
+        I = m * std::pow(0.5 * (a + b), 2);
+        // std::cout << "Inertia is " << I << std::endl;
+    }
+
+    // Constructeur étape 4
+    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired, double mu_front, double mu_rear, double g)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(200.0), vy(100.0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
     {
         I = m * std::pow(0.5 * (a + b), 2);
         // std::cout << "Inertia is " << I << std::endl;
@@ -160,7 +173,68 @@ public:
         x += v_global_x * dt;
         y += v_global_y * dt;
     }
+
+    void updateBicycleEtape4 (double dt, double delta) {
+        // Mise a jour dynamique du slip => Eq 1st degree
+        if (slip_tau == 0) {
+            // We don't want to divide by zero
+            std::cerr << "Error: slip_tau cannot be zero" << std::endl;
+            return;
+        }
+        double slip_dot = (s_desired - slip) / slip_tau;
+        slip += slip_dot * dt;
+
+
+        // Calculer les angles de glissement pour les pneus avant (alpha_F) et arrière (alpha_R)
+        double alpha_F = 0.0, alpha_R = 0.0;
+        if (vx > 0.01) {
+            // évite la division par zéro
+            alpha_F = delta - (vy + a * r) / vx;
+            alpha_R = -(vy - b * r) / vx;
+        }
+
+        // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
+        double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels)
+        double F_x_rear = 0.0; // Pas de force longitudinale à l'arrière
+
+        // Calcul des charges verticales sur chaque essieu (approximation statique)
+        double Fz_front = m * g * (b / (a + b));  // Charge sur l'essieu avant
+        double Fz_rear  = m * g * (a / (a + b));    // Charge sur l'essieu arrière
+
+        // Définition des forces latérales maximales via le coefficient de friction
+        double F_y_max_front = mu_front * Fz_front;
+        double F_y_max_rear  = mu_rear * Fz_rear;
+
+        // Calcul linéaire initial des forces latérales
+        double F_y_front_linear = 2.0 * Cy * alpha_F;
+        double F_y_rear_linear  = 2.0 * Cy * alpha_R;
+
+        // Application d'une fonction saturante pour modéliser la limite des pneus
+        double F_y_front = F_y_max_front * tanh(F_y_front_linear / F_y_max_front);
+        double F_y_rear  = F_y_max_rear  * tanh(F_y_rear_linear  / F_y_max_rear);
+
+        // Calcul des accélérations selon le modèle "bicycle"
+        double ax = vy * r + 1.0 / m * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx * vx);
+        double ay = -vx * r + 1.0 / m * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+        double r_dot = 1.0 / I * (a * (F_x_front * sin(delta) + F_y_front * cos(delta)) - b * F_y_rear);
+
+        // Mise à jour des états par intégration d'Euler
+        vx += ax * dt;
+        vy += ay * dt;
+        r += r_dot * dt;
+
+        psi += r * dt; // Integration du taux de lacet pour obtenir l'angle de direction
+
+        // Transformation des vitesses locales en vitesses globales :
+        double v_global_x = vx * cos(psi) - vy * sin(psi);
+        double v_global_y = vx * sin(psi) + vy * cos(psi);
+
+        // Mise a jour des positions globales par intégration :
+        x += v_global_x * dt;
+        y += v_global_y * dt;
+    }
 };
+
 void plot_etape(
     std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
     std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
@@ -372,8 +446,51 @@ void etape3() {
     plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape3");
 }
 
+void etape4() {
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    double initSlip = 0;
+    double initSlip_tau = 0.5;
+    double initS_desired = 0.1; // Valeur cible de slip
+
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0, 0, 9.81);
+
+    double dt = 0.2;
+    int steps = 1000;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    //double delta = 0.05; // en radians
+    double delta = 0.05; // en radians
+    double slip  = 0.1;  // valeur de glissement
+
+    // Vecteurs pour stocker les données (temps, valeur)
+    std::vector<std::pair<double,double>> vx_data, vy_data, r_data, slip_data;
+    std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+
+
+    for (int i = 0; i <= steps; ++i) {
+        if (i == 500) {
+            delta = -delta;
+        }
+        double t = i * dt;
+        vx_data.push_back({t, myVehicle.vx});
+        vy_data.push_back({t, myVehicle.vy});
+        r_data.push_back({t, myVehicle.r});
+        traj_data.push_back({myVehicle.x, myVehicle.y});
+        slip_data.push_back({t, myVehicle.slip});
+
+        // Mise à jour de la dynamique avec le modèle Bicycle
+        myVehicle.updateBicycleEtape4(dt, delta);
+    }
+
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape4");
+}
+
+
+
+
 int main() {
     etape2();
     etape3();
+    etape4();
     return 0;
 }
