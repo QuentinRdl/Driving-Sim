@@ -31,6 +31,7 @@ add_executable(Driving_Sim
 target_include_directories(Driving_Sim PRIVATE
     src/Headers
     src/Headers/GraphicsUtils
+    src/Headers/Physics
 )
 
 target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
