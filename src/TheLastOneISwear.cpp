@@ -278,24 +278,24 @@ public:
             double F_y_rear_linear = 2.0 * Cy * alpha_R;
 
             double ratio_front = F_y_front_linear / F_y_max_front;
-            double ratio_rear  = F_y_rear_linear  / F_y_max_rear;
+            double ratio_rear = F_y_rear_linear / F_y_max_rear;
 
             // Force saturée
             // Saturation via tanh pour modéliser la limite des pneus
             double F_y_front = F_y_max_front * tanh(ratio_front);
-            double F_y_rear  = F_y_max_rear  * tanh(ratio_rear);
+            double F_y_rear = F_y_max_rear * tanh(ratio_rear);
 
             // Affichage console si on est en saturation
             if (std::fabs(ratio_front) > 1.0) {
                 // std::cout << "[SAT FRONT] ratio = " << ratio_front
-                          // << " => F_y_front_linear=" << F_y_front_linear
-                          // << " N, F_y_front=" << F_y_front << " N\n";
+                // << " => F_y_front_linear=" << F_y_front_linear
+                // << " N, F_y_front=" << F_y_front << " N\n";
                 count++;
             }
             if (std::fabs(ratio_rear) > 1.0) {
                 // std::cout << "[SAT REAR] ratio = " << ratio_rear
-                  //         << " => F_y_rear_linear=" << F_y_rear_linear
-                    //      << " N, F_y_rear=" << F_y_rear << " N\n";
+                //         << " => F_y_rear_linear=" << F_y_rear_linear
+                //      << " N, F_y_rear=" << F_y_rear << " N\n";
                 count++;
             }
 
@@ -304,6 +304,35 @@ public:
                             F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - CA * vx_val * vx_val);
             double ay = -vx_val * r_val + (1.0 / m) * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
             double r_dot = 1.0 / I * (a * (F_x_front * sin(delta) + F_y_front * cos(delta)) - b * F_y_rear);
+
+
+            // TODO : Is Working ?
+            // On va essayer d'amortir le lateral
+            // Parametre d'amortissement lateral (en kg/s) :
+            double c_lat = 1000.0; // TODO : A ajuster en fonction des ocsillations
+
+            // TODO : Is Working ?
+            // Calcul de ay (Modele bicycle + amortissement)
+            ay = -vx_val * r_val
+                 + (1.0 / m) * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear)
+                 - (c_lat / m) * vy_val;
+
+
+            // Paramètre d'amortissement en lacet (en N·m·s/rad) :
+            double c_yaw = 2000.0; // À ajuster empiriquement
+
+            double torque = a * (F_x_front * sin(delta) + F_y_front * cos(delta))
+                            - b * F_y_rear;
+
+            // Ajout d'un couple d'amortissement = - c_yaw * r_val
+            r_dot = (1.0 / I) * ( torque - c_yaw * r_val );
+
+
+
+            // FIN TODO : Is Working ?
+
+
+
 
             dsdt[1] = ax;
             dsdt[2] = ay;
@@ -573,7 +602,7 @@ void etape4() {
     double initSlip_tau = 0.5;
     double initS_desired = 0.1; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 6, 6, 9.81);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 1.2, 1.2, 9.81);
 
     double dt = 0.02;
     int steps = 10000;
@@ -589,12 +618,6 @@ void etape4() {
 
     int change = steps / 2;
     for (int i = 0; i <= steps; ++i) {
-        if (i == 1000) {
-            delta = 0;
-        }
-        if (i == 1100) {
-            delta = 0.05;
-        }
         if (i == change) {
             delta = -delta; // Pour creer un changement de direction
         }
