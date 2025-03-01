@@ -1,6 +1,6 @@
 #ifndef SCICALCHELPER_H
 #define SCICALCHELPER_H
-#include <math.h>
+#include <cmath>
 
 
 inline float radToDeg(const float rad) {
