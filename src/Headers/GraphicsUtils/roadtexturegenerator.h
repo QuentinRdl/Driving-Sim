@@ -52,7 +52,7 @@ struct RoadTexture {
             extremities[0] = {0.f, 218.f};
             extremities[1] = {0.f, 947.f};
             break;
-        default: throw std::invalid_argument("Invalid segmentType: not implemented yet maybe ?");
+        default: throw std::invalid_argument("Invalid ResourceType: Can't be a road segment.");
     }
 
     // Appliquer la transformation de miroir sur l'axe X
