@@ -48,7 +48,7 @@ public:
             const float x, const float y, const float r)
     : mass(mass), dist_cog_front_axle(distance_cog_front_axle), dist_cog_rear_axle(distance_cog_rear_axle),
     airRes(airRes), vx(0.0), vy(0.0), r(r), Cx(cx), Cy(cy), x(x), y(y), psi(0.0) {
-        I = mass * std::pow(0.5 * (distance_cog_front_axle + distance_cog_rear_axle), 2);
+        I = mass * std::pow(0.5f * (distance_cog_front_axle + distance_cog_rear_axle), 2);
     }
 
 
@@ -62,14 +62,14 @@ public:
         }
 
         // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
-        const float F_x_front = 2.0 * Cx * slip;    // Force longitudinale sur l'essieu avant (drive wheels)
-        constexpr float F_x_rear  = 0.0;            // Pas de force longitudinale à l'arrière
-        const float F_y_front = 2.0 * Cy * alpha_F; // Force latérale sur l'essieu avant
-        const float F_y_rear  = 2.0 * Cy * alpha_R; // Force latérale sur l'essieu arrière
+        const float F_x_front = 2.0f * Cx * slip;    // Force longitudinale sur l'essieu avant (drive wheels)
+        constexpr float F_x_rear  = 0;            // Pas de force longitudinale à l'arrière
+        const float F_y_front = 2.0f * Cy * alpha_F; // Force latérale sur l'essieu avant
+        const float F_y_rear  = 2.0f * Cy * alpha_R; // Force latérale sur l'essieu arrière
 
-        const float ax = vy * r + 1.0/mass * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - airRes * vx * vx);
-        const float ay = -vx * r + 1.0/mass * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
-        const float r_dot = 1.0 / I * (dist_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - dist_cog_rear_axle * F_y_rear);
+        const float ax = vy * r + 1.0f/mass * (F_x_front * cosf(delta) - F_y_front * sinf(delta) + F_x_rear - airRes * vx * vx);
+        const float ay = -vx * r + 1.0f/mass * (F_x_front * sinf(delta) + F_y_front * cosf(delta) + F_y_rear);
+        const float r_dot = 1.0f / I * (dist_cog_front_axle * (F_x_front * sinf(delta) + F_y_front * cosf(delta)) - dist_cog_rear_axle * F_y_rear);
 
         // Mise à jour des états par intégration d'Euler
         vx += ax * dt;
@@ -79,8 +79,8 @@ public:
         psi += r * dt; // Integration du taux de lacet pour obtenir l'angle de direction
 
         // Transformation des vitesses locales en vitesses globales :
-        const float v_global_x = vx * cos(psi) - vy * sin(psi);
-        const float v_global_y = vx * sin(psi) + vy * cos(psi);
+        const float v_global_x = vx * cosf(psi) - vy * sinf(psi);
+        const float v_global_y = vx * sinf(psi) + vy * cosf(psi);
 
         // Mise à jour des positions globales par intégration :
         x += v_global_x * dt;
@@ -88,7 +88,5 @@ public:
     }
 
 };
-
-
 
 #endif //VEHICLE_H
