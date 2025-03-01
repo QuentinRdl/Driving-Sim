@@ -1,5 +1,7 @@
 #ifndef CAR_H
 #define CAR_H
+#include <memory>
+
 #include "main_classes.h"
 
 #include <SFML/Graphics.hpp>
@@ -18,14 +20,13 @@ class Car {
     const float maxSlip = 0.2f;          // Max slip (may be negative for the brake)
 
     sf::Sprite sprite;
-public:
-    Vehicle vehicle;
 
+public:
+    std::unique_ptr<Vehicle> vehicle;
     /**
      * @param game the game instance
-     * @param vehicle the vehicle (physic model) to use
      */
-    Car(const Game* game, const Vehicle &vehicle);
+    explicit Car(const Game* game);
 
     /**
      * Handle the keyboard input to update the car 
@@ -44,9 +45,9 @@ public:
      */
     void renderOn(sf::RenderWindow& window) const;
 
-    float getVx() const { return vehicle.vx; }
-    float getVy() const { return vehicle.vy; }
-    float getLacet() const { return vehicle.r; }
+    float getVx() const { return vehicle->vx; }
+    float getVy() const { return vehicle->vy; }
+    float getLacet() const { return vehicle->r; }
     float getSteeringAngle() const { return currentDelta; }
 };
 
