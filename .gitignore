@@ -5,6 +5,7 @@ build/*
 
 *MakeFiles*
 *MakeFile*
+*Makefile*
 # Images
 *.png
 
