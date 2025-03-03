@@ -19,7 +19,7 @@ endif()
 
 # Définir les sources et headers (en adaptant aux fichiers réellement présents)
 set(SOURCES
-        src/TheLastOneISwear.cpp
+        src/VehiculeDynamics.cpp
 )
 
 set(HEADERS
@@ -31,3 +31,17 @@ add_executable(Driving_Sim ${SOURCES} ${HEADERS})
 
 # Lier les bibliothèques Python3 et Boost.iostreams
 target_link_libraries(Driving_Sim ${Python3_LIBRARIES} Boost::iostreams)
+
+# Commande pour creer le dossier
+add_custom_command(
+        TARGET Driving_Sim POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Driving_Sim>/Images
+)
+
+# Commande pour créer les fichiers Etape2, Etape3 et Etape4 dans le dossier Images
+add_custom_command(
+        TARGET Driving_Sim POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Driving_Sim>/Images/Etape2
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Driving_Sim>/Images/Etape3
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Driving_Sim>/Images/Etape4
+)
