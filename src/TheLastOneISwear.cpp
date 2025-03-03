@@ -602,7 +602,7 @@ void etape4() {
     double initSlip_tau = 0.5;
     double initS_desired = 0.1; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 1.2, 1.2, 9.81);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
 
     double dt = 0.02;
     int steps = 10000;
