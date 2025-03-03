@@ -11,7 +11,6 @@
 #include "gnuplot-iostream.h"
 #include <cmath>
 
-// Exemple de classe Vehicle (cf. implémentation précédente)
 class Vehicle {
 public:
     double m;   // Masse [kg]
