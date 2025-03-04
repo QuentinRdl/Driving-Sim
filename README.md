@@ -20,8 +20,9 @@ Driving Sim is a 2D driving simulator designed to simulate vehicle physics, incl
 ### Prerequisites
 - **C++17 or later**
 - **CMake** (for building)
-- **SFML 2.5+**
-- **Google Test** (for unit testing)
+- **Installed by the `CMakeLists.txt` file**:
+  - **SFML 2.5+**
+  - **Google Test** (for unit testing)
 
 ### Build Instructions
 1. Clone the repository:
