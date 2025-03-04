@@ -87,7 +87,7 @@ void Game::update() {
     car->update(dt);
 
     game_view.setCenter(car->getX(), car->getY());
-    game_view.setRotation(-radToDeg(car->getLacet()));
+    game_view.setRotation(radToDeg(car->getPsi() + M_PI_2f)); // Here we add PI/2 to have the good direction (car moving to the top of the screen).
     window->setView(game_view);
 }
 
