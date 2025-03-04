@@ -19,7 +19,6 @@ if (NOT SFML_FOUND)
     endif()
 endif()
 
-
 add_executable(Driving_Sim
         src/main.cpp
         src/game.cpp
@@ -32,14 +31,47 @@ add_executable(Driving_Sim
 )
 
 target_include_directories(Driving_Sim PRIVATE
-    src/Headers
-    src/Headers/GraphicsUtils
-    src/Headers/Physics
+        src/Headers
+        src/Headers/GraphicsUtils
+        src/Headers/Physics
 )
 
 target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
 
-# Copier les assets dans le dossier de sortie
 add_custom_command(TARGET Driving_Sim POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:Driving_Sim>/assets)
+
+# ------------------------------------------------------------------
+# Ajout de l'exécutable de tests avec GoogleTest
+# ------------------------------------------------------------------
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        075196ca060107d44b4e3a1f44b25886ed5bd187 # v1.15.2
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+find_package(Threads REQUIRED)
+
+add_executable(DrivingSimTests tests/r4_integration_test.cpp)
+
+target_include_directories(DrivingSimTests PRIVATE
+        src/Headers
+        src/Headers/GraphicsUtils
+        src/Headers/Physics
+)
+
+target_compile_options(DrivingSimTests PRIVATE "-Wall" "-Wextra" "-g" "-O0" "-fsanitize=address,undefined")
+set_target_properties(DrivingSimTests PROPERTIES LINK_FLAGS "-fsanitize=address,undefined")
+
+target_link_libraries(DrivingSimTests PRIVATE
+        GTest::gtest_main
+        Threads::Threads
+)
+
+include(GoogleTest)
+gtest_discover_tests(DrivingSimTests)
