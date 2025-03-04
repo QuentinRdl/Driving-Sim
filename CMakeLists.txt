@@ -26,6 +26,8 @@ add_executable(Driving_Sim
         src/circuit.cpp
         src/fpscounter.cpp
         src/car.cpp
+        src/debugmode.cpp
+        src/arial_ttf.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
