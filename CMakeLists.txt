@@ -28,6 +28,7 @@ add_executable(Driving_Sim
         src/car.cpp
         src/debugmode.cpp
         src/arial_ttf.cpp
+        src/vehicle.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
