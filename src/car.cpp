@@ -1,64 +1,82 @@
 #include "car.h"
 
-#include <iostream>
-#include <cmath>
-#include <fstream>
-#include <iomanip>
+#include <SFML/Window/Keyboard.hpp>
 
-namespace Driving_Sim {
+#include "game.h"
+#include "resourcetype.h"
+#include "calculationhelper.h"
 
-    Car::Car(double f, double r): dT(0.01) {
-        frontDistance = f;
-        rearDistance = r;
+
+Car::Car(const Game* game): game(game), currentDelta(0.05f) {
+    constexpr float initSlip = 0;
+    constexpr float initSlip_tau = 0.5;
+    constexpr float initS_desired = 0.1;
+    Vehicle vehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+    this->vehicle = std::make_unique<Vehicle>(vehicle);
+
+    sprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
+    const sf::FloatRect bounds = sprite.getLocalBounds();
+    sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+}
+
+/**
+ * TODO Biais lié aux fps => prends pas en compte le dt.
+ */
+void Car::handleInput() {
+    // Incrément pour l'accélération (commande de slip désiré)
+    constexpr float throttleIncrement = 0.01f;
+
+    // --- Accélération / Décélération ---
+    // Si la flèche du haut est pressée, on augmente la commande d'accélération.
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        vehicle->s_desired += throttleIncrement;
+        if (vehicle->s_desired > 1.0f)
+            vehicle->s_desired = 1.0f; // On limite à 1.0 (valeur maximale)
+    }
+    // Si la flèche du bas est pressée, on diminue la commande d'accélération (pour freiner).
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        vehicle->s_desired -= throttleIncrement;
+        if (vehicle->s_desired < 0.0f)
+            vehicle->s_desired = 0.0f; // On ne descend pas en dessous de 0
     }
 
-    void Car::setInitialConditions(double x_i, double y_i, double v_i, double psi_i) {
-       positionX.push_back(x_i);
-       positionY.push_back(y_i);
-       speed.push_back(v_i);
-       heading.push_back(psi_i);
-       time.push_back(0.0);
+    // --- Gestion de l'orientation (volant) ---
+    // Si la flèche gauche est pressée, on tourne à gauche (angle négatif)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        currentDelta -= deltaIncrement;
+        if (currentDelta < -maxDelta)
+            currentDelta = -maxDelta;
+    }
+    // Si la flèche droite est pressée, on tourne à droite (angle positif)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        currentDelta += deltaIncrement;
+        if (currentDelta > maxDelta)
+            currentDelta = maxDelta;
     }
 
-    void Car::setInputs(double a, double steer) {
-        acceleration_Input = a;
-        steerAngle_Input = steer;
+    // Si aucune touche de direction n'est pressée, on recentre le volant progressivement
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (currentDelta > 0) {
+            currentDelta -= deltaIncrement;
+            if (currentDelta < 0)
+                currentDelta = 0;
+        } else if (currentDelta < 0) {
+            currentDelta += deltaIncrement;
+            if (currentDelta > 0)
+                currentDelta = 0;
+        }
     }
+}
 
-    void Car::simulateTrajectory(double t) {
-         int numSamples = t/dT;
-         for(int i = 0; i < numSamples; i++) {
-           // We will use Euler's method to solve (or simulate) differential equation ? // TODO : Check info
-           double timeUpdate = time[i] + dT;
-           time.push_back(timeUpdate);
+void Car::update(const float dt) {
+    handleInput();
 
-           double speedUpdated = speed[i] + dT*(acceleration_Input);
-           speed.push_back(speedUpdated);
-
-           double slipAngle = atan(tan(steerAngle_Input) * rearDistance/(rearDistance+frontDistance));
-
-           double headingUpdated = heading[i] + dT * ((speed[i]/rearDistance) * sin (slipAngle));
-           heading.push_back(headingUpdated);
-
-           double posXUpdated = positionX[i] + dT * (speed[i] * cos(heading[i] + slipAngle));
-           positionX.push_back(posXUpdated);
+    vehicle->updateBicycleRK4(dt, currentDelta);
+    sprite.setPosition(vehicle->x, vehicle->y);
+    sprite.setRotation(radToDeg(vehicle->psi));
+}
 
 
-           double posYUpdated = positionY[i] + dT * (speed[i] * sin(heading[i] + slipAngle));
-           positionY.push_back(posYUpdated);
-
-           std::cout << speed[i] << std::endl;
-         }
-    }
-
-    void Car::writeToFile(const std::string &fileName) const {
-       std::ofstream oFile;
-       oFile.open(fileName);
-       oFile << "t(s)" << "\t" << "X(m)" << "\t" << "Y(m)" << "\t" << "V(m/s)" << "\t" << "Psi(rad)" << std::endl;
-       for(int i = 0; i < time.size(); i++) {
-           oFile << std::setprecision(5) << time[i] << "\t" << positionX[i] << "\t" << positionY[i] << "\t" << speed[i] << "\t" << heading[i] << std::endl;
-       }
-       oFile.close();
-    }
-
+void Car::renderOn(sf::RenderWindow &window) const {
+    window.draw(sprite);
 }
