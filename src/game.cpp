@@ -51,7 +51,7 @@ void Game::manageEvents() {
                 if (event.key.code == sf::Keyboard::F)            fps_counter.toggle();
                 else if (event.key.code == sf::Keyboard::Escape)  window->close();
                 else if (event.key.code == sf::Keyboard::F7)      printf("Car position: %f / %f\n Lacet: %f\n\n",
-                                                                     car->vehicle->x, car->vehicle->y, car->vehicle->r);
+                                                                     car->vehicle->x, car->vehicle->y, car->vehicle->lacet);
                 else if (event.key.code == sf::Keyboard::F3) {
                     debug_mode.toggle();
                     printf("Debug mode changed to %s\n", debug_mode.isEnabled() ? "ON" : "OFF");
