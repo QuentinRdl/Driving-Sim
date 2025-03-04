@@ -12,32 +12,30 @@ class Car {
     const Game* game;
 
     float currentDelta;
-    float currentSlip;
 
-    const float deltaIncrement = 0.002f; // Increment of angle by frame
-    const float slipIncrement  = 0.001f; // Increment of slip by frame
+    const float deltaIncrement = 0.001f; // Increment of angle by frame
     const float maxDelta = 0.3f;         // Max angle for the steering wheel
-    const float maxSlip = 0.2f;          // Max slip (may be negative for the brake)
 
     sf::Sprite sprite;
 
 public:
     std::unique_ptr<Vehicle> vehicle;
+
     /**
      * @param game the game instance
      */
     explicit Car(const Game* game);
 
     /**
-     * Handle the keyboard input to update the car 
-     */
-    void handleInput();
-
-    /**
      * Update the physic and the graphical representation of the car
      * @param dt the delta time
      */
     void update(float dt);
+
+    /**
+     * Handle the keyboard input to update the car
+     */
+    void handleInput();
 
     /**
      * Render the car on the window
@@ -64,13 +62,9 @@ public:
      */
     float getVy() const { return vehicle->vy; }
     /**
-     * @return the yaw rate of the car
+     * @return the direction of the car
      */
-    float getLacet() const { return vehicle->r; }
-    /**
-     * @return the steering angle of the car
-     */
-    float getSteeringAngle() const { return currentDelta; }
+    float getPsi() const { return vehicle->psi; }
 };
 
 #endif //CAR_H
