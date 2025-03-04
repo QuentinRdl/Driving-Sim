@@ -41,6 +41,8 @@ public:
 
     void manageEvents();
 
+    DebugMode getDebugMode() const { return debug_mode; }
+
     [[nodiscard]] float getZoomFactor() const;
 
     void update();
