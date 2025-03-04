@@ -36,19 +36,19 @@ double f(double x, double /* t */) {
  * @param dt Le pas de temps pour l'intégration.
  * @return La nouvelle valeur de x après une étape d'intégration RK4.
  */double RK4Step(double (*f)(double, double), double x, double t, double dt) {
-    double k1 = f(x, t);
-    double k2 = f(x + 0.5 * dt * k1, t + 0.5 * dt);
-    double k3 = f(x + 0.5 * dt * k2, t + 0.5 * dt);
-    double k4 = f(x + dt * k3, t + dt);
+    const double k1 = f(x, t);
+    const double k2 = f(x + 0.5 * dt * k1, t + 0.5 * dt);
+    const double k3 = f(x + 0.5 * dt * k2, t + 0.5 * dt);
+    const double k4 = f(x + dt * k3, t + dt);
     return x + (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4);
 }
 
 // Test de convergence de l'intégrateur RK4
 TEST(RK4IntegratorTest, ConvergenceTest) {
-    double x0 = 1.0;       // condition initiale
-    double T = 1.0;        // temps final
-    int N = 1000;          // nombre d'étapes
-    double dt = T / N;     // pas de temps
+    constexpr double x0 = 1.0;       // condition initiale
+    constexpr double T = 1.0;        // temps final
+    constexpr int N = 1000;          // nombre d'étapes
+    constexpr double dt = T / N;     // pas de temps
 
     double x_num = x0;
     double t = 0.0;
@@ -60,8 +60,8 @@ TEST(RK4IntegratorTest, ConvergenceTest) {
     }
 
     // Solution exacte: x(T) = x0 * exp(T)
-    double x_exact = x0 * std::exp(T);
-    double error = std::fabs(x_num - x_exact);
+    const double x_exact = x0 * std::exp(T);
+    const double error = std::fabs(x_num - x_exact);
 
     // Afficher l'erreur pour le débogage (optionnel)
     std::cout << "x_num = " << x_num << ", x_exact = " << x_exact
