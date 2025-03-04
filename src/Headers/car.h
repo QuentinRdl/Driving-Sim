@@ -45,9 +45,31 @@ public:
      */
     void renderOn(sf::RenderWindow& window) const;
 
+    /**
+     * @return the x position of the car
+     */
+    float getX() const { return vehicle->x; }
+
+    /**
+     * @return the y position of the car
+     */
+    float getY() const { return vehicle->y; }
+
+    /**
+     * @return the speed of the car in x direction
+     */
     float getVx() const { return vehicle->vx; }
+    /**
+     * @return the speed of the car in y direction
+     */
     float getVy() const { return vehicle->vy; }
+    /**
+     * @return the yaw rate of the car
+     */
     float getLacet() const { return vehicle->r; }
+    /**
+     * @return the steering angle of the car
+     */
     float getSteeringAngle() const { return currentDelta; }
 };
 
