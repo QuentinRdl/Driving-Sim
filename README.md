@@ -54,27 +54,35 @@ Driving Sim is a 2D driving simulator designed to simulate vehicle physics, incl
 ## Project Structure
 ```
 Driving_Sim/
-│── src/
+├── src/
 │   ├── car.cpp
 │   ├── circuit.cpp
 │   ├── game.cpp
 │   ├── vehicle.cpp
 │   ├── debugmode.cpp
 │   ├── fpscounter.cpp
-│   ├── main.cpp
-│── include/
+│   └── main.cpp
+├── include/
 │   ├── car.h
 │   ├── circuit.h
 │   ├── game.h
 │   ├── vehicle.h
 │   ├── debugmode.h
-│   ├── fpscounter.h
-│── assets/
-│   ├── images/
-│── tests/
-│   ├── rk4_integration_test.cpp
-│── CMakeLists.txt
-│── README.md
+│   └── fpscounter.h
+├── assets/
+│   └── images/
+│       ├── car.png
+│       ├── large_turn.png
+│       ├── long_straight.png
+│       ├── medium_turn.png
+│       ├── small_straight.png
+│       ├── small_turn.png
+│       ├── s_turn.png
+│       └── u_turn.png
+├── tests/
+│   └── rk4_integration_test.cpp
+├── CMakeLists.txt
+└── README.md
 ```
 
 ## Testing
