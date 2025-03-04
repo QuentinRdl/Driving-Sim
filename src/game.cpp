@@ -45,7 +45,11 @@ void Game::manageEvents() {
                 if (event.key.code == sf::Keyboard::F)            fps_counter.toggle();
                 else if (event.key.code == sf::Keyboard::Escape)  window->close();
                 else if (event.key.code == sf::Keyboard::F7)      printf("Car position: %f / %f\n Lacet: %f\n\n",
-                                                                        car->vehicle->x, car->vehicle->y, car->vehicle->r);
+                                                                     car->vehicle->x, car->vehicle->y, car->vehicle->r);
+                else if (event.key.code == sf::Keyboard::F3) {
+                    debug_mode.toggle();
+                    printf("Debug mode changed to %s\n", debug_mode.isEnabled() ? "ON" : "OFF");
+                }
             break;
             case sf::Event::MouseWheelScrolled:
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
@@ -68,6 +72,7 @@ void Game::update() {
 
     manageEvents();
     fps_counter.update(dt);
+    debug_mode.update(car.get());
 
     if (circuit->shouldBeUpdated()) {
         updateCircuit();
@@ -91,6 +96,7 @@ void Game::render() const {
     circuit->renderOn(*window);
     car->renderOn(*window);
 
+    debug_mode.renderOn(*window);
     window->display();
 }
 

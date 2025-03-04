@@ -9,6 +9,7 @@
 #include "circuit.h"
 #include "fpscounter.h"
 #include "texturemanager.h"
+#include "debugmode.h"
 
 /**
  * Class that acts as the game engine.
@@ -20,6 +21,7 @@ class Game final {
     float zoom_factor;
 
     FPSCounter fps_counter;
+    DebugMode debug_mode;
     std::unique_ptr<Circuit> circuit;
     std::unique_ptr<Car> car;
     std::unique_ptr<sf::RenderWindow> window;
