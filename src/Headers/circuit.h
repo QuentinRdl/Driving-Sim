@@ -7,8 +7,6 @@
 #include "roadtexturegenerator.h"
 #include "game.h"
 
-/* Declaration to avoid circular includes problem */
-
 class Circuit {
     struct RoadSegment {
         RoadTexture texture;
@@ -52,11 +50,10 @@ public:
         return false;
     }
     void needUpdate() { should_be_updated = true; }
-#ifdef debug
+
     /* Debug function for the sprite */
     static sf::CircleShape createCircle(sf::Color color, float radius);
     static sf::RectangleShape createSquare(sf::Color color, float length);
-#endif
 };
 
 #endif // CIRCUIT_H

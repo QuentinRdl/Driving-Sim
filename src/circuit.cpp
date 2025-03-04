@@ -80,39 +80,48 @@ void Circuit::join(const ResourceType::Value& segment_type, const float rotation
     segments.push_back({ road_texture, rotation, fromPoint2, rotatedPoint});
 }
 
+/**
+ *
+ * @param window the window to render the circuit on
+ */
 void Circuit::renderOn(sf::RenderWindow& window) const {
     for (const auto& seg : segments) {
         window.draw(seg.texture.sprite);
     }
-#ifdef debug
-    for (const auto& segment : segments) {
-        constexpr float radius = 10.f;
-        sf::CircleShape redCirc = createCircle(sf::Color::Red, radius);
-        redCirc.setPosition(segment.realPoint1);
+    if (game->getDebugMode().isEnabled()) {
+        for (const auto& segment : segments) {
+            constexpr float radius = 10.f;
+            sf::CircleShape redCirc = createCircle(sf::Color::Red, radius);
+            redCirc.setPosition(segment.realPoint1);
 
-        sf::CircleShape greenCirc = createCircle(sf::Color::Green, radius*2);
-        greenCirc.setPosition(segment.realPoint2);
+            sf::CircleShape greenCirc = createCircle(sf::Color::Green, radius*2);
+            greenCirc.setPosition(segment.realPoint2);
 
-        sf::RectangleShape p1 = createSquare(sf::Color::Red, radius*2);
-        p1.setPosition(segment.texture.sprite.getPosition());
+            sf::RectangleShape p1 = createSquare(sf::Color::Red, radius*2);
+            p1.setPosition(segment.texture.sprite.getPosition());
 
-        sf::RectangleShape p2 = createSquare(sf::Color::Green, radius*2);
-        p2.setPosition(segment.texture.sprite.getPosition() + segment.texture.sprite.getGlobalBounds().getSize());
+            sf::RectangleShape p2 = createSquare(sf::Color::Green, radius*2);
+            p2.setPosition(segment.texture.sprite.getPosition() + segment.texture.sprite.getGlobalBounds().getSize());
 
 
-        window.draw(greenCirc);
-        window.draw(redCirc);
-        window.draw(p1);
-        window.draw(p2);
+            window.draw(greenCirc);
+            window.draw(redCirc);
+            window.draw(p1);
+            window.draw(p2);
+        }
     }
-#endif
 }
+
 
 void Circuit::resetSegments() {
     segments = {};
 }
 
-#ifdef debug
+/**
+ * @param color the color of the circle
+ * @param radius  the radius of the circle
+ * @return a `sf::CircleShape` with the given color and radius
+ */
 sf::CircleShape Circuit::createCircle(const sf::Color color, const float radius) {
     sf::CircleShape circle(radius);
     circle.setOrigin(radius, radius);
@@ -120,9 +129,13 @@ sf::CircleShape Circuit::createCircle(const sf::Color color, const float radius)
     return circle;
 }
 
+/**
+ * @param color the color of the square
+ * @param length the length of the square
+ * @return a `sf::RectangleShape` with the given color and length
+ */
 sf::RectangleShape Circuit::createSquare(const sf::Color color, const float length) {
     sf::RectangleShape rectangle({length, length});
     rectangle.setFillColor(color);
     return rectangle;
 }
-#endif
