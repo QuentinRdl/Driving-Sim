@@ -9,6 +9,7 @@
 #include "circuit.h"
 #include "fpscounter.h"
 #include "texturemanager.h"
+#include "calculationhelper.h"
 #include "debugmode.h"
 
 /**
@@ -25,6 +26,9 @@ class Game final {
     std::unique_ptr<Circuit> circuit;
     std::unique_ptr<Car> car;
     std::unique_ptr<sf::RenderWindow> window;
+
+    sf::View game_view;
+    sf::View hud_view;
 
     sf::Clock clock;
 

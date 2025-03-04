@@ -15,12 +15,18 @@ float Game::getZoomFactor() const {
  * Constructor
  */
 Game::Game(): zoom_factor(0.4) {
-    window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Interface Graphique", sf::Style::Default);
+    window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Simulateur de conduite", sf::Style::Default); // TODO check name.
     window->setVerticalSyncEnabled(true);
     texture_manager = {};
 
-    // Data given by QRadlo in his tests (cf Physics4Real#src/TheLastOneISwear.cpp).
     car = std::make_unique<Car>(this);
+    const float win_x = static_cast<float>(window->getSize().x);
+    const float win_y = static_cast<float>(window->getSize().y);
+    game_view.setSize(win_x, win_y);
+    game_view.setCenter(car->getX(), car->getY());
+
+    hud_view.setSize(win_x, win_y);
+    hud_view.setCenter(win_x / 2.f, win_y / 2.f);
 
     circuit = std::make_unique<Circuit>(this);
     updateCircuit();
@@ -79,6 +85,10 @@ void Game::update() {
     }
 
     car->update(dt);
+
+    game_view.setCenter(car->getX(), car->getY());
+    game_view.setRotation(-radToDeg(car->getLacet()));
+    window->setView(game_view);
 }
 
 void Game::updateCircuit() const {
@@ -92,11 +102,16 @@ void Game::updateCircuit() const {
 void Game::render() const {
     window->clear();
 
-    fps_counter.renderOn(*window);
+    /* --- Game View (Car, Circuit, ...) --- */
+    window->setView(game_view);
     circuit->renderOn(*window);
     car->renderOn(*window);
 
+    /* --- HUD View (FPS, Menus, ...) --- */
+    window->setView(hud_view);
+    fps_counter.renderOn(*window);
     debug_mode.renderOn(*window);
+
     window->display();
 }
 
