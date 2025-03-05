@@ -7,7 +7,7 @@
 
 
 
-struct vehiculeData {
+struct vehicleData {
     float mass;   // Masse [kg]
     float dist_cog_front_axle;   // Distance COG - essieu avant [m]
     float dist_cog_rear_axle;   // Distance COG - essieu arrière [m]
@@ -34,6 +34,8 @@ struct vehiculeData {
     float mu_front; // Coefficient de friction pour l'essieu avant
     float mu_rear; // Coefficient de friction pour l'essieu arriere
     float g; // Acceleration due a la gravite
+
+    float delta; // Angle de braquage (rad)
 };
 
 class Vehicle {
@@ -91,7 +93,13 @@ public:
      */
     void updateBicycleRK4(float dt, float delta);
 
-    void getNextIterations(size_t nbIterations, vehiculeData* data);
+    /**
+     * TODO Full Complete Documentation.
+     * @param nbIterations
+     * @param data
+     * @param step
+     */
+    void getNextIterations(const size_t nbIterations, vehicleData* data, float step);
 
 private:
 

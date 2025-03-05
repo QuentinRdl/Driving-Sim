@@ -1,4 +1,5 @@
 #include "vehicle.h"
+#include <assert.h>
 
 /**
  * TODO complete documentation / @gubgub
@@ -148,4 +149,45 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     const float v_global_y = vx_val * sinf(psi_val) + vy_val * cosf(psi_val);
     dsdt[5] = v_global_x; // dx/dt
     dsdt[6] = v_global_y; // dy/dt
+}
+
+
+void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, float step) {
+    // Get the number of items in the array data
+
+    size_t dataSize = sizeof(vehicleData) / sizeof(data[0]);
+
+    assert(nbIterations > 0);
+    assert(nbIterations == dataSize); // Ensures correct usage of function
+
+    float angleBraquage = data[0].delta;
+
+    /* We will now apply the updataBicycleRK4 a total of nbIterations times
+     * And stock the result of each iteration inside our vehiculeData array
+     */
+
+    for (size_t i = 0; i < nbIterations; i++) {
+        updateBicycleRK4(step, angleBraquage);
+        data[i].mass = mass;
+        data[i].dist_cog_front_axle = dist_cog_front_axle;
+        data[i].dist_cog_rear_axle = dist_cog_rear_axle;
+        data[i].airResCoeff = airResCoeff;
+        data[i].I = I;
+        data[i].Cx = Cx;
+        data[i].Cy = Cy;
+        data[i].vx = vx;
+        data[i].vy = vy;
+        data[i].lacet = lacet;
+        data[i].x = x;
+        data[i].y = y;
+        data[i].psi = psi;
+        data[i].slip = slip;
+        data[i].slip_tau = slip_tau;
+        data[i].s_desired = s_desired;
+        data[i].mu_front = mu_front;
+        data[i].mu_rear = mu_rear;
+        data[i].g = g;
+        // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
+
+    }
 }
