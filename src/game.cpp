@@ -74,7 +74,7 @@ void Game::manageEvents() {
 
 
 void Game::update() {
-    const float dt = clock.restart().asSeconds();
+    const float dt = clock.restart().asSeconds(); // time delta between the frame N-1 and the frame N
 
     manageEvents();
     fps_counter.update(dt);
