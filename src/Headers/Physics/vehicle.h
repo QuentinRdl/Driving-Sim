@@ -1,7 +1,3 @@
-//
-// Created by rgld_ on 04/03/25.
-//
-
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
