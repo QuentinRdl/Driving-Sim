@@ -10,14 +10,7 @@ endif()
 
 include_directories(src)
 
-find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-if (NOT SFML_FOUND)
-    if (EXISTS "/etc/arch-release")
-        execute_process(COMMAND sudo pacman -S sfml=2.5 --noconfirm)
-    else()
-        execute_process(COMMAND sudo apt-get install libsfml-dev -y)
-    endif()
-endif()
+find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
 add_executable(Driving_Sim
         src/main.cpp
@@ -31,6 +24,7 @@ add_executable(Driving_Sim
 )
 
 target_include_directories(Driving_Sim PRIVATE
+
         src/Headers
         src/Headers/GraphicsUtils
         src/Headers/Physics
