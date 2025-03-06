@@ -6,7 +6,6 @@
 #include "calculationhelper.h"
 
 
-
 struct vehicleData {
     float mass;   // Masse [kg]
     float dist_cog_front_axle;   // Distance COG - essieu avant [m]
@@ -69,6 +68,12 @@ public:
 
 
     size_t count; // TODO : Remove !!!
+    Vehicle() : mass(0), dist_cog_front_axle(0), dist_cog_rear_axle(0),
+        airResCoeff(0), I(0), Cx(0), Cy(0), vx(0), vy(0), lacet(0), x(0),
+        y(0), psi(0), slip(0), slip_tau(0), s_desired(0),
+        mu_front(0), mu_rear(0), g(0), count(0)
+    {
+    }
 
     // TODO : Remove this constructor
     Vehicle(float mass, float a_front, float b_rear,
@@ -77,7 +82,7 @@ public:
         float mu_front, float mu_rear, float g)
         : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), Cx(cx), Cy(cy),
           vx(1), vy(1), lacet(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired),
-          mu_front(mu_front), mu_rear(mu_rear), g(g) {
+          mu_front(mu_front), mu_rear(mu_rear), g(g), count(0) {
         I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
     }
 
@@ -122,7 +127,7 @@ public:
      * TODO Full Complete Documentation.
      * @param data
      */
-    void getData(vehicleData data) const;
+    void getData(vehicleData &data) const;
 
 private:
 

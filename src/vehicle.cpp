@@ -1,5 +1,5 @@
 #include "vehicle.h"
-#include <assert.h>
+#include <cassert>
 
 /**
  * TODO complete documentation / @gubgub
@@ -155,7 +155,7 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
 void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, float step) {
     // Get the number of items in the array data
 
-    size_t dataSize = sizeof(vehicleData) / sizeof(data[0]);
+    constexpr size_t dataSize = sizeof(vehicleData) / sizeof(data[0]);
 
     assert(nbIterations > 0);
     assert(nbIterations == dataSize); // Ensures correct usage of function
@@ -214,7 +214,7 @@ void Vehicle::setData(const vehicleData &data) {
     g = data.g;
 }
 
-void Vehicle::getData(vehicleData data) const {
+void Vehicle::getData(vehicleData &data) const {
     data.mass = mass;
     data.dist_cog_front_axle = dist_cog_front_axle;
     data.dist_cog_rear_axle = dist_cog_rear_axle;
