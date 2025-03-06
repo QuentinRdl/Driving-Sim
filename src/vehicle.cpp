@@ -151,7 +151,6 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     dsdt[6] = v_global_y; // dy/dt
 }
 
-
 void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, float step) {
     // Get the number of items in the array data
 

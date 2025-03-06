@@ -21,6 +21,7 @@ add_executable(Driving_Sim
         src/debugmode.cpp
         src/arial_ttf.cpp
         src/vehicle.cpp
+        src/Headers/plotting.h
 )
 
 target_include_directories(Driving_Sim PRIVATE
