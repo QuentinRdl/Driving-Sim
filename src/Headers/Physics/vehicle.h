@@ -70,6 +70,17 @@ public:
 
     size_t count; // TODO : Remove !!!
 
+    // TODO : Remove this constructor
+    Vehicle(float mass, float a_front, float b_rear,
+        float airRes, float cx, float cy,
+        float slip, float slip_tau, float s_desired,
+        float mu_front, float mu_rear, float g)
+        : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), Cx(cx), Cy(cy),
+          vx(1), vy(1), lacet(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired),
+          mu_front(mu_front), mu_rear(mu_rear), g(g) {
+        I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
+    }
+
     Vehicle(const float mass, const float dist_cog_front_axle, const float dist_cog_rear_axle,
             const float airRes, const float cx, const float cy,
             const float vx, const float vy, const float lacet,
@@ -100,6 +111,18 @@ public:
      * @param step
      */
     void getNextIterations(const size_t nbIterations, vehicleData* data, float step);
+
+    /**
+     * TODO Full Complete Documentation.
+     * @param data
+     */
+    void setData(const vehicleData &data);
+
+    /**
+     * TODO Full Complete Documentation.
+     * @param data
+     */
+    void getData(vehicleData data) const;
 
 private:
 

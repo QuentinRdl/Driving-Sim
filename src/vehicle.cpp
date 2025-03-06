@@ -191,3 +191,48 @@ void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, fl
 
     }
 }
+
+void Vehicle::setData(const vehicleData &data) {
+    mass = data.mass;
+    dist_cog_front_axle = data.dist_cog_front_axle;
+    dist_cog_rear_axle = data.dist_cog_rear_axle;
+    airResCoeff = data.airResCoeff;
+    I = data.I;
+    Cx = data.Cx;
+    Cy = data.Cy;
+    vx = data.vx;
+    vy = data.vy;
+    lacet = data.lacet;
+    x = data.x;
+    y = data.y;
+    psi = data.psi;
+    slip = data.slip;
+    slip_tau = data.slip_tau;
+    s_desired = data.s_desired;
+    mu_front = data.mu_front;
+    mu_rear = data.mu_rear;
+    g = data.g;
+}
+
+void Vehicle::getData(vehicleData data) const {
+    data.mass = mass;
+    data.dist_cog_front_axle = dist_cog_front_axle;
+    data.dist_cog_rear_axle = dist_cog_rear_axle;
+    data.airResCoeff = airResCoeff;
+    data.I = I;
+    data.Cx = Cx;
+    data.Cy = Cy;
+    data.vx = vx;
+    data.vy = vy;
+    data.lacet = lacet;
+    data.x = x;
+    data.y = y;
+    data.psi = psi;
+    data.slip = slip;
+    data.slip_tau = slip_tau;
+    data.s_desired = s_desired;
+    data.mu_front = mu_front;
+    data.mu_rear = mu_rear;
+    data.g = g;
+    // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
+}
