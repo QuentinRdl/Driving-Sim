@@ -115,7 +115,7 @@ public:
      * @param data
      * @param step
      */
-    void getNextIterations(const size_t nbIterations, vehicleData* data, float step);
+    void getNextIterations(size_t nbIterations, vehicleData* data, float step);
 
     /**
      * TODO Full Complete Documentation.
