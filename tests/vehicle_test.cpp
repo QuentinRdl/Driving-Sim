@@ -36,7 +36,8 @@ double f(double x, double /* t */) {
  * @param t  L'instant courant.
  * @param dt Le pas de temps pour l'intégration.
  * @return La nouvelle valeur de x après une étape d'intégration RK4.
- */double RK4Step(double (*f)(double, double), double x, double t, double dt) {
+ */
+double RK4Step(double (*f)(double, double), const double x, const double t, const double dt) {
     const double k1 = f(x, t);
     const double k2 = f(x + 0.5 * dt * k1, t + 0.5 * dt);
     const double k3 = f(x + 0.5 * dt * k2, t + 0.5 * dt);
