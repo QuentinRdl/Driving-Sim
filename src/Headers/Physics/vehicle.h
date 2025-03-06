@@ -34,7 +34,7 @@ struct vehicleData {
     float mu_rear; // Coefficient de friction pour l'essieu arriere
     float g; // Acceleration due a la gravite
 
-    float delta; // Angle de braquage (rad)
+    float delta; // Angle de braquage (radiant)
 };
 
 class Vehicle {
