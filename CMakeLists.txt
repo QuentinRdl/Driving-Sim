@@ -51,7 +51,9 @@ FetchContent_MakeAvailable(googletest)
 
 find_package(Threads REQUIRED)
 
-add_executable(DrivingSimTests tests/vehicle_test.cpp)
+add_executable(DrivingSimTests
+        src/vehicle.cpp
+        tests/vehicle_test.cpp)
 
 target_include_directories(DrivingSimTests PRIVATE
         src/Headers
