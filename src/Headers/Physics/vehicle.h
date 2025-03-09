@@ -2,9 +2,14 @@
 #define VEHICLE_H
 
 #include <cmath>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <plotting.h>
 
 #include "calculationhelper.h"
 
+void plotTest();
 
 struct vehicleData {
     float mass;   // Masse [kg]

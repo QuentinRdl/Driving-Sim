@@ -235,3 +235,49 @@ void Vehicle::getData(vehicleData &data) const {
     data.g = g;
     // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
 }
+
+
+
+void plotTest() {
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    // vehicleData *data = {};
+    float initSlip = 0;
+    float initSlip_tau = 0.5;
+    float initS_desired = 0.1; // Valeur cible de slip
+
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+
+    float dt = 0.02;
+    int steps = 10000;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    //double delta = 0.05; // en radians
+    float delta = 0.05; // en radians
+    // double slip  = 0.1;  // valeur de glissement
+
+    // Vecteurs pour stocker les données (temps, valeur)
+    std::vector<std::pair<float, float>> vx_data, vy_data, r_data, slip_data;
+    std::vector<std::pair<float,float>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+
+
+    int change = steps / 2;
+    for (int i = 0; i <= steps; ++i) {
+        if (i == change) {
+            delta = -delta; // Pour creer un changement de direction
+        }
+        float t = i * dt;
+        vx_data.push_back({t, myVehicle.vx});
+        vy_data.push_back({t, myVehicle.vy});
+        r_data.push_back({t, myVehicle.lacet});
+        traj_data.push_back({myVehicle.x, myVehicle.y});
+        slip_data.push_back({t, myVehicle.slip});
+
+        // Mise à jour de la dynamique avec le modèle Bicycle
+        // myVehicle.updateBicycleEtape4(dt, delta);
+        myVehicle.updateBicycleRK4(dt, delta);
+    }
+
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape4");
+    // We print count (Number of time saturation is reached)
+    std::cout << "Saturation count : " << myVehicle.count << std::endl;
+}

@@ -11,8 +11,8 @@
 #include <gnuplot-iostream.h>
 
 void plot_etape(
-    std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
-    std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
-    std::vector<std::pair<double,double>> slip_data, std::string path, vehicleData *data);
+    std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
+    std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
+    std::vector<std::pair<float, float>> slip_data, std::string path);
 
 #endif //PLOTTING_H
