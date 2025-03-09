@@ -155,10 +155,7 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
 void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, const float step) {
     // Get the number of items in the array data
 
-    constexpr size_t dataSize = sizeof(vehicleData) / sizeof(data[0]);
-
     assert(nbIterations > 0);
-    assert(nbIterations == dataSize); // Ensures correct usage of function
 
     float angleBraquage = data[0].delta;
 

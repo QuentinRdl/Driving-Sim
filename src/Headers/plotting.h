@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <gnuplot-iostream.h>
-#include <filesystem> // Etre sur que le fichier a plot existe
+#include <filesystem> // Etre sûr que le fichier à plot existe
 #include "vehicle.h"
 
 class Plotting {
@@ -19,9 +19,9 @@ public:
         std::vector<std::pair<float, float>> slip_data, std::string path);
 
     void convertToArray(
-        std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
-        std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
-        std::vector<std::pair<float, float>> slip_data, vehicleData *data, size_t size);
+        std::vector<std::pair<float, float>>& vx_data, std::vector<std::pair<float, float>>& vy_data,
+        std::vector<std::pair<float, float>>& r_data, std::vector<std::pair<float, float>>& traj_data,
+        std::vector<std::pair<float, float>>& slip_data, vehicleData *data, size_t size);
 
     void plotStepFromArray(vehicleData *data, size_t size, std::string path);
 

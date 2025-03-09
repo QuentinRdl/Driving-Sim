@@ -3,7 +3,7 @@
 int main() {
     Vehicle v;
     v.plotTest();
-    // v.plotTestIterative();
+    v.plotTestIterative();
 
     /*
     Game game;

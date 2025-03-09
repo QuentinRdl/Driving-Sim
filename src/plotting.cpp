@@ -12,6 +12,13 @@ void Plotting::plot_etape(
     std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
     std::vector<std::pair<float, float>> slip_data, std::string path)
     {
+    // On s'assure que chaque vecteur n'est pas vide
+    assert(!vx_data.empty());
+    assert(!vy_data.empty());
+    assert(!r_data.empty());
+    assert(!traj_data.empty());
+    assert(!slip_data.empty());
+
     // On s'assure que le path exists
     if (!std::filesystem::exists(path)) {
         std::cerr << "Error: Path does not exist: " << path << std::endl;
@@ -30,7 +37,6 @@ void Plotting::plot_etape(
     gp.send1d(vx_data);
     gp << "unset output\n";
     gp.flush();
-
 
     // Plot de vy
     gp << "reset\n";
@@ -88,17 +94,18 @@ void Plotting::plot_etape(
 
 // Converts the array of vehicleData into the vector or pair we inputs
 void Plotting::convertToArray(
-    std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
-    std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
-    std::vector<std::pair<float, float>> slip_data, vehicleData *data, size_t size) {
+    std::vector<std::pair<float, float>>& vx_data, std::vector<std::pair<float, float>>& vy_data,
+    std::vector<std::pair<float, float>>& r_data, std::vector<std::pair<float, float>>& traj_data,
+    std::vector<std::pair<float, float>>& slip_data, vehicleData *data, size_t size) {
     // We iterate through our array of vehicleData
     for (size_t i = 0; i < size; ++i) {
         // Access each element using data[i]
-        vx_data.push_back({static_cast<float>(i), data[i].vx});
-        vy_data.push_back({static_cast<float>(i), data[i].vy});
-        r_data.push_back({static_cast<float>(i), data[i].lacet});
-        traj_data.push_back({data[i].x, data[i].y});
-        slip_data.push_back({static_cast<float>(i), data[i].slip});
+        std::cout << data[i].vx << std::endl;
+        vx_data.emplace_back(static_cast<float>(i), data[i].vx);
+        vy_data.emplace_back(static_cast<float>(i), data[i].vy);
+        r_data.emplace_back(static_cast<float>(i), data[i].lacet);
+        traj_data.emplace_back(data[i].x, data[i].y);
+        slip_data.emplace_back(static_cast<float>(i), data[i].slip);
         std::cout << "convertToArray => Iteration number: " << i << std::endl;
     }
 }
