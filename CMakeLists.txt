@@ -23,6 +23,7 @@ add_executable(Driving_Sim
         src/vehicle.cpp
         src/Headers/plotting.h
         src/Headers/gnuplot-iostream.h
+        src/plotting.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
