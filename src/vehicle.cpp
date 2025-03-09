@@ -237,6 +237,30 @@ void Vehicle::getData(vehicleData &data) const {
     // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
 }
 
+
+void Vehicle::plotTestIterative() {
+
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    // vehicleData *data = {};
+    float initSlip = 0;
+    float initSlip_tau = 0.5;
+    float initS_desired = 0.1; // Valeur cible de slip
+
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+
+    float dt = 0.02;
+    int steps = 10000;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    //double delta = 0.05; // en radians
+    float delta = 0.05; // en radians
+    vehicleData data[steps];
+    myVehicle.getNextIterations(steps, data, dt);
+
+    Plotting p;
+    p.plotStepFromArray(data, steps, "../Plots/Iterative");
+}
+
 void Vehicle::plotTest() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
@@ -275,9 +299,9 @@ void Vehicle::plotTest() {
         // myVehicle.updateBicycleEtape4(dt, delta);
         myVehicle.updateBicycleRK4(dt, delta);
     }
-    Plotting p;
-    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots/");
 
+    Plotting p;
+    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots");
     // We print count (Number of time saturation is reached)
     std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

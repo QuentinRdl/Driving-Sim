@@ -4,11 +4,19 @@
 
 #include "plotting.h"
 
+#include <utility>
+#include "vehicle.h"
+
 void Plotting::plot_etape(
     std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
     std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
     std::vector<std::pair<float, float>> slip_data, std::string path)
     {
+    // On s'assure que le path exists
+    if (!std::filesystem::exists(path)) {
+        std::cerr << "Error: Path does not exist: " << path << std::endl;
+        return;
+    }
     // Création d'un objet Gnuplot pour générer les fichiers images
     Gnuplot gp;
     // Plot de vx
@@ -76,4 +84,36 @@ void Plotting::plot_etape(
     gp.send1d(slip_data);
     gp << "unset output\n";
     gp.flush();
+}
+
+// Converts the array of vehicleData into the vector or pair we inputs
+void Plotting::convertToArray(
+    std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
+    std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
+    std::vector<std::pair<float, float>> slip_data, vehicleData *data, size_t size) {
+    // We iterate through our array of vehicleData
+    for (size_t i = 0; i < size; ++i) {
+        // Access each element using data[i]
+        vx_data.push_back({static_cast<float>(i), data[i].vx});
+        vy_data.push_back({static_cast<float>(i), data[i].vy});
+        r_data.push_back({static_cast<float>(i), data[i].lacet});
+        traj_data.push_back({data[i].x, data[i].y});
+        slip_data.push_back({static_cast<float>(i), data[i].slip});
+        std::cout << "convertToArray => Iteration number: " << i << std::endl;
+    }
+}
+
+void Plotting::plotStepFromArray(vehicleData *data, size_t size, std::string path) {
+    // On s'assure que le path exists
+    if (!std::filesystem::exists(path)) {
+        std::cerr << "Error: Path does not exist: " << path << std::endl;
+        return;
+    }
+
+    // Vecteurs pour stocker les données (temps, valeur)
+    std::vector<std::pair<float, float>> vx_data, vy_data, r_data, slip_data, traj_data;
+    convertToArray(vx_data, vy_data, r_data, traj_data, slip_data, data, size);
+
+    // Appel a la fonction de plot
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, std::move(path));
 }
