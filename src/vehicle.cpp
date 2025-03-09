@@ -277,7 +277,7 @@ void plotTest() {
         myVehicle.updateBicycleRK4(dt, delta);
     }
 
-    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape4");
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots/");
     // We print count (Number of time saturation is reached)
     std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

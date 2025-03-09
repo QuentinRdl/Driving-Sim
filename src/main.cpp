@@ -1,6 +1,5 @@
 #include "game.h"
 #include "vehicle.h"
-
 int main() {
     plotTest();
 
