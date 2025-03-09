@@ -67,6 +67,7 @@ find_package(Threads REQUIRED)
 
 add_executable(DrivingSimTests
         src/vehicle.cpp
+        src/plotting.cpp
         tests/vehicle_test.cpp)
 
 target_include_directories(DrivingSimTests PRIVATE
@@ -81,6 +82,7 @@ set_target_properties(DrivingSimTests PROPERTIES LINK_FLAGS "-fsanitize=address,
 target_link_libraries(DrivingSimTests PRIVATE
         GTest::gtest_main
         Threads::Threads
+        ${Boost_LIBRARIES}
 )
 
 include(GoogleTest)
