@@ -174,6 +174,7 @@ void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, co
         data[i].Cy = Cy;
         data[i].vx = vx;
         data[i].vy = vy;
+        std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
         data[i].lacet = lacet;
         data[i].x = x;
         data[i].y = y;
@@ -252,6 +253,7 @@ void Vehicle::plotTestIterative() {
     //double delta = 0.05; // en radians
     float delta = 0.05; // en radians
     vehicleData data[steps];
+    data[0].delta = delta;
     myVehicle.getNextIterations(steps, data, dt);
 
     // Print the results
@@ -260,7 +262,7 @@ void Vehicle::plotTestIterative() {
     }
 
     Plotting p;
-    // p.plotStepFromArray(data, steps, "../Plots/Iterative");
+    p.plotStepFromArray(data, steps, "../Plots/Iterative");
 }
 
 void Vehicle::plotTest() {
