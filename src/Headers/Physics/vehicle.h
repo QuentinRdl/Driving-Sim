@@ -117,11 +117,12 @@ public:
 
     /**
      * TODO Full Complete Documentation.
+     * @param startIndex
      * @param nbIterations
      * @param data
      * @param step
      */
-    void getNextIterations(size_t nbIterations, vehicleData* data, float step);
+    void getNextIterations(size_t startIndex, size_t nbIterations, vehicleData* data, float step);
 
     /**
      * TODO Full Complete Documentation.

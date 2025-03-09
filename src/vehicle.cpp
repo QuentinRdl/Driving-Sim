@@ -152,12 +152,12 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     dsdt[6] = v_global_y; // dy/dt
 }
 
-void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, const float step) {
+void Vehicle::getNextIterations(size_t startIndex, const size_t nbIterations, vehicleData* data, const float step) {
     // Get the number of items in the array data
 
     assert(nbIterations > 0);
 
-    float angleBraquage = data[0].delta;
+    float angleBraquage = data[startIndex].delta;
 
     /* We will now apply the updataBicycleRK4 a total of nbIterations times
      * And stock the result of each iteration inside our vehiculeData array
@@ -165,26 +165,27 @@ void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, co
 
     for (size_t i = 0; i < nbIterations; i++) {
         updateBicycleRK4(step, angleBraquage);
-        data[i].mass = mass;
-        data[i].dist_cog_front_axle = dist_cog_front_axle;
-        data[i].dist_cog_rear_axle = dist_cog_rear_axle;
-        data[i].airResCoeff = airResCoeff;
-        data[i].I = I;
-        data[i].Cx = Cx;
-        data[i].Cy = Cy;
-        data[i].vx = vx;
-        data[i].vy = vy;
+        const size_t currentIndex = startIndex + i;
+        data[currentIndex].mass = mass;
+        data[currentIndex].dist_cog_front_axle = dist_cog_front_axle;
+        data[currentIndex].dist_cog_rear_axle = dist_cog_rear_axle;
+        data[currentIndex].airResCoeff = airResCoeff;
+        data[currentIndex].I = I;
+        data[currentIndex].Cx = Cx;
+        data[currentIndex].Cy = Cy;
+        data[currentIndex].vx = vx;
+        data[currentIndex].vy = vy;
         std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
-        data[i].lacet = lacet;
-        data[i].x = x;
-        data[i].y = y;
-        data[i].psi = psi;
-        data[i].slip = slip;
-        data[i].slip_tau = slip_tau;
-        data[i].s_desired = s_desired;
-        data[i].mu_front = mu_front;
-        data[i].mu_rear = mu_rear;
-        data[i].g = g;
+        data[currentIndex].lacet = lacet;
+        data[currentIndex].x = x;
+        data[currentIndex].y = y;
+        data[currentIndex].psi = psi;
+        data[currentIndex].slip = slip;
+        data[currentIndex].slip_tau = slip_tau;
+        data[currentIndex].s_desired = s_desired;
+        data[currentIndex].mu_front = mu_front;
+        data[currentIndex].mu_rear = mu_rear;
+        data[currentIndex].g = g;
         // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
 
     }
@@ -248,13 +249,15 @@ void Vehicle::plotTestIterative() {
     Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
 
     float dt = 0.02;
-    int steps = 1000;
+    int steps = 10000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     //double delta = 0.05; // en radians
     float delta = 0.05; // en radians
     vehicleData data[steps];
     data[0].delta = delta;
-    myVehicle.getNextIterations(steps, data, dt);
+    myVehicle.getNextIterations(0, steps/2, data, dt);
+    data[steps/2].delta = -delta;
+    myVehicle.getNextIterations(steps/2, steps/2, data, dt);
 
     // Print the results
     for (size_t i = 0; i < steps; ++i) {
