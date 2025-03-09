@@ -247,15 +247,20 @@ void Vehicle::plotTestIterative() {
     Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
 
     float dt = 0.02;
-    int steps = 10000;
+    int steps = 1000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     //double delta = 0.05; // en radians
     float delta = 0.05; // en radians
     vehicleData data[steps];
     myVehicle.getNextIterations(steps, data, dt);
 
+    // Print the results
+    for (size_t i = 0; i < steps; ++i) {
+        std::cout << "Iteration " << i << ": x = " << data[i].x << ", y = " << data[i].y << ", vx = " << data[i].vx << ", vy = " << data[i].vy << std::endl;
+    }
+
     Plotting p;
-    p.plotStepFromArray(data, steps, "../Plots/Iterative");
+    // p.plotStepFromArray(data, steps, "../Plots/Iterative");
 }
 
 void Vehicle::plotTest() {
@@ -286,11 +291,11 @@ void Vehicle::plotTest() {
             delta = -delta; // Pour creer un changement de direction
         }
         float t = i * dt;
-        vx_data.push_back({t, myVehicle.vx});
-        vy_data.push_back({t, myVehicle.vy});
-        r_data.push_back({t, myVehicle.lacet});
-        traj_data.push_back({myVehicle.x, myVehicle.y});
-        slip_data.push_back({t, myVehicle.slip});
+        vx_data.emplace_back(t, myVehicle.vx);
+        vy_data.emplace_back(t, myVehicle.vy);
+        r_data.emplace_back(t, myVehicle.lacet);
+        traj_data.emplace_back(myVehicle.x, myVehicle.y);
+        slip_data.emplace_back(t, myVehicle.slip);
 
         // Mise à jour de la dynamique avec le modèle Bicycle
         // myVehicle.updateBicycleEtape4(dt, delta);
