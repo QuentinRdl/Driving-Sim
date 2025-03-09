@@ -12,6 +12,13 @@ include_directories(src)
 
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
+# Inclusion de Boost pour les graphes
+find_package(Boost COMPONENTS iostreams REQUIRED)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+
 add_executable(Driving_Sim
         src/main.cpp
         src/game.cpp
@@ -33,7 +40,11 @@ target_include_directories(Driving_Sim PRIVATE
         src/Headers/Physics
 )
 
-target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
+target_link_libraries(Driving_Sim
+        sfml-graphics
+        sfml-audio
+        ${Boost_LIBRARIES}
+)
 
 add_custom_command(TARGET Driving_Sim POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
