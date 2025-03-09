@@ -237,9 +237,7 @@ void Vehicle::getData(vehicleData &data) const {
     // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
 }
 
-
-
-void plotTest() {
+void Vehicle::plotTest() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     // vehicleData *data = {};
@@ -277,8 +275,8 @@ void plotTest() {
         // myVehicle.updateBicycleEtape4(dt, delta);
         myVehicle.updateBicycleRK4(dt, delta);
     }
-
-    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots/");
+    Plotting p;
+    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots/");
 
     // We print count (Number of time saturation is reached)
     std::cout << "Saturation count : " << myVehicle.count << std::endl;

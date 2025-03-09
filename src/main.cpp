@@ -1,7 +1,8 @@
 #include "game.h"
 #include "vehicle.h"
 int main() {
-    plotTest();
+    Vehicle v;
+    v.plotTest();
 
     /*
     Game game;

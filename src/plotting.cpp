@@ -4,7 +4,7 @@
 
 #include "plotting.h"
 
-void plot_etape(
+void Plotting::plot_etape(
     std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
     std::vector<std::pair<float, float>>r_data, std::vector<std::pair<float, float>> traj_data,
     std::vector<std::pair<float, float>> slip_data, std::string path)

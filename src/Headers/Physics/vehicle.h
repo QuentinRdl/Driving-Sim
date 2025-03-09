@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <plotting.h>
 
 #include "calculationhelper.h"
 
@@ -134,6 +135,8 @@ public:
      * @param data
      */
     void getData(vehicleData &data) const;
+
+    void plotTest();
 
 private:
 
