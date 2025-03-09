@@ -1,4 +1,5 @@
 #include "vehicle.h"
+#include "plotting.h"
 #include <cassert>
 
 /**
@@ -151,7 +152,7 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     dsdt[6] = v_global_y; // dy/dt
 }
 
-void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, float step) {
+void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, const float step) {
     // Get the number of items in the array data
 
     constexpr size_t dataSize = sizeof(vehicleData) / sizeof(data[0]);
@@ -257,7 +258,7 @@ void plotTest() {
 
     // Vecteurs pour stocker les données (temps, valeur)
     std::vector<std::pair<float, float>> vx_data, vy_data, r_data, slip_data;
-    std::vector<std::pair<float,float>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+    std::vector<std::pair<float, float>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
 
 
     int change = steps / 2;
@@ -278,6 +279,7 @@ void plotTest() {
     }
 
     plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots/");
+
     // We print count (Number of time saturation is reached)
     std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

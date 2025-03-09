@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <plotting.h>
 
 #include "calculationhelper.h"
 
@@ -41,6 +40,8 @@ struct vehicleData {
 
     float delta; // Angle de braquage (radiant)
 };
+
+#include <plotting.h> // Moved the inclusion here to prevent inclusion looping
 
 class Vehicle {
 public:

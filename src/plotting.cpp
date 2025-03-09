@@ -3,7 +3,6 @@
 //
 
 #include "plotting.h"
-#include "vehicle.h"
 
 void plot_etape(
     std::vector<std::pair<float, float>> vx_data, std::vector<std::pair<float, float>>vy_data,
@@ -77,5 +76,4 @@ void plot_etape(
     gp.send1d(slip_data);
     gp << "unset output\n";
     gp.flush();
-
 }

@@ -5,7 +5,6 @@
 #ifndef PLOTTING_H
 #define PLOTTING_H
 
-#include "Physics/vehicle.h"
 #include <vector>
 #include <string>
 #include <gnuplot-iostream.h>
