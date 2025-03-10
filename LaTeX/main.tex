@@ -94,9 +94,7 @@
 
 \newpage
 \section*{Remerciements}
-Je tiens tout d'abord à exprimer ma sincère gratitude envers M. Abdallah Ben Othman pour sa générosité et sa disponibilité exemplaire. Ses précieux insights ont jeté une lumière éclairante sur les aspects quotidiens et les exigences du métier de Développeur Logiciels Embarqué, enrichissant ainsi considérablement le contenu de ce dossier.\\
-
-Un remerciement particulier est adressé à M. Florian Wiedenkeller, dont l'attention portée à mon dossier a été déterminante. Son rôle crucial dans la recommandation et son engagement ont facilité la rencontre avec M. Ben Othman, permettant ainsi l'accès à des informations essentielles pour la réalisation de ce travail.
+- Un remerciement particulier est adressé à M. Hufflen pour la guidance et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
 
 % Page dédiée à la table des matières
 \newpage
@@ -132,21 +130,22 @@ Un remerciement particulier est adressé à M. Florian Wiedenkeller, dont l'atte
 \textbf{SS2I :} Société de Services en Ingénierie Informatique.
 
 \newpage
-\section{Présentation du Projet Professionnel}
+\section{Sujet du projet}
 
-\subsection*{Introduction}
-L'évolution rapide de la technologie a profondément transformé notre manière d'interagir avec le monde qui nous entoure. Au cœur de cette révolution, le développement de logiciels embarqués se positionne comme une pierre angulaire, propulsant des innovations qui touchent tous les aspects de notre vie quotidienne. Les logiciels embarqués, intégrés à des dispositifs matériels spécifiques, sont omniprésents, allant des appareils électroniques grand public aux systèmes critiques utilisés dans l'industrie et les technologies émergentes.
+\subsection{Le sujet}
+- Le sujet originel nous laissait une assez grande liberté quant à l'orientation de notre projet. L'idée globale consistait en la réalisation graphique d'un mini-simulateur de conduite, avec des ordres de conduite (démarrage, arrêt, accélération et décélération) donnés par la frappe du clavier. L'utilisateur devait pouvoir observer son véhicule ainsi que le circuit avec une vue du dessus ou la vision du conducteur à travers le pare-brise. Il était aussi proposé de pouvoir "corser" le jeu en programmant des événements aléatoires.
 
-Cette introduction vise à contextualiser l'importance capitale du développement de logiciels embarqués dans le paysage technologique actuel. L'émergence de ces systèmes intelligents a révolutionné la manière dont nous interagissons avec les objets qui nous entourent, en offrant des fonctionnalités avancées, une connectivité et une autonomie accrues. La nécessité de développer des logiciels adaptés à des contraintes matérielles spécifiques, tout en assurant une efficacité maximale, confère au domaine une complexité stimulante.
+Pour réaliser ce projet, plusieurs langages de programmation nous étaient proposés :
+\begin{itemize}
+    \item \textbf{DrRacket}, avec des compléments pour nous aider sur la partie graphique.
+    \item \textbf{JRuby}, avec pour idée d'implémenter la logique du programme en Ruby et la partie graphique avec des bibliothèques de Java.
+    \item \textbf{C\#} ou \textbf{C++} avec les bibliothèques graphiques adéquates.
+\end{itemize}
 
-En tant qu'étudiant passionné d'informatique, mon intérêt s'est naturellement orienté vers le développement de logiciels embarqués en raison de son caractère dynamique et de son impact omniprésent. La fusion de l'informatique et du matériel pour créer des systèmes intelligents m'a toujours fasciné. La diversité des applications, qu'il s'agisse de dispositifs portables, de systèmes embarqués dans l'automobile, ou de solutions industrielles avancées, offre un terrain fertile pour l'innovation et la résolution de problèmes complexes.
 
-Mon intérêt pour le développement de logiciels embarqués a été particulièrement stimulé par l'exploration de projets en ligne, où j'ai pu observer la puissance créative des communautés utilisant des dispositifs tels que Arduino et Raspberry Pi. Ces projets, allant de systèmes domotiques intelligents à des dispositifs médicaux innovants, ont renforcé ma conviction quant à l'impact majeur de ce domaine sur notre quotidien et ont alimenté mon désir de contribuer à cette révolution technologique en constante évolution.
-
-\subsection*{Métiers, Postes et Fonctions qui m'intéressent}
-Mon intérêt marqué pour le développement de logiciels embarqués se base autour de la fascination pour un domaine en constante évolution, où la combinaison de l'informatique et du matériel ouvre la voie à des innovations qui ont changé notre monde. Parmi les métiers, postes et fonctions qui retiennent particulièrement mon attention dans le domaine du développement de logiciels embarqués, on retrouve le poste de "Développeur Logiciels Embarqués", qui gère la création de logiciels adaptés aux contraintes qui viennent avec les systèmes embarqués.
-
-D'autres rôles comme "Ingénieur Systèmes Embarqués" attirent également mon intérêt en raison de leur nécessité de concevoir des solutions logicielles intégrées à des dispositifs matériels. Les postes de "Concepteur de Logiciels Embarqués" et de "Spécialiste en Systèmes Embarqués" captivent particulièrement mon intérêt. En effet, ces rôles impliquent non seulement la création de logiciels adaptés aux contraintes spécifiques des systèmes embarqués, mais également la résolution habile de défis complexes liés à l'optimisation et à l'efficacité des logiciels au sein de ces environnements embarqués. Ces professionnels jouent un rôle essentiel dans la conception et la mise en œuvre de solutions logicielles innovantes, contribuant ainsi de manière significative à l'évolution dynamique du domaine des logiciels embarqués.
+\subsection{Notre interprétation du sujet / Objectif du sujet }
+- Après réflexion et discussion avec notre tuteur nous avons décidé de partir vers une orientation didacticiel plutôt qu'une "orientation de 'jeu' ". L'idée était d'implémenter un modèle de dynamique de véhicule se rapprochant de la réalité. Avec un tel modèle nous pourrions donc visualiser des comportements de perte d'adhérence sur la route, ainsi que les phénomènes de survirage et sous virage. Un tel simulateur permettrait donc à l'utilisateur d'expérimenter / se familiariser avec de tel comportements de véhicule. De ce qui est du langage de programmation nous avons décidé de nous orienter vers le langage C++, car il nous était plus familier que les autres langages proposés, et nous avons utilisé SFML en tant que bibliothèque graphique.
+- Ensuite nous avons donc commencer l'implémentation de notre simulateur, il s'est décomposé en deux grandes parties, l'implémentation de la physique, et la création de l'interface graphique. Nous allons commencer par vous présenter la partie physique de notre projet.
 
 \section{Domaine d'Activité et Fonction du Développeur Logiciels Embarqués}
 
