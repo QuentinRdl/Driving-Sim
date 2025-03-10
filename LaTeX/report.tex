@@ -133,7 +133,7 @@
 \section{Sujet du projet}
 
 \subsection{Le sujet}
-- Le sujet originel nous laissait une assez grande liberté quant à l'orientation de notre projet. L'idée globale consistait en la réalisation graphique d'un mini-simulateur de conduite, avec des ordres de conduite (démarrage, arrêt, accélération et décélération) donnés par la frappe du clavier. L'utilisateur devait pouvoir observer son véhicule ainsi que le circuit avec une vue du dessus ou la vision du conducteur à travers le pare-brise. Il était aussi proposé de pouvoir "corser" le jeu en programmant des événements aléatoires.
+Le sujet originel nous laissait une assez grande liberté quant à l'orientation de notre projet. L'idée globale consistait en la réalisation graphique d'un mini-simulateur de conduite, avec des ordres de conduite (démarrage, arrêt, accélération et décélération) donnés par la frappe du clavier. L'utilisateur devait pouvoir observer son véhicule ainsi que le circuit avec une vue du dessus ou la vision du conducteur à travers le pare-brise. Il était aussi proposé de pouvoir "corser" le jeu en programmant des événements aléatoires.
 
 Pour réaliser ce projet, plusieurs langages de programmation nous étaient proposés :
 \begin{itemize}
@@ -144,29 +144,20 @@ Pour réaliser ce projet, plusieurs langages de programmation nous étaient prop
 
 
 \subsection{Notre interprétation du sujet / Objectif du sujet }
-- Après réflexion et discussion avec notre tuteur nous avons décidé de partir vers une orientation didacticiel plutôt qu'une "orientation de 'jeu' ". L'idée était d'implémenter un modèle de dynamique de véhicule se rapprochant de la réalité. Avec un tel modèle nous pourrions donc visualiser des comportements de perte d'adhérence sur la route, ainsi que les phénomènes de survirage et sous virage. Un tel simulateur permettrait donc à l'utilisateur d'expérimenter / se familiariser avec de tel comportements de véhicule. De ce qui est du langage de programmation nous avons décidé de nous orienter vers le langage C++, car il nous était plus familier que les autres langages proposés, et nous avons utilisé SFML en tant que bibliothèque graphique.
-- Ensuite nous avons donc commencer l'implémentation de notre simulateur, il s'est décomposé en deux grandes parties, l'implémentation de la physique, et la création de l'interface graphique. Nous allons commencer par vous présenter la partie physique de notre projet.
+Après réflexion et discussion avec notre tuteur, nous avons décidé de partir vers une orientation didacticiel plutôt qu'une "orientation de 'jeu' ". L'idée était d'implémenter un modèle de dynamique de véhicule se rapprochant de la réalité. Avec un tel modèle, nous pourrions donc visualiser des comportements de perte d'adhérence sur la route, ainsi que les phénomènes de survirage et sous virage. Un tel simulateur permettrait donc à l'utilisateur d'expérimenter / se familiariser avec de tels comportements de véhicule. De ce qui est du langage de programmation, nous avons décidé de nous orienter vers le langage C++, car il nous était plus familier que les autres langages proposés, et nous avons utilisé SFML en tant que bibliothèque graphique.
+Ensuite, nous avons donc commencé l'implémentation de notre simulateur, il s'est décomposé en deux grandes parties, l'implémentation de la physique et la création de l'interface graphique. Nous allons commencer par vous présenter la partie physique de notre projet.
 
-\section{Domaine d'Activité et Fonction du Développeur Logiciels Embarqués}
-
-\subsection{Mission et Responsabilités}
-
-Le rôle du Développeur Logiciels Embarqués est aussi varié que crucial dans la conception et la mise en œuvre de systèmes embarqués. En tant que professionnel dans ce domaine, le développeur est chargé de créer des logiciels spécifiquement adaptés aux contraintes des dispositifs matériels sur lesquels ils s'exécutent. Cette mission exige une compréhension approfondie du matériel, ainsi que des compétences techniques pointues pour optimiser les performances, la consommation d'énergie et la stabilité des systèmes.
-
-\subsection{Environnement de Travail}
-
-Le Développeur Logiciels Embarqués évolue dans un environnement professionnel stimulant et dynamique, où la convergence entre logiciel et matériel crée une synergie incontournable. Ce professionnel est fréquemment impliqué dans des projets variés, allant de dispositifs électroniques grand public à des applications industrielles critiques, chacun présentant des défis uniques.
-
-L
 \newpage
 
-\section{Conclusion}
+\section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}
 
-En résumé, ce dossier confirme ma conviction profonde que le poste de Développeur Logiciels Embarqués est la voie professionnelle qui me correspond parfaitement. L'analyse approfondie des profils recherchés a identifié des compétences techniques essentielles que je m'engage à développer, notamment la maîtrise du langage C/C++, des protocoles de communication et une familiarité avec les RTOS. Mes qualités personnelles telles que l'autonomie, la rigueur et la maîtrise de l'anglais correspondent aux attentes du marché, renforçant ainsi ma conviction d'être un candidat idéal.
+\subsection{Introduction}
+Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur. De plus, comme l'étude et la représentation d'un système  de dynamique de véhicule est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative. Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique,  puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
+Ceci nous a mené à un plan en 5 étapes.
+Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, puis implémenter un modèle bicycle simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
+Nous allons maintenant vous détailler les principes physiques et l'implémentation, que nous avons fournis pour chacune de ces étapes :
 
-L'entretien enrichissant avec M. Abdallah Ben-Othman a non seulement confirmé ma compréhension des missions et responsabilités inhérentes au métier de développeur logiciel embarqué, mais a également renforcé ma conviction que ce poste constitue un défi stimulant et aligné sur mes aspirations professionnelles.
-
-Je suis convaincu que ma solide base de compétences actuelles, combinée à mon engagement à acquérir les connaissances nécessaires, me positionne favorablement pour exceller en tant que développeur logiciel embarqué. Je suis enthousiaste à l'idée de contribuer de manière significative à ce domaine exigeant tout en continuant à cultiver mes compétences dans ce secteur dynamique.
+\subsection{Implémentation des lois de Newton pour la dynamique du véhicule}
 
 \begin{thebibliography}{99}
   \bibitem{interview}
