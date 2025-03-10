@@ -15,6 +15,9 @@ class Car {
 
     sf::Sprite carSprite;
 
+    const int pointsCount = 500;
+    sf::VertexArray carPrediction;
+
 public:
     std::unique_ptr<Vehicle> vehicle;
 
