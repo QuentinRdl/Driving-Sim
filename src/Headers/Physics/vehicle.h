@@ -120,9 +120,9 @@ public:
      * @param startIndex
      * @param nbIterations
      * @param data
-     * @param step
+     * @param dt
      */
-    void getNextIterations(size_t startIndex, size_t nbIterations, vehicleData* data, float step);
+    void getNextIterations(size_t startIndex, size_t nbIterations, vehicleData* data, float dt);
 
     /**
      * TODO Full Complete Documentation.
