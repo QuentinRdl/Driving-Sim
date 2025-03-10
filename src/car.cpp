@@ -14,7 +14,20 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
     constexpr float initSlip = 0;
     constexpr float initSlip_tau = 0.5;
     constexpr float initS_desired = 0.1;
-    Vehicle vehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+    Vehicle vehicle(
+        1700, // mass
+        1.5, 1.5, // distance between the center of gravity and the front and rear axles
+        20, // airResistance coefficient
+        150000.0f, // Cx
+        40000.0f, // Cy
+        0.0f, 0.0f, // vx, vy
+        0.0f, // lacet
+        0.0f, 0.0f, // x, y
+        0.0f, // psi (initHeading)
+        initSlip, initSlip_tau, initS_desired, // slip, slip_tau, s_desired
+        0.9f, 0.9f, // mu_front, mu_rear: coefficients of friction
+        9.81f // g: gravity
+        );
     this->vehicle = std::make_unique<Vehicle>(vehicle);
 
     sprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
