@@ -12,6 +12,13 @@ include_directories(src)
 
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
+# Inclusion de Boost pour les graphes
+find_package(Boost COMPONENTS iostreams REQUIRED)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+
 add_executable(Driving_Sim
         src/main.cpp
         src/game.cpp
@@ -21,6 +28,9 @@ add_executable(Driving_Sim
         src/debugmode.cpp
         src/dejavu_sans_mono_ttf.cpp
         src/vehicle.cpp
+        src/Headers/plotting.h
+        src/Headers/gnuplot-iostream.h
+        src/plotting.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
@@ -30,7 +40,11 @@ target_include_directories(Driving_Sim PRIVATE
         src/Headers/Physics
 )
 
-target_link_libraries(Driving_Sim sfml-graphics sfml-audio)
+target_link_libraries(Driving_Sim
+        sfml-graphics
+        sfml-audio
+        ${Boost_LIBRARIES}
+)
 
 add_custom_command(TARGET Driving_Sim POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -51,7 +65,10 @@ FetchContent_MakeAvailable(googletest)
 
 find_package(Threads REQUIRED)
 
-add_executable(DrivingSimTests tests/r4_integration_test.cpp)
+add_executable(DrivingSimTests
+        src/vehicle.cpp
+        src/plotting.cpp
+        tests/vehicle_test.cpp)
 
 target_include_directories(DrivingSimTests PRIVATE
         src/Headers
@@ -65,6 +82,7 @@ set_target_properties(DrivingSimTests PROPERTIES LINK_FLAGS "-fsanitize=address,
 target_link_libraries(DrivingSimTests PRIVATE
         GTest::gtest_main
         Threads::Threads
+        ${Boost_LIBRARIES}
 )
 
 include(GoogleTest)

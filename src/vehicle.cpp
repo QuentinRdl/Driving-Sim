@@ -1,4 +1,6 @@
 #include "vehicle.h"
+#include "plotting.h"
+#include <cassert>
 
 /**
  * TODO complete documentation / @gubgub
@@ -148,4 +150,165 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     const float v_global_y = vx_val * sinf(psi_val) + vy_val * cosf(psi_val);
     dsdt[5] = v_global_x; // dx/dt
     dsdt[6] = v_global_y; // dy/dt
+}
+
+void Vehicle::getNextIterations(size_t startIndex, const size_t nbIterations, vehicleData* data, const float step) {
+    // Get the number of items in the array data
+
+    assert(nbIterations > 0);
+
+    float angleBraquage = data[startIndex].delta;
+
+    /* We will now apply the updataBicycleRK4 a total of nbIterations times
+     * And stock the result of each iteration inside our vehiculeData array
+     */
+
+    for (size_t i = 0; i < nbIterations; i++) {
+        updateBicycleRK4(step, angleBraquage);
+        const size_t currentIndex = startIndex + i;
+        data[currentIndex].mass = mass;
+        data[currentIndex].dist_cog_front_axle = dist_cog_front_axle;
+        data[currentIndex].dist_cog_rear_axle = dist_cog_rear_axle;
+        data[currentIndex].airResCoeff = airResCoeff;
+        data[currentIndex].I = I;
+        data[currentIndex].Cx = Cx;
+        data[currentIndex].Cy = Cy;
+        data[currentIndex].vx = vx;
+        data[currentIndex].vy = vy;
+        std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
+        data[currentIndex].lacet = lacet;
+        data[currentIndex].x = x;
+        data[currentIndex].y = y;
+        data[currentIndex].psi = psi;
+        data[currentIndex].slip = slip;
+        data[currentIndex].slip_tau = slip_tau;
+        data[currentIndex].s_desired = s_desired;
+        data[currentIndex].mu_front = mu_front;
+        data[currentIndex].mu_rear = mu_rear;
+        data[currentIndex].g = g;
+        // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
+
+    }
+}
+
+void Vehicle::setData(const vehicleData &data) {
+    mass = data.mass;
+    dist_cog_front_axle = data.dist_cog_front_axle;
+    dist_cog_rear_axle = data.dist_cog_rear_axle;
+    airResCoeff = data.airResCoeff;
+    I = data.I;
+    Cx = data.Cx;
+    Cy = data.Cy;
+    vx = data.vx;
+    vy = data.vy;
+    lacet = data.lacet;
+    x = data.x;
+    y = data.y;
+    psi = data.psi;
+    slip = data.slip;
+    slip_tau = data.slip_tau;
+    s_desired = data.s_desired;
+    mu_front = data.mu_front;
+    mu_rear = data.mu_rear;
+    g = data.g;
+}
+
+void Vehicle::getData(vehicleData &data) const {
+    data.mass = mass;
+    data.dist_cog_front_axle = dist_cog_front_axle;
+    data.dist_cog_rear_axle = dist_cog_rear_axle;
+    data.airResCoeff = airResCoeff;
+    data.I = I;
+    data.Cx = Cx;
+    data.Cy = Cy;
+    data.vx = vx;
+    data.vy = vy;
+    data.lacet = lacet;
+    data.x = x;
+    data.y = y;
+    data.psi = psi;
+    data.slip = slip;
+    data.slip_tau = slip_tau;
+    data.s_desired = s_desired;
+    data.mu_front = mu_front;
+    data.mu_rear = mu_rear;
+    data.g = g;
+    // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
+}
+
+
+void Vehicle::plotTestIterative() {
+
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    // vehicleData *data = {};
+    float initSlip = 0;
+    float initSlip_tau = 0.5;
+    float initS_desired = 0.1; // Valeur cible de slip
+
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+
+    float dt = 0.02;
+    int steps = 10000;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    //double delta = 0.05; // en radians
+    float delta = 0.05; // en radians
+    vehicleData data[steps];
+    data[0].delta = delta;
+    myVehicle.getNextIterations(0, steps/2, data, dt);
+    data[steps/2].delta = -delta;
+    myVehicle.getNextIterations(steps/2, steps/2, data, dt);
+
+    // Print the results
+    for (size_t i = 0; i < static_cast<size_t>(steps); ++i) {
+        std::cout << "Iteration " << i << ": x = " << data[i].x << ", y = " << data[i].y << ", vx = " << data[i].vx << ", vy = " << data[i].vy << std::endl;
+    }
+
+    Plotting p;
+    p.plotStepFromArray(data, steps, "../Plots/Iterative");
+}
+
+void Vehicle::plotTest() {
+    // Initialisation du véhicule avec modèle Bicycle
+    // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+    // vehicleData *data = {};
+    float initSlip = 0;
+    float initSlip_tau = 0.5;
+    float initS_desired = 0.1; // Valeur cible de slip
+
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+
+    float dt = 0.02;
+    int steps = 10000;
+    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+    //double delta = 0.05; // en radians
+    float delta = 0.05; // en radians
+    // double slip  = 0.1;  // valeur de glissement
+
+    // Vecteurs pour stocker les données (temps, valeur)
+    std::vector<std::pair<float, float>> vx_data, vy_data, r_data, slip_data;
+    std::vector<std::pair<float, float>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+
+
+    int change = steps / 2;
+    for (int i = 0; i <= steps; ++i) {
+        if (i == change) {
+            delta = -delta; // Pour creer un changement de direction
+        }
+        float t = i * dt;
+        vx_data.emplace_back(t, myVehicle.vx);
+        vy_data.emplace_back(t, myVehicle.vy);
+        r_data.emplace_back(t, myVehicle.lacet);
+        traj_data.emplace_back(myVehicle.x, myVehicle.y);
+        slip_data.emplace_back(t, myVehicle.slip);
+
+        // Mise à jour de la dynamique avec le modèle Bicycle
+        // myVehicle.updateBicycleEtape4(dt, delta);
+        myVehicle.updateBicycleRK4(dt, delta);
+    }
+
+    Plotting p;
+    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots");
+    // We print count (Number of time saturation is reached)
+    std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

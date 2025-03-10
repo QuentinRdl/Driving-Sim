@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <cmath>
+#include "vehicle.h"
 
 // Fonction dérivée f(x,t) = dx/dt = x
 double f(double x, double /* t */) {
@@ -35,7 +36,8 @@ double f(double x, double /* t */) {
  * @param t  L'instant courant.
  * @param dt Le pas de temps pour l'intégration.
  * @return La nouvelle valeur de x après une étape d'intégration RK4.
- */double RK4Step(double (*f)(double, double), double x, double t, double dt) {
+ */
+double RK4Step(double (*f)(double, double), const double x, const double t, const double dt) {
     const double k1 = f(x, t);
     const double k2 = f(x + 0.5 * dt * k1, t + 0.5 * dt);
     const double k3 = f(x + 0.5 * dt * k2, t + 0.5 * dt);
@@ -69,6 +71,36 @@ TEST(RK4IntegratorTest, ConvergenceTest) {
 
     // On s'attend à ce que l'erreur soit inférieure à une tolérance (ici 1e-6)
     EXPECT_NEAR(x_num, x_exact, 1e-6);
+}
+
+TEST(VehicleTest, SetDataAndGetData) {
+    Vehicle vehicle;
+    vehicleData inputData = {1000, 1.5, 1.5, 0.3, 1500, 0.5, 0.5, 10, 0, 0, 0, 0, 0, 0.1, 0.2, 0.5, 0.8, 0.9, 9.81, 20};
+
+    vehicle.setData(inputData);
+
+    vehicleData outputData{};
+    vehicle.getData(outputData);
+
+    EXPECT_EQ(outputData.mass, inputData.mass);
+    EXPECT_EQ(outputData.dist_cog_front_axle, inputData.dist_cog_front_axle);
+    EXPECT_EQ(outputData.dist_cog_rear_axle, inputData.dist_cog_rear_axle);
+    EXPECT_EQ(outputData.airResCoeff, inputData.airResCoeff);
+    EXPECT_EQ(outputData.I, inputData.I);
+    EXPECT_EQ(outputData.Cx, inputData.Cx);
+    EXPECT_EQ(outputData.Cy, inputData.Cy);
+    EXPECT_EQ(outputData.vx, inputData.vx);
+    EXPECT_EQ(outputData.vy, inputData.vy);
+    EXPECT_EQ(outputData.lacet, inputData.lacet);
+    EXPECT_EQ(outputData.x, inputData.x);
+    EXPECT_EQ(outputData.y, inputData.y);
+    EXPECT_EQ(outputData.psi, inputData.psi);
+    EXPECT_EQ(outputData.slip, inputData.slip);
+    EXPECT_EQ(outputData.slip_tau, inputData.slip_tau);
+    EXPECT_EQ(outputData.s_desired, inputData.s_desired);
+    EXPECT_EQ(outputData.mu_front, inputData.mu_front);
+    EXPECT_EQ(outputData.mu_rear, inputData.mu_rear);
+    EXPECT_EQ(outputData.g, inputData.g);
 }
 
 // Point d'entrée pour GoogleTest
