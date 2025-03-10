@@ -74,7 +74,13 @@ void Car::handleInput() {
 void Car::update(const float dt) {
     handleInput();
 
-    vehicle->updateBicycleRK4(dt, currentDelta);
+    // vehicle->updateBicycleRK4(dt, currentDelta);
+
+    vehicleData vd = {};
+    vd.delta = currentDelta;
+
+    vehicle->getNextIterations(0, 1, &vd, dt);
+    vehicle->setData(vd);
     sprite.setPosition(vehicle->x, vehicle->y);
     sprite.setRotation(radToDeg(vehicle->psi));
 }
