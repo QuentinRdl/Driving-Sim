@@ -30,9 +30,6 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
         );
     this->vehicle = std::make_unique<Vehicle>(vehicle);
 
-    sprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
-    const sf::FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
     carSprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
     const sf::FloatRect bounds = carSprite.getLocalBounds();
     carSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
