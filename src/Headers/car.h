@@ -60,9 +60,14 @@ public:
      */
     float getVy() const { return vehicle->vy; }
     /**
-     * @return the direction of the car
+     * @return the heading of the car
      */
     float getPsi() const { return vehicle->psi; }
+
+    /**
+     * @return the angle of the steering wheel
+     */
+    float getSteeringAngle() const { return currentDelta; }
 };
 
 #endif //CAR_H

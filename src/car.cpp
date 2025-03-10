@@ -38,34 +38,38 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
 /**
  * TODO Biais lié aux fps => prends pas en compte le dt.
  */
-void Car::handleInput() {
+void Car::handleInput(const float dt) {
+
+    constexpr float throttleRate = 0.1f;        // by second
+    constexpr float steeringRate   = 0.1f;     // by second
+
     // Incrément pour l'accélération (commande de slip désiré)
-    constexpr float throttleIncrement = 0.01f;
+    const float throttleIncrement = throttleRate * dt;
+    const float deltaIncrementScaled = steeringRate * dt;
 
     // --- Accélération / Décélération ---
     // Si la flèche du haut est pressée, on augmente la commande d'accélération.
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        vehicle->s_desired += throttleIncrement;
-        if (vehicle->s_desired > 1.0f)
-            vehicle->s_desired = 1.0f; // On limite à 1.0 (valeur maximale)
+        vehicle->s_desired = std::min(vehicle->s_desired + throttleIncrement, 1.0f);
     }
     // Si la flèche du bas est pressée, on diminue la commande d'accélération (pour freiner).
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        vehicle->s_desired -= throttleIncrement;
-        if (vehicle->s_desired < 0.0f)
-            vehicle->s_desired = 0.0f; // On ne descend pas en dessous de 0
+        vehicle->s_desired = std::max(vehicle->s_desired - throttleIncrement, 0.0f);
     }
+
+
+    constexpr float maxDelta = 0.3f;         // Max angle for the steering wheel
 
     // --- Gestion de l'orientation (volant) ---
     // Si la flèche gauche est pressée, on tourne à gauche (angle négatif)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        currentDelta -= deltaIncrement;
+        currentDelta -= deltaIncrementScaled;
         if (currentDelta < -maxDelta)
             currentDelta = -maxDelta;
     }
     // Si la flèche droite est pressée, on tourne à droite (angle positif)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        currentDelta += deltaIncrement;
+        currentDelta += deltaIncrementScaled;
         if (currentDelta > maxDelta)
             currentDelta = maxDelta;
     }
@@ -73,11 +77,11 @@ void Car::handleInput() {
     // Si aucune touche de direction n'est pressée, on recentre le volant progressivement
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         if (currentDelta > 0) {
-            currentDelta -= deltaIncrement;
+            currentDelta -= deltaIncrementScaled;
             if (currentDelta < 0)
                 currentDelta = 0;
         } else if (currentDelta < 0) {
-            currentDelta += deltaIncrement;
+            currentDelta += deltaIncrementScaled;
             if (currentDelta > 0)
                 currentDelta = 0;
         }
@@ -85,9 +89,7 @@ void Car::handleInput() {
 }
 
 void Car::update(const float dt) {
-    handleInput();
-
-    // vehicle->updateBicycleRK4(dt, currentDelta);
+    handleInput(dt);
 
     vehicleData vd = {};
     vd.delta = currentDelta;
