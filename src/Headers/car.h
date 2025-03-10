@@ -34,8 +34,9 @@ public:
 
     /**
      * Handle the keyboard input to update the car
+     * @param dt the delta time
      */
-    void handleInput();
+    void handleInput(float dt);
 
     /**
      * Render the car on the window
