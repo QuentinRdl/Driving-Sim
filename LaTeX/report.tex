@@ -159,6 +159,20 @@ Nous allons maintenant vous détailler les principes physiques et l'implémentat
 
 \subsection{Implémentation des lois de Newton pour la dynamique du véhicule}
 
+Comme base de notre projet, nous avons donc commencé par implémenter la première Loi de Newton qui est le principe d'inertie, il stipule que tout corps conservera son état de repos ou de mouvement rectiligne uniforme en ligne droite dans lequel il se trouve, à moins qu'une force ne soit appliquée sur ce corps. Ainsi, un système ou corps quelconque ne peut pas se déplacer à moins qu'une force ne lui soit appliquée. Et c'est pareil pour qu'un système passe d'un état de mouvement à un état arrêté.
+Dans notre implémentation, cette loi est traduite par le fait que si aucune force n'agit sur le véhicule, alors ses vitesses vont rester nulles (ou constantes si le véhicule est initialisé avec une vitesse).
+Pourquoi et comment avons-nous implémenté cette loi ?
+Rappelons d'abord que l'équation fondamentale de la dynamique est donnée par :
+$$F = m \ .\  a$$
+Avec :
+\begin{itemize}
+    \item $F$ la force appliquée sur le corps,
+    \item $m$ la masse du corps,
+    \item $a$ l'accélération résultante.
+\end{itemize}
+
+Dans notre code, nous avons appliqué cette relation en calculant les accélérations $a_x$ et $a_y$ du véhicule à partir des forces appliquées :
+
 \begin{thebibliography}{99}
   \bibitem{interview}
     Abdallah Ben Othman,
