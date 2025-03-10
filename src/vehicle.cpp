@@ -152,19 +152,19 @@ void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float de
     dsdt[6] = v_global_y; // dy/dt
 }
 
-void Vehicle::getNextIterations(size_t startIndex, const size_t nbIterations, vehicleData* data, const float step) {
+void Vehicle::getNextIterations(const size_t startIndex, const size_t nbIterations, vehicleData* data, const float dt) {
     // Get the number of items in the array data
 
     assert(nbIterations > 0);
 
-    float angleBraquage = data[startIndex].delta;
+    const float angleBraquage = data[startIndex].delta;
 
     /* We will now apply the updataBicycleRK4 a total of nbIterations times
      * And stock the result of each iteration inside our vehiculeData array
      */
 
     for (size_t i = 0; i < nbIterations; i++) {
-        updateBicycleRK4(step, angleBraquage);
+        updateBicycleRK4(dt, angleBraquage);
         const size_t currentIndex = startIndex + i;
         data[currentIndex].mass = mass;
         data[currentIndex].dist_cog_front_axle = dist_cog_front_axle;
@@ -175,7 +175,7 @@ void Vehicle::getNextIterations(size_t startIndex, const size_t nbIterations, ve
         data[currentIndex].Cy = Cy;
         data[currentIndex].vx = vx;
         data[currentIndex].vy = vy;
-        std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
+        // std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
         data[currentIndex].lacet = lacet;
         data[currentIndex].x = x;
         data[currentIndex].y = y;
