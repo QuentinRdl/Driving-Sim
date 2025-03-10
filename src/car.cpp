@@ -33,6 +33,10 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
     carSprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
     const sf::FloatRect bounds = carSprite.getLocalBounds();
     carSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+
+    carPrediction = sf::VertexArray(sf::LineStrip, pointsCount);
+
 }
 
 /**
@@ -91,16 +95,22 @@ void Car::handleInput(const float dt) {
 void Car::update(const float dt) {
     handleInput(dt);
 
-    vehicleData vd = {};
-    vd.delta = currentDelta;
+    vehicleData vehicle_datas[pointsCount];
+    vehicle_datas[0].delta = currentDelta;
+    vehicle->getNextIterations(0, pointsCount, vehicle_datas, dt);
 
-    vehicle->getNextIterations(0, 1, &vd, dt);
-    vehicle->setData(vd);
+    for (int i = 0; i < pointsCount; ++i) {
+        carPrediction[i].position = sf::Vector2f(vehicle_datas[i].x, vehicle_datas[i].y);
+        carPrediction[i].color = sf::Color::Yellow;
+    }
+
+    vehicle->setData(vehicle_datas[0]);
     carSprite.setPosition(vehicle->x, vehicle->y);
     carSprite.setRotation(radToDeg(vehicle->psi));
 }
 
 
 void Car::renderOn(sf::RenderWindow &window) const {
+    window.draw(carPrediction);
     window.draw(carSprite);
 }
