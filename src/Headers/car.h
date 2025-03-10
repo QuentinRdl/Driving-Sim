@@ -16,7 +16,6 @@ class Car {
     const float deltaIncrement = 0.001f; // Increment of angle by frame
     const float maxDelta = 0.3f;         // Max angle for the steering wheel
 
-    sf::Sprite sprite;
 
 public:
     std::unique_ptr<Vehicle> vehicle;

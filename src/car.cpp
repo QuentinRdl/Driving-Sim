@@ -20,6 +20,9 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
     sprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
     const sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    carSprite.setTexture(game->texture_manager.getTexture(ResourceType::CAR));
+    const sf::FloatRect bounds = carSprite.getLocalBounds();
+    carSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
 /**
@@ -81,11 +84,11 @@ void Car::update(const float dt) {
 
     vehicle->getNextIterations(0, 1, &vd, dt);
     vehicle->setData(vd);
-    sprite.setPosition(vehicle->x, vehicle->y);
-    sprite.setRotation(radToDeg(vehicle->psi));
+    carSprite.setPosition(vehicle->x, vehicle->y);
+    carSprite.setRotation(radToDeg(vehicle->psi));
 }
 
 
 void Car::renderOn(sf::RenderWindow &window) const {
-    window.draw(sprite);
+    window.draw(carSprite);
 }
