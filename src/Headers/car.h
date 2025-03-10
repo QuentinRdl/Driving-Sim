@@ -13,10 +13,7 @@ class Car {
 
     float currentDelta;
 
-    const float deltaIncrement = 0.001f; // Increment of angle by frame
-    const float maxDelta = 0.3f;         // Max angle for the steering wheel
-
-    sf::Sprite sprite;
+    sf::Sprite carSprite;
 
 public:
     std::unique_ptr<Vehicle> vehicle;
@@ -34,8 +31,9 @@ public:
 
     /**
      * Handle the keyboard input to update the car
+     * @param dt the delta time
      */
-    void handleInput();
+    void handleInput(float dt);
 
     /**
      * Render the car on the window
@@ -62,9 +60,14 @@ public:
      */
     float getVy() const { return vehicle->vy; }
     /**
-     * @return the direction of the car
+     * @return the heading of the car
      */
     float getPsi() const { return vehicle->psi; }
+
+    /**
+     * @return the angle of the steering wheel
+     */
+    float getSteeringAngle() const { return currentDelta; }
 };
 
 #endif //CAR_H
