@@ -260,7 +260,7 @@ void Vehicle::plotTestIterative() {
     myVehicle.getNextIterations(steps/2, steps/2, data, dt);
 
     // Print the results
-    for (size_t i = 0; i < steps; ++i) {
+    for (size_t i = 0; i < static_cast<size_t>(steps); ++i) {
         std::cout << "Iteration " << i << ": x = " << data[i].x << ", y = " << data[i].y << ", vx = " << data[i].vx << ", vy = " << data[i].vy << std::endl;
     }
 
