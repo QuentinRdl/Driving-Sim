@@ -10,6 +10,24 @@
 \usepackage{lastpage}
 \usepackage{xurl}  % Permet de casser les URL de manière améliorée
 \usepackage[breaklinks]{hyperref}  % Permet de casser les liens URL
+\usepackage{listings} % Importation du package pour le code source
+\usepackage{xcolor}   % Importation du package pour la coloration syntaxique
+
+% Définition du style pour le code C
+\lstdefinestyle{CStyle}{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single
+}
+
+
 \def\UrlBreaks{\do\/\do-}
 \usepackage[french]{babel}
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
@@ -155,7 +173,7 @@ Ensuite, nous avons donc commencé l'implémentation de notre simulateur, il s'e
 Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur. De plus, comme l'étude et la représentation d'un système  de dynamique de véhicule est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative. Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique,  puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
 Ceci nous a mené à un plan en 5 étapes.
 Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, puis implémenter un modèle bicycle simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
-Nous allons maintenant vous détailler les principes physiques et l'implémentation, que nous avons fournis pour chacune de ces étapes :
+Nous allons maintenant vous détailler les principes physiques et l'implémentation que nous avons fournis pour chacune de ces étapes :
 
 \subsection{Implémentation des lois de Newton pour la dynamique du véhicule}
 
@@ -172,6 +190,11 @@ Avec :
 \end{itemize}
 
 Dans notre code, nous avons appliqué cette relation en calculant les accélérations $a_x$ et $a_y$ du véhicule à partir des forces appliquées :
+
+
+
+
+
 
 \begin{thebibliography}{99}
   \bibitem{interview}
@@ -219,4 +242,4 @@ Dans notre code, nous avons appliqué cette relation en calculant les accéléra
     Consulté le 12 décembre 2023.
 
 \end{thebibliography}
-\end{document}
+\end{document}
