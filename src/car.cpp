@@ -7,7 +7,10 @@
 #include "calculationhelper.h"
 
 
-Car::Car(const Game* game): game(game), currentDelta(0.05f) {
+/**
+ * TODO fix the speed increase alone some times ???
+ */
+Car::Car(const Game* game): game(game), currentDelta(0.0f) {
     constexpr float initSlip = 0;
     constexpr float initSlip_tau = 0.5;
     constexpr float initS_desired = 0.1;

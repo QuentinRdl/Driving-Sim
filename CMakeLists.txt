@@ -19,7 +19,7 @@ add_executable(Driving_Sim
         src/fpscounter.cpp
         src/car.cpp
         src/debugmode.cpp
-        src/arial_ttf.cpp
+        src/dejavu_sans_mono_ttf.cpp
         src/vehicle.cpp
 )
 

@@ -8,14 +8,16 @@ class DebugMode {
 
     sf::Font font;
     std::vector<sf::Text> texts;
+    std::vector<sf::RectangleShape> backgrounds;
     bool enabled;
 
     /**
      * Set up the font, the char size, the color and the position of a `sf::Text`.
      * @param content
      * @param size
+     * @param color
      */
-    void addLine(const std::string &content, uint size);
+    void addLine(const std::string &content, uint size = 20, const sf::Color &color = sf::Color::White);
 
 public:
     /**

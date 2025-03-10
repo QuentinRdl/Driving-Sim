@@ -87,7 +87,7 @@ void Game::update() {
     car->update(dt);
 
     game_view.setCenter(car->getX(), car->getY());
-    game_view.setRotation(radToDeg(car->getPsi() + M_PI_2f)); // Here we add PI/2 to have the good direction (car moving to the top of the screen).
+    // game_view.setRotation(radToDeg(car->getPsi() + M_PI_2f)); // Here we add PI/2 to have the good direction (car moving to the top of the screen).
     window->setView(game_view);
 }
 
@@ -96,14 +96,6 @@ void Game::updateCircuit() const {
     circuit->setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT, { 500, 40 });
     circuit->join(ResourceType::Value::SEGMENT_S_TURN);
     circuit->join(ResourceType::Value::SEGMENT_MEDIUM_TURN);
-    circuit->join(ResourceType::Value::SEGMENT_U_TURN, 90);
-    circuit->join(ResourceType::Value::SEGMENT_U_TURN, 90, true);
-    circuit->join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 90);
-    circuit->join(ResourceType::Value::SEGMENT_U_TURN, 90);
-    circuit->join(ResourceType::Value::SEGMENT_LARGE_TURN, 90, true);
-    circuit->join(ResourceType::Value::SEGMENT_S_TURN, 180, false, false);
-    circuit->join(ResourceType::Value::SEGMENT_U_TURN, 180, false, false);
-    circuit->join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 0, false, false);
 }
 
 void Game::render() const {
