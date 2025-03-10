@@ -49,7 +49,7 @@ void Vehicle::updateBicycleRK4(const float dt, float delta) {
  * @param dsdt
  * @param delta
  */
-void Vehicle::computeDerivatives(const float s[7], float dsdt[7], float delta) {
+void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float delta) {
     // Extraction des états
     const float slip_val = s[0];
     const float vx_val = s[1];
