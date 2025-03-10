@@ -192,7 +192,19 @@ Avec :
 Dans notre code, nous avons appliqué cette relation en calculant les accélérations $a_x$ et $a_y$ du véhicule à partir des forces appliquées :
 
 
+\begin{lstlisting}[style=CStyle]
+void computeTranslation(const double Fx, const double Fy, double& ax, double& ay) {
+    ax = Fx / m;
+    ay = Fy / m;
+}
 
+\end{lstlisting}
+
+Ici si $F_x = 0$ et $F_y = 0$, alors $a_x = 0$ et $a_y = 0$ ,ce qui signifie que les vitesses restent constantes conformément au principe d'inertie.
+Ensuite, nous prenons ces données et les intégrons en utilisant la méthode d'Euler qui est une méthode d'intégration numérique qui nous permet d'approximer l'évolution des variables dynamiques du modèle au fil du temps.
+Mais pourquoi a-t-on besoin de la méthode d'Euler ? Parce que lorsqu'on applique une force sur un objet, on génère des accélérations, qui vont modifier les vitesses qui elles-mêmes vont avoir une influence sur la position. Tout ce processus est décrit par des équations différentielles de la forme :
+$$\frac{d v_x}{dt} = a_x, \quad \frac{d v_y}{dt} = a_y, \quad \frac{d r}{dt} = r_{\dot{}}$$
+Cependant, comme notre simulateur est en temps réel, résoudre ces équations à chaque itération demanderait de nombreux cycles CPU, alors pour préserver leur usage, nous utilisons une méthode numérique, celle qui est la plus simple et efficace : la \textbf{méthode d'Euler explicite}.
 
 
 
@@ -242,4 +254,4 @@ Dans notre code, nous avons appliqué cette relation en calculant les accéléra
     Consulté le 12 décembre 2023.
 
 \end{thebibliography}
-\end{document}
+\end{document}
