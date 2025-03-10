@@ -49,30 +49,6 @@ public:
         I = m * std::pow(0.5 * (a + b), 2);
     }
 
-    // Constructeur étape 2
-    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0), x(0.0), y(0.0), psi(0.0)
-    {
-        I = m * std::pow(0.5 * (a + b), 2);
-    }
-
-    // Constructeur étape 3
-    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0), vy(0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
-    {
-        I = m * std::pow(0.5 * (a + b), 2);
-        // std::cout << "Inertia is " << I << std::endl;
-    }
-
-    // Constructeur étape 4
-    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired, double mu_front, double mu_rear, double g)
-  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(1), vy(1), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
-    {
-        I = m * std::pow(0.5 * (a + b), 2);
-        std::cout << "Building object for step 4 !\n";
-        count = 0;
-        // std::cout << "Inertia is " << I << std::endl;
-    }
 
     // Loi de Newton pour la translation
     void computeTranslation(const double Fx, const double Fy, double& ax, double& ay) {
@@ -157,6 +133,33 @@ public:
         gp << "unset output\n";
         gp.flush();
     }
+
+    // Constructeur étape 2
+    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), r(0.0), x(0.0), y(0.0), psi(0.0)
+    {
+        I = m * std::pow(0.5 * (a + b), 2);
+    }
+
+    // Constructeur étape 3
+    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(0), vy(0), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired)
+    {
+        I = m * std::pow(0.5 * (a + b), 2);
+        // std::cout << "Inertia is " << I << std::endl;
+    }
+
+    // Constructeur étape 4
+    Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy, double slip, double slip_tau, double s_desired, double mu_front, double mu_rear, double g)
+  : m(mass), a(a_front), b(b_rear), CA(airRes), Cx(cx), Cy(cy), vx(1), vy(1), r(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired), mu_front(mu_front), mu_rear(mu_rear), g(g)
+    {
+        I = m * std::pow(0.5 * (a + b), 2);
+        std::cout << "Building object for step 4 !\n";
+        count = 0;
+        // std::cout << "Inertia is " << I << std::endl;
+    }
+
+
     void updateBicycle(double dt, double delta, double slip) {
         // Calculer les angles de glissement pour les pneus avant (alpha_F) et arrière (alpha_R)
         double alpha_F = 0.0, alpha_R = 0.0;
