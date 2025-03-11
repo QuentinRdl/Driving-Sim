@@ -219,7 +219,8 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
         \item \textbf{Pour l'orientation $r$ :}
         $$r(t+dt) = r(t)+\dot{r}(t)\times(dt)$$
     \end{itemize}
-
+    Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
+    Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, alors cette méthode produira des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
     \begin{thebibliography}{99}
         \bibitem{interview}
         Abdallah Ben Othman,
