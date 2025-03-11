@@ -203,20 +203,22 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
     Ici si $F_x = 0$ et $F_y = 0$, alors $a_x$ et $a_y$, s'annulent, ce qui signifie que les vitesses restent constantes conformément au principe d'inertie.
     Cependant, dès qu'on applique une force sur un objet, on génère une accélération. Cette accélération va alors modifier la vitesse de l'objet, et, comme la position est liée à la vitesse de l'objet, alors, elle évoluera dans le temps. Ce processus est décrit par des équations différentielles. Dans notre cas, nous aurons :
     $$\frac{d v_x}{dt} = a_x, \quad \frac{d v_y}{dt} = a_y, \quad \frac{d r}{dt} = r_{\dot{}}$$
-    où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ l'orientation du véhicule.
+    où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ le lacet, l'orientation, du véhicule.
 
-
-
-    Ensuite, nous prenons ces données et les intégrons en utilisant la méthode d'Euler qui est une méthode d'intégration numérique qui nous permet d'approximer l'évolution des variables dynamiques du modèle au fil du temps.
-    Mais pourquoi a-t-on besoin de la méthode d'Euler ? Parce que lorsqu'on applique une force sur un objet, on génère des accélérations, qui vont modifier les vitesses qui elles-mêmes vont avoir une influence sur la position. Tout ce processus est décrit par des équations différentielles de la forme :
-    $$\frac{d v_x}{dt} = a_x, \quad \frac{d v_y}{dt} = a_y, \quad \frac{d r}{dt} = r_{\dot{}}$$
-    où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ l'orientation du véhicule.
     Cependant, comme notre simulateur est en temps réel, résoudre ces équations à chaque itération demanderait de nombreux cycles CPU, alors pour préserver leur usage, nous utilisons une méthode numérique, celle qui est la plus simple et efficace : la \textbf{méthode d'Euler explicite}.
-    Cette méthode permet d'approximer l'évolution d'une variable, sur un temps fixe, en supposant que sa dérivée soit constante sur un petit intervalle de temps $dt$. Alors, la mise à jour d'une variable $x$ avec sa dérivée $\dot{x}$ suit la relation :
+
+    Cette méthode repose sur le fait que la dérivée d'une variable $x$ notée $\dot{x}$ reste constante sur un petit intervalle de temps $dt$. Donc, on peut approximer son évolution par :
     $$x(t+dt) \approx x(t) + \dot{x}(t) \times dt$$
-    Et donc, dans notre cas, nous avons
-
-
+    Dans la première implémentation de notre simulateur, nous utilisons donc cette formule pour mettre à jour les vitesses et l'orientation de la voiture :
+    \\
+    \begin{itemize}
+        \item \textbf{Pour la vitesse sur l'axe $x$ :}
+        $$v_x(t+dt) = v_x(t)+a_x(t)\times(dt)$$
+        \item \textbf{Pour la vitesse sur l'axe $y$ :}
+        $$v_y(t+dt) = v_y(t)+a_y(t)\times(dt)$$
+        \item \textbf{Pour l'orientation $r$ :}
+        $$r(t+dt) = r(t)+\dot{r}(t)\times(dt)$$
+    \end{itemize}
 
     \begin{thebibliography}{99}
         \bibitem{interview}
