@@ -219,8 +219,23 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
         \item \textbf{Pour l'orientation $r$ :}
         $$r(t+dt) = r(t)+\dot{r}(t)\times(dt)$$
     \end{itemize}
+    Ici, on utilise $a_x(t)$, car c'est la dérivée de $v_x(t)$ par rapport au temps. C'est la même chose pour $a_y(t)$ qui résulte de $a_y(t)$. Ensuite, pour trouver $\dot{r}(t)$, qui est l'accélération angulaire, on applique la loi de la dynamique de rotation angulaire qui est la suivante :
+    $$I\dot{r}(t) = \texttt{torque}$$
+    où $I$ est le moment d'inertie de l'objet. En isolant $\dot{r}(t)$, on obtient :
+    $$\dot{r}(t)= {\texttt{torque}\over{I}}$$
+    Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAcceleration(torque);} où cette relation est implémentée.
+
     Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
-    Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, alors cette méthode produira des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
+    Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
+
+% TODO : Mettre sources dans les pages direct ? En pied de page ?
+% TODO : Montrer implem avec code aussi ?
+
+
+
+
+
+
     \begin{thebibliography}{99}
         \bibitem{interview}
         Abdallah Ben Othman,
