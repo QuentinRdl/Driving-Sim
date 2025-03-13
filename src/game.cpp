@@ -17,7 +17,6 @@ float Game::getZoomFactor() const {
 Game::Game(): zoom_factor(0.4) {
     window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Simulateur de conduite", sf::Style::Default); // TODO check name.
     window->setPosition(sf::Vector2i(0, 1080)); // Ecran 1
-    window->setVerticalSyncEnabled(true);
     texture_manager = {};
 
     car = std::make_unique<Car>(this);
