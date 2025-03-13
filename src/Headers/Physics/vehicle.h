@@ -73,11 +73,10 @@ public:
     float g; // Acceleration due a la gravite
 
 
-    size_t count; // TODO : Remove !!!
     Vehicle() : mass(0), dist_cog_front_axle(0), dist_cog_rear_axle(0),
         airResCoeff(0), I(0), Cx(0), Cy(0), vx(0), vy(0), lacet(0), x(0),
         y(0), psi(0), slip(0), slip_tau(0), s_desired(0),
-        mu_front(0), mu_rear(0), g(0), count(0)
+        mu_front(0), mu_rear(0), g(0)
     {
     }
 
@@ -88,8 +87,8 @@ public:
         float mu_front, float mu_rear, float g)
         : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), Cx(cx), Cy(cy),
           vx(1), vy(1), lacet(0.0), x(0.0), y(0.0), psi(0.0), slip(slip), slip_tau(slip_tau), s_desired(s_desired),
-          mu_front(mu_front), mu_rear(mu_rear), g(g), count(0) {
-        I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
+          mu_front(mu_front), mu_rear(mu_rear), g(g) {
+        I = mass * std::powf(0.5f * (dist_cog_front_axle + dist_cog_rear_axle), 2.f);
     }
 
     Vehicle(const float mass, const float dist_cog_front_axle, const float dist_cog_rear_axle,
@@ -105,24 +104,18 @@ public:
             mu_front(mu_front), mu_rear(mu_rear), g(g)
     {
         I = mass * std::powf(0.5f * (dist_cog_front_axle + dist_cog_rear_axle), 2.0f);
-        count = 0; // TODO REMOVE.
     }
 
-    /**
-     * TODO Full Complete Documentation.
-     * @param dt
-     * @param delta
-     */
-    void updateBicycleRK4(float dt, float delta);
+
 
     /**
      * TODO Full Complete Documentation.
-     * @param startIndex
      * @param nbIterations
      * @param data
      * @param dt
+     * @param startIndex
      */
-    void getNextIterations(size_t startIndex, size_t nbIterations, vehicleData* data, float dt);
+    void getNextIterations(size_t nbIterations, vehicleData* data, float dt, size_t startIndex = 0) const;
 
     /**
      * TODO Full Complete Documentation.
@@ -136,13 +129,27 @@ public:
      */
     void getData(vehicleData &data) const;
 
-    void plotTest();
+    static void plotTest();
 
-    void plotTestIterative();
+    static void plotTestIterative();
 
 private:
 
-    void computeDerivatives(const float s[7], float dsdt[7], float delta);
+    void computeDerivatives(const float state[7], float dsdt[7], float delta) const;
+
+    /**
+     * TODO Full Complete Documentation.
+     * @param dt
+     * @param delta
+     */
+    [[nodiscard]] std::array<float, 7> updateBicycleRK4(float dt, float delta) const;
+
+    /**
+     * TODO Full Complete Documentation.
+     * @param dt
+     * @param delta
+     */
+    [[nodiscard]] std::array<float, 7> updateBicycleRK4(float dt, float delta, const std::array<float, 7>& currentState) const;
 };
 
 
