@@ -15,7 +15,7 @@
 
 % Définition du style pour le code C
 \lstdefinestyle{CStyle}{
-    language=C,
+    language=C++,
     basicstyle=\ttfamily\small,
     keywordstyle=\color{blue},
     commentstyle=\color{gray},
@@ -228,9 +228,55 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
     Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
     Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
-% TODO : Mettre sources dans les pages direct ? En pied de page ?
-% TODO : Montrer implem avec code aussi ?
+    Ensuite pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{Gnuplot} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
+    \begin{lstlisting}[style=CStyle]
+void simulation_etape1() {
+    // Initialisation du vehicule (mass=1700 kg, dist_cog_front_axle=1.5 m, dist_cog_rear_axle=1.5 m)
+    OldVehicle myVehicle(1700.0, 1.5, 1.5);
 
+    // Parametres de simulation
+    double Fx = 500.0;       // Force longitudinale (N)
+    double Fy = 200.0;       // Force laterale (N)
+    double torque = -150.0;  // Moment de lacet (Nm)
+    double dt = 0.1;         // Pas de temps (s)
+    int steps = 10000;       // Simulation sur 10 secondes
+
+    // Vecteurs pour stocker les donnees : paire (temps, valeur)
+    std::vector<std::pair<double, double>>vx_data, vy_data, r_data;
+
+    // Simulation : enregistrement des etats a chaque pas de temps
+    for (int i = 0; i <= steps; ++i) {
+        vx_data.push_back({t, myVehicle.vx});
+        vy_data.push_back({t, myVehicle.vy});
+        r_data.push_back({t, myVehicle.lacet
+        myVehicle.update(dt, Fx, Fy, torque);
+    }
+    // ... Plot des donnees stockees dans les vecteurs avec Gnuplot
+
+}
+    \end{lstlisting}
+
+    {\LARGE Question => Doit-on ajouter la partie code Gnuplot à la figure précédente ?}
+
+    Les graphiques donnés par notre implémentation donnent alors :
+
+    \begin{center}
+
+        \includegraphics[width=0.70\linewidth]{Plots_Etape1/vx.png}
+        \includegraphics[width=0.70\linewidth]{Plots_Etape1/vy.png}
+        \includegraphics[width=0.70\linewidth]{Plots_Etape1/lacet.png}
+    \end{center}
+
+
+
+    \begin{itemize}
+        \item \textbf{Graphique de la vitesse longitudinale ($vx$)} : Sur ce premier graphique, on observe bien que l'évolution de la vitesse sur l'axe $y$, se traduit par l'application de la force longitudinale ($ F = m \cdot a $). Et nous avons donc une accélération constante, ce qui mène à une augmentation linéaire de $vx$ au fil du temps.
+
+        \item \textbf{Graphique de la vitesse latérale ($vy$)} : De même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
+
+        \item \textbf{Graphique du taux de lacet ({$\texttt{lacet}$})} : Et dernièrement, ce graphique-ci nous permet de voir l'évolution de l'orientation du véhicule. Grâce à la loi de la dynamique de rotation ($I\dot{r} = \texttt{torque}$), nous constatons que l'accélération angulaire est directement proportionnelle au couple appliqué, ce qui se traduit par une variation linéaire de $\texttt{lacet}$ au fil du temps.
+
+    \end{itemize}
 
 
 
