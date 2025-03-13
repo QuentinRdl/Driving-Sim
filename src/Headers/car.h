@@ -1,5 +1,6 @@
 #ifndef CAR_H
 #define CAR_H
+#include <deque>
 #include <memory>
 
 #include "main_classes.h"
@@ -17,8 +18,58 @@ class Car {
 
     sf::Sprite carSprite;
 
-    const int pointsCount = 500;
     sf::VertexArray carPrediction;
+
+    /**
+     * Here is a buffer of float containing the `dtBufferSize` last values of dt (dt is the delta of time between the frames N-1 and N).<br>
+     * It's used to compute the median of the dt to avoid having a too high volatility of the dt.<br>
+     * The median of dt is used to calculate the prediction line.
+     */
+    std::deque<float> dtBuffer;
+    const size_t max_dt_buffer_size = 1000;
+
+    /**
+     * Get the median of the dtBuffer in a O(n) time complexity.
+     * @param dt the delta of time between the frames N-1 and N
+     * @return the median of the dtBuffer
+     */
+    float updateAndGetMedian(const float dt) {
+        // O(1) to add the new dt to the deque cf https://en.cppreference.com/w/cpp/container/deque/push_back#:~:text=Complexity-,Constant.,-Exceptions
+        dtBuffer.push_back(dt);
+        if (dtBuffer.size() > max_dt_buffer_size) {
+            // O(1) to remove the first element of the deque cf https://en.cppreference.com/w/cpp/container/deque/pop_front#:~:text=Complexity-,Constant.,-Example
+            dtBuffer.pop_front();
+        } else {
+            printf("dtBuffer size / max: %zu / %zu\n", dtBuffer.size(), max_dt_buffer_size);
+        }
+        if constexpr (false) { // change this to true to use the old implementation
+            /**
+             * Implementation v1 => Cost O(nlogn)
+             * O(n) to copy dtBuffer to tmp
+             * O(nlogn) to sort tmp
+             * O(1) to get the value at the index.
+             */
+            std::vector tmp(dtBuffer.begin(), dtBuffer.end());
+            std::sort(tmp.begin(), tmp.end());
+            const float median = tmp[tmp.size() / 2];
+            return median;
+        } else {
+            /**
+             * Implementation v2 => Cost O(n)
+             * O(n) to copy dtBuffer to tmp cf https://en.cppreference.com/w/cpp/container/vector/vector
+             * O(n) to use nth_element cf https://en.cppreference.com/w/cpp/algorithm/nth_element
+             */
+            std::vector tmp(dtBuffer.begin(), dtBuffer.end());
+            const auto mid = tmp.begin() + tmp.size() / 2;
+            /**
+             * nth_element rearranges the elements in two parts separated by the index given in second parameter.
+             * like before mid, every element are lower to mid and after mid, every element are greater than mid.
+             * but in the indexes [0, mid[ and ]mid, end[ the elements are not sorted.
+             */
+            std::nth_element(tmp.begin(), mid, tmp.end());
+            return *mid.base();
+        }
+    }
 
 public:
     std::unique_ptr<Vehicle> vehicle;
@@ -28,8 +79,10 @@ public:
      */
     explicit Car(const Game* game);
 
+    vehicleData computePredictionLine(float dt);
+
     /**
-     * Update the physic and the graphical representation of the car
+     * Update the physic and the graphical representation of the car and of the prediction line.
      * @param dt the delta time
      */
     void update(float dt);

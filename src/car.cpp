@@ -36,7 +36,7 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
     constexpr float carScale = 0.5f;
     carSprite.setScale(carScale, carScale);
 
-    carPrediction = sf::VertexArray(sf::LineStrip, pointsCount);
+    carPrediction = sf::VertexArray(sf::LineStrip, 1000);
 }
 
 /**
@@ -93,22 +93,37 @@ void Car::update(const float dt) {
 
     handleInput(dt);
 
-    vehicleData vehicle_datas[pointsCount];
-    vehicle_datas[0].delta = currentDelta;
-    vehicle->getNextIterations(pointsCount, vehicle_datas, dt);
-
-    // Tracé de la trajectoire en appliquant le facteur de conversion
-    for (int i = 0; i < pointsCount; ++i) {
-        carPrediction[i].position = sf::Vector2f(vehicle_datas[i].x * METER_TO_PIXEL,
-                                                  vehicle_datas[i].y * METER_TO_PIXEL);
-        carPrediction[i].color = sf::Color::Yellow;
-    }
+    const vehicleData vd = computePredictionLine(dt);
 
     // Mise à jour de l'état réel du véhicule avec la première itération
-    vehicle->setData(vehicle_datas[0]);
+    vehicle->setData(vd);
     // Positionner le sprite avec conversion
     carSprite.setPosition(vehicle->x * METER_TO_PIXEL, vehicle->y * METER_TO_PIXEL);
     carSprite.setRotation(radToDeg(vehicle->psi));
+}
+
+vehicleData Car::computePredictionLine(const float dt) {
+    // Calcul du nombre de points de la ligne pour qu'elle sa longueur ne soit pas affecté par le nombre de FPS via le paramètre dt.
+    constexpr float predictionTime = 10.0f;
+    // Ici, on calcule récupère le dt médian sur les 1000 derniers frames pour éviter les artéfactes visuels car le dt a une grande volatilité.
+    const float median_dt = updateAndGetMedian(dt);
+    int nPoints = static_cast<int>(predictionTime / median_dt);
+    constexpr int minPoints = 10;
+    constexpr int maxPoints = 1000;
+    nPoints = std::max(minPoints, std::min(nPoints, maxPoints));
+    carPrediction.resize(nPoints);
+
+    vehicleData vehicle_datas[nPoints];
+    vehicle_datas[0].delta = currentDelta;
+    vehicle->getNextIterations(nPoints, vehicle_datas, median_dt);
+
+    // Tracé de la trajectoire en appliquant le facteur de conversion
+    for (int i = 0; i < nPoints; ++i) {
+        carPrediction[i].position = sf::Vector2f(vehicle_datas[i].x * METER_TO_PIXEL,
+                                                 vehicle_datas[i].y * METER_TO_PIXEL);
+        carPrediction[i].color = sf::Color::Yellow;
+    }
+    return vehicle_datas[0];
 }
 
 
@@ -124,7 +139,7 @@ bool Car::atTheEdgeOfScreen(const sf::View &game_view) const {
     const float viewY = game_view.getCenter().y;
     const float viewWidth = game_view.getSize().x;
     const float viewHeight = game_view.getSize().y;
-    constexpr float deltaScale = 0.9f;
+    constexpr float deltaScale = 0.75f;
     const float viewLeft = viewX - (viewWidth / 2) * deltaScale;
     const float viewTop = viewY - (viewHeight / 2) * deltaScale;
     const float viewRight = viewX + (viewWidth / 2) * deltaScale;
@@ -134,23 +149,26 @@ bool Car::atTheEdgeOfScreen(const sf::View &game_view) const {
 }
 
 void Car::recenterViewOnCar(sf::View &game_view, const float dt) const {
-    sf::Vector2f currentCenter = game_view.getCenter();
-    auto targetCenter = sf::Vector2f(getX() * METER_TO_PIXEL, getY() * METER_TO_PIXEL);
-    sf::Vector2f offset = targetCenter - currentCenter;
-    float distance = std::sqrt(offset.x * offset.x + offset.y * offset.y);
+    const sf::Vector2f currentCenter = game_view.getCenter();
+    const auto targetCenter = sf::Vector2f(getX() * METER_TO_PIXEL, getY() * METER_TO_PIXEL);
+    const sf::Vector2f offset = targetCenter - currentCenter;
+    const float distance = std::sqrt(offset.x * offset.x + offset.y * offset.y);
 
-    if (distance > 1.0f) { // seuil pour éviter de trop petites corrections
+    const float carX = getX() * METER_TO_PIXEL;
+    const float carY = getY() * METER_TO_PIXEL;
+    if (distance > 1.f) { // seuil pour éviter de trop petites corrections
         // Calcul de la vitesse de la voiture en pixels par seconde
-        float carSpeed = std::fabs(getVx()) * METER_TO_PIXEL;
+        const float carSpeed = std::sqrt(carX * carX + carY * carY);
         // On fixe une vitesse minimale pour la caméra pour qu'elle suive même à basse vitesse
-        float cameraSpeed = std::max(carSpeed, 200.0f);
+        constexpr float minCameraSpeed = 150.f;
+        const float cameraSpeed = std::max(carSpeed, minCameraSpeed);
         // Distance maximale que la caméra peut parcourir durant ce dt
         float maxDisplacement = cameraSpeed * dt;
         if (maxDisplacement > distance) {
             maxDisplacement = distance;
         }
         // On déplace la caméra d'un incrément proportionnel à l'offset
-        sf::Vector2f newCenter = currentCenter + (offset / distance) * maxDisplacement;
+        const sf::Vector2f newCenter = currentCenter + (offset / distance) * maxDisplacement;
         game_view.setCenter(newCenter);
     }
 }
