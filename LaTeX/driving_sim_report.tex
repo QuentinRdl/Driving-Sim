@@ -1,0 +1,222 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage{lastpage}
+\usepackage{xurl}  % Permet de casser les URL de manière améliorée
+\usepackage[breaklinks]{hyperref}  % Permet de casser les liens URL
+\usepackage{listings} % Importation du package pour le code source
+\usepackage{xcolor}   % Importation du package pour la coloration syntaxique
+
+% Définition du style pour le code Cpp
+\lstdefinestyle{CStyle}{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single
+}
+
+
+\def\UrlBreaks{\do\/\do-}
+\usepackage[french]{babel}
+\renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
+\renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
+
+% Pour gerer l'espace dans la table of contents
+\usepackage{tocloft}
+\renewcommand{\cftsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
+\renewcommand{\cftsubsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
+% ---
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black, % Couleur des liens internes (table des matières, etc.)
+    urlcolor=blue, % Couleur des liens externes (URLs)
+    citecolor=blue, % Couleur des liens de citation
+    filecolor=blue % Couleur des liens vers des fichiers
+}
+
+\fancyhf{} % Efface les en-têtes et pieds de page par défaut
+\pagestyle{fancy}
+\renewcommand\headrulewidth{1pt}
+\fancyhead[L]{Romain GALLAND | Quentin RADLO}
+\fancyhead[R]{Université de Marie \& Louis Pasteur}
+\renewcommand\footrulewidth{1pt}
+\fancyfoot[L]{}
+\fancyfoot[C]{Rapport de Projet - Simulateur de conduite:\\
+\textbf{Page \thepage/\pageref{LastPage}}}
+\fancyfoot[R]{}
+\geometry{
+    bindingoffset=1cm,  % Décalage pour la reliure
+    left=2cm,
+    right=2cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
+
+\begin{document}
+
+    \begin{titlepage}
+
+        \begin{center}
+            \vspace{2cm}
+            \includegraphics[width=0.3\textwidth]{university_logo.png}\par
+        \end{center}
+
+
+
+        \begin{center}
+            \vspace{0.2cm}
+            {\scshape \large{Rapport de projet} \par}
+            Licence 3 Informatique - UFR Sciences et Techniques
+            \vspace{0.4cm}
+            \hrule
+            \vspace{0.4cm}
+            {\huge\bfseries Simulateur de conduite \par}
+            \vspace{0.4cm}
+            \hrule
+            \vspace{1cm}
+            {\large\bfseries Décembre 2024 - Mars 2025 \par}
+            Romain GALLAND - Quentin RADLO
+            %\vspace*{1.5cm}
+            % Image d'illustration
+            % \vspace*{1.5cm}
+            \vspace{1cm} % Fonctionne mieux si encapsulé dans un bloc centre
+            \begin{center}
+                \includegraphics[width=0.8\textwidth]{illustration.jpg}
+            \end{center}
+
+
+            % Informations supplémentaires
+            \vspace{1cm}
+            {\bfseries Sous la supervision de:} Jean-Michel Hufflen \\
+
+
+        \end{center}
+    \end{titlepage}
+
+
+    \newpage
+    \section*{Remerciements}
+    - Un remerciement particulier est adressé à M. Hufflen pour la guidance et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
+
+% Page dédiée à la table des matières
+    \newpage
+    \tableofcontents
+    \newpage
+
+
+    \newpage
+    \section*{Glossaire}
+
+    \textbf{APEC :} Agence pour l'Emploi des Cadres, une association française qui propose des offres d'emploi pour les cadres.
+
+    \textbf{Bluetooth :} Norme de communication sans fil à courte portée.
+
+    \textbf{C, C++ :} Langages de programmation populaires dans le milieu embarqué.
+
+    \textbf{ESP32 :} Microcontrôleur très utilisé dans le développement de projets embarqués.
+
+    \textbf{Framework :} Ensemble d'outils et de conventions facilitant le développement.
+
+    \textbf{Git :} Système de gestion de versions décentralisé.
+
+    \textbf{I2C :} Protocole de communication entre plusieurs dispositifs.
+
+    \textbf{LinkedIn :} Réseau social professionnel en ligne.
+
+    \textbf{OS :} Système d'exploitation (\textit{Operating System} en anglais).
+
+    \textbf{RTOS :} Système d'exploitation temps réel (\textit{Real-Time Operating System} en anglais).
+
+    \textbf{SPI :} Protocole de communication série synchrone utilisé principalement pour la communication entre microcontrôleurs et périphériques.
+
+    \textbf{SS2I :} Société de Services en Ingénierie Informatique.
+
+    \newpage
+    \section{Sujet du projet}\label{sec:sujet-du-projet}
+    \input{subpart/sujet_du_projet}
+
+    \section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
+    \input{subpart/implementation_physique_modelisation_dyn_vehicule}
+
+
+
+
+
+
+    \begin{thebibliography}{99}
+        \bibitem{interview}
+        Abdallah Ben Othman,
+        Interview réalisée le 10 Décembre 2023.
+
+        \bibitem{CreditPhoto}
+        \emph{Crédit photo :}
+        \url{https://www.it-connect.fr/plus-dun-million-de-raspberry-pi-commercialises/},
+        Florian Burnel, sous licence BY-NC-ND 4.0
+
+        \bibitem{APEC}
+        \emph{APEC - Offres d'emploi},
+        \url{https://www.apec.fr/candidat.html},
+        Consulté le 5 Décembre 2023.
+
+        \bibitem{apec}
+        \emph{APEC - Fiche Métier},
+        \url{https://www.apec.fr/tous-nos-metiers/informatique/ingenieur-en-etudes-et-developpement-informatiques.html},
+        Consulté le 19 novembre 2023.
+
+        \bibitem{qt}
+        \emph{QT},
+        \url{https://www.qt.io/embedded-development-talk/embedded-engineers-roles-responsibilities-and-job-descriptions},
+        Consulté le 2 Décembre 2023.
+
+        \bibitem{kicklox}
+        \emph{Kicklox},
+        \url{https://www.kicklox.com/blog-talent/developpeur-logiciel-embarque},
+        Consulté le 2 Décembre 2023.
+
+        \bibitem{yuhiro}
+        \emph{Yuhiro},
+        \url{https://www.software-developer-india.com/fr/developpeur-de-logiciels-embarques-que-fait-il/},
+        Consulté le 2 Décembre 2023.
+
+        \bibitem{ti}
+        \emph{Texas Instruments\\},
+        \url{https://news.ti.com/blog/2023/04/07/3-trends-impacting-future-embedded-processing-technology},
+        Consulté le 12 décembre 2023.
+
+        \bibitem{readwrite}
+        \emph{ReadWrite},
+        \url{https://readwrite.com/embedded-systems-and-the-future/},
+        Consulté le 12 décembre 2023.
+
+    \end{thebibliography}
+
+
+
+
+    \begin{abstract}
+
+        Ce rapport présente le développement d'un prototype d'un simulateur de conduite réalisé en C++. L'objectif principal est de modéliser de manière réaliste divers scénarios de conduite en développant un modèle de physique réaliste pour avoir une gestion dynamique du véhicule par l'utilisateur. L'architecture modulaire et orientée objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
+
+        \bigskip
+
+        This report presents the development of a prototype for a driving simulator realized in C++. The main objective is to model in a realistic way multiple driving scenarios using a realistic vehicle dynamics model to have a dynamic management of the vehicle by the user. The source code uses a modular architecture and is object-oriented to facilitate adding new features.
+
+    \end{abstract}
+
+\end{document}
