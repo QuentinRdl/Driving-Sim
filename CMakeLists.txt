@@ -18,7 +18,6 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-
 add_executable(Driving_Sim
         src/main.cpp
         src/game.cpp
@@ -31,10 +30,10 @@ add_executable(Driving_Sim
         src/Headers/plotting.h
         src/Headers/gnuplot-iostream.h
         src/plotting.cpp
+        OldPhysics/OldPhysics.cpp     # Ajout du fichier OldPhysics.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
-
         src/Headers
         src/Headers/GraphicsUtils
         src/Headers/Physics
