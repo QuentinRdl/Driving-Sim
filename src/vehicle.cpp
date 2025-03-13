@@ -4,190 +4,143 @@
 
 /**
  * TODO complete documentation / @gubgub
- * @param dt
- * @param delta
+ * @param dt the delta of time.
+ * @param delta the steering angle.
+ * @param currentState the current state of the vehicle
  */
-void Vehicle::updateBicycleRK4(const float dt, float delta) {
-    // État vectoriel : [slip, vx, vy, r, psi, x, y]
-    float state[7] = {slip, vx, vy, lacet, psi, x, y};
+std::array<float, 7> Vehicle::updateBicycleRK4(const float dt, const float delta, const std::array<float, 7>& currentState) const {
+    const std::array<float, 7> state = currentState;
+    // État initial (en SI) extrait des membres
+    std::array<float, 7> newState{};
     float k1[7], k2[7], k3[7], k4[7], temp[7];
 
+    computeDerivatives(state.data(), k1, delta);
 
-    // Calcul de k1
-    computeDerivatives(state, k1, delta);
-    // Calcul de k2
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7; ++i)
         temp[i] = state[i] + 0.5f * dt * k1[i];
-    }
     computeDerivatives(temp, k2, delta);
-    // Calcul de k3
-    for (int i = 0; i < 7; i++) {
+
+    for (int i = 0; i < 7; ++i)
         temp[i] = state[i] + 0.5f * dt * k2[i];
-    }
     computeDerivatives(temp, k3, delta);
-    // Calcul de k4
-    for (int i = 0; i < 7; i++) {
+
+    for (int i = 0; i < 7; ++i)
         temp[i] = state[i] + dt * k3[i];
-    }
     computeDerivatives(temp, k4, delta);
 
-    // Combinaison pour obtenir le nouvel état
-    for (int i = 0; i < 7; i++) {
-        state[i] = state[i] + dt / 6.0f * (k1[i] + 2.0f * k2[i] + 2.0f * k3[i] + k4[i]);
-    }
-    // Mise à jour des variables membres
-    slip = state[0];
-    vx = state[1];
-    vy = state[2];
-    lacet = state[3];
-    psi = state[4];
-    x = state[5];
-    y = state[6];
+    for (int i = 0; i < 7; ++i)
+        newState[i] = state[i] + dt / 6.0f * (k1[i] + 2.0f * k2[i] + 2.0f * k3[i] + k4[i]);
+
+    return newState;
 }
 
 /**
  * TODO complete documentation / @gubgub
- * @param s
- * @param dsdt
- * @param delta
+ * @param dt the delta of time.
+ * @param delta the steering angle.
  */
-void Vehicle::computeDerivatives(const float s[7], float dsdt[7], const float delta) {
-    // Extraction des états
-    const float slip_val = s[0];
-    const float vx_val = s[1];
-    const float vy_val = s[2];
-    const float r_val = s[3];
-    const float psi_val = s[4];
+std::array<float, 7> Vehicle::updateBicycleRK4(const float dt, const float delta) const {
+    return updateBicycleRK4(dt, delta, { slip, vx, vy, lacet, psi, x, y });
+}
+
+/**
+ * TODO complete documentation / @gubgub
+ * @param state the state of the vehicle
+ * @param dsdt the derivative of the state
+ * @param delta the steering angle
+ */
+void Vehicle::computeDerivatives(const float state[7], float dsdt[7], const float delta) const {
+    const float slip_val = state[0];
+    const float vx_val   = state[1];
+    const float vy_val   = state[2];
+    const float r_val    = state[3];
+    const float psi_val  = state[4];
     // s[5] = x, s[6] = y
 
-    // Dynamique du slip
     dsdt[0] = (s_desired - slip_val) / slip_tau;
 
-    // Calcul des angles de glissement (éviter division par zéro)
-    float alpha_F = 0.0, alpha_R = 0.0;
+    float alpha_F = 0.0f, alpha_R = 0.0f;
     if (vx_val > 0.01f) {
         alpha_F = delta - (vy_val + dist_cog_front_axle * r_val) / vx_val;
         alpha_R = -(vy_val - dist_cog_rear_axle * r_val) / vx_val;
     }
 
-    // Forces longitudinales
     const float F_x_front = 2.0f * Cx * slip_val;
-    constexpr float F_x_rear = 0.0;
+    constexpr float F_x_rear = 0.0f;
 
-    // Charges verticales sur chaque essieu
     const float Fz_front = mass * g * (dist_cog_rear_axle / (dist_cog_front_axle + dist_cog_rear_axle));
-    const float Fz_rear = mass * g * (dist_cog_front_axle / (dist_cog_front_axle + dist_cog_rear_axle));
+    const float Fz_rear  = mass * g * (dist_cog_front_axle / (dist_cog_front_axle + dist_cog_rear_axle));
     const float F_y_max_front = mu_front * Fz_front;
-    const float F_y_max_rear = mu_rear * Fz_rear;
+    const float F_y_max_rear  = mu_rear * Fz_rear;
 
-    // Forces latérales linéaires
     const float F_y_front_linear = 2.0f * Cy * alpha_F;
-    const float F_y_rear_linear = 2.0f * Cy * alpha_R;
+    const float F_y_rear_linear  = 2.0f * Cy * alpha_R;
 
     const float ratio_front = F_y_front_linear / F_y_max_front;
-    const float ratio_rear = F_y_rear_linear / F_y_max_rear;
+    const float ratio_rear  = F_y_rear_linear  / F_y_max_rear;
 
-    // Force saturée
-    // Saturation via tanh pour modéliser la limite des pneus
     const float F_y_front = F_y_max_front * tanhf(ratio_front);
-    const float F_y_rear = F_y_max_rear * tanhf(ratio_rear);
+    const float F_y_rear  = F_y_max_rear  * tanhf(ratio_rear);
 
-    // Affichage console si on est en saturation
-    if (std::fabs(ratio_front) > 1.0f) {
-        // std::cout << "[SAT FRONT] ratio = " << ratio_front
-        // << " => F_y_front_linear=" << F_y_front_linear
-        // << " N, F_y_front=" << F_y_front << " N\n";
-        count++;
-    }
-    if (std::fabs(ratio_rear) > 1.0f) {
-        // std::cout << "[SAT REAR] ratio = " << ratio_rear
-        //         << " => F_y_rear_linear=" << F_y_rear_linear
-        //      << " N, F_y_rear=" << F_y_rear << " N\n";
-        count++;
-    }
-
-    // Accélérations (modèle bicycle)
     const float ax = vy_val * r_val + (1.0f / mass) *
                      (F_x_front * cosf(delta) - F_y_front * sinf(delta) + F_x_rear - airResCoeff * vx_val * vx_val);
 
-    // TODO Call Gub Gub to check why the two following lines are reassigned without using the values few lines in bottom
-    float ay = -vx_val * r_val + (1.0f / mass) * (F_x_front * sinf(delta) + F_y_front * cosf(delta) + F_y_rear);
+    float ay   = -vx_val * r_val + (1.0f / mass) * (F_x_front * sinf(delta) + F_y_front * cosf(delta) + F_y_rear);
     float r_dot = 1.0f / I * (dist_cog_front_axle * (F_x_front * sinf(delta) + F_y_front * cosf(delta)) - dist_cog_rear_axle * F_y_rear);
 
+    constexpr float c_lat = 1000.0f;
+    ay = ay - (c_lat / mass) * vy_val;
 
-    // TODO : Is Working ?
-    // On va essayer d'amortir le lateral
-    // Parametre d'amortissement lateral (en kg/s) :
-    constexpr float c_lat = 1000.0; // TODO : A ajuster en fonction des ocsillations
-
-    // TODO : Is Working ?
-    // Calcul de ay (Modele bicycle + amortissement)
-    ay = -vx_val * r_val
-         + (1.0f / mass) * (F_x_front * sinf(delta) + F_y_front * cosf(delta) + F_y_rear)
-         - (c_lat / mass) * vy_val;
-
-
-    // Paramètre d'amortissement en lacet (en N·m·s/rad) :
-    constexpr float c_yaw = 2000.0f; // À ajuster empiriquement
-
+    constexpr float c_yaw = 2000.0f;
     const float torque = dist_cog_front_axle * (F_x_front * sinf(delta) + F_y_front * cosf(delta))
                          - dist_cog_rear_axle * F_y_rear;
-
-    // Ajout d'un couple d'amortissement = - c_yaw * r_val
-    r_dot = (1.0f / I) * ( torque - c_yaw * r_val );
-
-
-
-    // FIN TODO : Is Working ?
+    r_dot = (1.0f / I) * (torque - c_yaw * r_val);
 
     dsdt[1] = ax;
     dsdt[2] = ay;
     dsdt[3] = r_dot;
     dsdt[4] = r_val; // d(psi)/dt = r
 
-    // Transformation en vitesses globales
     const float v_global_x = vx_val * cosf(psi_val) - vy_val * sinf(psi_val);
     const float v_global_y = vx_val * sinf(psi_val) + vy_val * cosf(psi_val);
-    dsdt[5] = v_global_x; // dx/dt
-    dsdt[6] = v_global_y; // dy/dt
+    dsdt[5] = v_global_x;
+    dsdt[6] = v_global_y;
 }
 
-void Vehicle::getNextIterations(const size_t startIndex, const size_t nbIterations, vehicleData* data, const float dt) {
-    // Get the number of items in the array data
-
+/**
+ *
+ * @param nbIterations the number of iterations to compute
+ * @param data the data array to fill
+ * @param dt the delta of time between two iterations (in seconds, often related to fps in the interface used)
+ * @param startIndex the starting index in the data array
+ */
+void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, const float dt, const size_t startIndex) const {
     assert(nbIterations > 0);
+    const float delta = data[startIndex].delta;
+    std::array<float, 7> currentState = { slip, vx, vy, lacet, psi, x, y };
 
-    const float angleBraquage = data[startIndex].delta;
-
-    /* We will now apply the updataBicycleRK4 a total of nbIterations times
-     * And stock the result of each iteration inside our vehiculeData array
-     */
-
-    for (size_t i = 0; i < nbIterations; i++) {
-        updateBicycleRK4(dt, angleBraquage);
-        const size_t currentIndex = startIndex + i;
-        data[currentIndex].mass = mass;
-        data[currentIndex].dist_cog_front_axle = dist_cog_front_axle;
-        data[currentIndex].dist_cog_rear_axle = dist_cog_rear_axle;
-        data[currentIndex].airResCoeff = airResCoeff;
-        data[currentIndex].I = I;
-        data[currentIndex].Cx = Cx;
-        data[currentIndex].Cy = Cy;
-        data[currentIndex].vx = vx;
-        data[currentIndex].vy = vy;
-        // std::cout << "Iteration " << i << " : vx = " << vx << ", vy = " << vy << std::endl;
-        data[currentIndex].lacet = lacet;
-        data[currentIndex].x = x;
-        data[currentIndex].y = y;
-        data[currentIndex].psi = psi;
-        data[currentIndex].slip = slip;
-        data[currentIndex].slip_tau = slip_tau;
-        data[currentIndex].s_desired = s_desired;
-        data[currentIndex].mu_front = mu_front;
-        data[currentIndex].mu_rear = mu_rear;
-        data[currentIndex].g = g;
-        // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
-
+    for (size_t i = 0; i < nbIterations; ++i) {
+        currentState = updateBicycleRK4(dt, delta, currentState);
+        const size_t idx = startIndex + i;
+        data[idx].mass = mass;
+        data[idx].dist_cog_front_axle = dist_cog_front_axle;
+        data[idx].dist_cog_rear_axle = dist_cog_rear_axle;
+        data[idx].airResCoeff = airResCoeff;
+        data[idx].I = I;
+        data[idx].Cx = Cx;
+        data[idx].Cy = Cy;
+        data[idx].vx = currentState[1];
+        data[idx].vy = currentState[2];
+        data[idx].lacet = currentState[3];
+        data[idx].psi = currentState[4];
+        data[idx].x = currentState[5];
+        data[idx].y = currentState[6];
+        data[idx].slip = currentState[0];
+        data[idx].slip_tau = slip_tau;
+        data[idx].s_desired = s_desired;
+        data[idx].mu_front = mu_front;
+        data[idx].mu_rear = mu_rear;
+        data[idx].g = g;
     }
 }
 
@@ -255,9 +208,9 @@ void Vehicle::plotTestIterative() {
     float delta = 0.05; // en radians
     vehicleData data[steps];
     data[0].delta = delta;
-    myVehicle.getNextIterations(0, steps/2, data, dt);
+    myVehicle.getNextIterations(steps/2, data, dt, 0);
     data[steps/2].delta = -delta;
-    myVehicle.getNextIterations(steps/2, steps/2, data, dt);
+    myVehicle.getNextIterations(steps/2, data, dt, steps/2);
 
     // Print the results
     for (size_t i = 0; i < static_cast<size_t>(steps); ++i) {
@@ -276,7 +229,8 @@ void Vehicle::plotTest() {
     float initSlip_tau = 0.5;
     float initS_desired = 0.1; // Valeur cible de slip
 
-    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+    Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0,
+                      initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
 
     float dt = 0.02;
     int steps = 10000;
@@ -289,26 +243,27 @@ void Vehicle::plotTest() {
     std::vector<std::pair<float, float>> vx_data, vy_data, r_data, slip_data;
     std::vector<std::pair<float, float>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
 
-
     int change = steps / 2;
+    // On crée une copie locale de l'état initial : [slip, vx, vy, lacet, psi, x, y]
+    std::array<float, 7> currentState = { myVehicle.slip, myVehicle.vx, myVehicle.vy,
+                                          myVehicle.lacet, myVehicle.psi, myVehicle.x, myVehicle.y };
+
     for (int i = 0; i <= steps; ++i) {
         if (i == change) {
             delta = -delta; // Pour creer un changement de direction
         }
         float t = i * dt;
-        vx_data.emplace_back(t, myVehicle.vx);
-        vy_data.emplace_back(t, myVehicle.vy);
-        r_data.emplace_back(t, myVehicle.lacet);
-        traj_data.emplace_back(myVehicle.x, myVehicle.y);
-        slip_data.emplace_back(t, myVehicle.slip);
+        vx_data.emplace_back(t, currentState[1]);
+        vy_data.emplace_back(t, currentState[2]);
+        r_data.emplace_back(t, currentState[3]);
+        traj_data.emplace_back(currentState[5], currentState[6]);
+        slip_data.emplace_back(t, currentState[0]);
 
         // Mise à jour de la dynamique avec le modèle Bicycle
-        // myVehicle.updateBicycleEtape4(dt, delta);
-        myVehicle.updateBicycleRK4(dt, delta);
+        // Ici, updateBicycleRK4 retourne le nouvel état sans modifier l'objet myVehicle
+        currentState = myVehicle.updateBicycleRK4(dt, delta);
     }
 
     Plotting p;
     p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots");
-    // We print count (Number of time saturation is reached)
-    std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

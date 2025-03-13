@@ -8,6 +8,9 @@
 #include <cmath>
 #include "vehicle.h"
 
+/**
+ * TODO Fix only x ?
+ */
 // Fonction dérivée f(x,t) = dx/dt = x
 double f(double x, double /* t */) {
     return x;

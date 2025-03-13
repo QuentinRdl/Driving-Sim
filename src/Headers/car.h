@@ -13,6 +13,8 @@ class Car {
 
     float currentDelta;
 
+    float time = 0.0f; // todo delete;
+
     sf::Sprite carSprite;
 
     const int pointsCount = 500;
@@ -71,6 +73,14 @@ public:
      * @return the angle of the steering wheel
      */
     float getSteeringAngle() const { return currentDelta; }
+
+    /**
+     * @param game_view the view containing the car, the circuit, ...
+     * @return true if the car is at the edge of the screen, false otherwise
+     */
+    bool atTheEdgeOfScreen(const sf::View& game_view) const;
+
+    void recenterViewOnCar(sf::View& game_view, float dt) const;
 };
 
 #endif //CAR_H

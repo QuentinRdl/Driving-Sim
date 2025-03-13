@@ -1,6 +1,6 @@
 #include "game.h"
 
-#include <iostream>
+#include "constants.h"
 
 
 /**
@@ -16,6 +16,7 @@ float Game::getZoomFactor() const {
  */
 Game::Game(): zoom_factor(0.4) {
     window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Simulateur de conduite", sf::Style::Default); // TODO check name.
+    window->setPosition(sf::Vector2i(0, 1080)); // Ecran 1
     window->setVerticalSyncEnabled(true);
     texture_manager = {};
 
@@ -23,7 +24,7 @@ Game::Game(): zoom_factor(0.4) {
     const float win_x = static_cast<float>(window->getSize().x);
     const float win_y = static_cast<float>(window->getSize().y);
     game_view.setSize(win_x, win_y);
-    game_view.setCenter(car->getX(), car->getY());
+    game_view.setCenter(car->getX() * METER_TO_PIXEL, car->getY() * METER_TO_PIXEL);
 
     hud_view.setSize(win_x, win_y);
     hud_view.setCenter(win_x / 2.f, win_y / 2.f);
@@ -57,14 +58,14 @@ void Game::manageEvents() {
                 else if (event.key.code == sf::Keyboard::F5) {
                     car.reset();
                     car = std::make_unique<Car>(this);
-                    game_view.setCenter(car->getX(), car->getY());
+                    game_view.setCenter(car->getX() * METER_TO_PIXEL, car->getY() * METER_TO_PIXEL);
                 }
             break;
             case sf::Event::MouseWheelScrolled:
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     circuit->needUpdate();
-                    if (event.mouseWheelScroll.delta > 0)    zoom_factor += 0.01f;
-                    else                                     zoom_factor -= (zoom_factor > 0 ? 0.01f : zoom_factor);
+                    if (event.mouseWheelScroll.delta < 0)    game_view.zoom(1.1);
+                    else                                     game_view.zoom(0.9);
                 }
                 break;
             case sf::Event::Closed:
@@ -88,8 +89,9 @@ void Game::update() {
     }
 
     car->update(dt);
-
-    game_view.setCenter(car->getX(), car->getY());
+    if (car->atTheEdgeOfScreen(game_view)) {
+        car->recenterViewOnCar(game_view, dt);
+    }
     // game_view.setRotation(radToDeg(car->getPsi() + M_PI_2f)); // Here we add PI/2 to have the good direction (car moving to the top of the screen).
     window->setView(game_view);
 }
@@ -103,6 +105,7 @@ void Game::updateCircuit() const {
 
 void Game::render() const {
     window->clear();
+
 
     /* --- Game View (Car, Circuit, ...) --- */
     window->setView(game_view);
