@@ -41,9 +41,9 @@ public:
     size_t count; // TODO : Remove !!!
 
     // Constructeur étape 1
-    OldVehicle(double mass, double a_front, double b_rear, double airRes = 0.0)
+    OldVehicle(double mass, double a_front, double b_rear)
 
-      : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), vx(0.0), vy(0.0), lacet(0.0)
+      : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), vx(0.0), vy(0.0), lacet(0.0)
     {
         I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
     }
@@ -70,9 +70,9 @@ public:
         lacet  += r_dot * dt;
     }
 
-void etape1() {
-    // Initialisation du véhicule (mass=1700 kg, dist_cog_front_axle=1.5 mass, dist_cog_rear_axle=1.5 mass, airResCoeff=0.5)
-    OldVehicle myVehicle(1700.0, 1.5, 1.5, 0.5);
+void simulation_etape1() {
+    // Initialisation du véhicule (mass=1700 kg, dist_cog_front_axle=1.5 mass, dist_cog_rear_axle=1.5 mass)
+    OldVehicle myVehicle(1700.0, 1.5, 1.5);
 
     // Paramètres de simulation
     double Fx = 500.0;     // Force longitudinale (N)
@@ -647,7 +647,7 @@ void etape4() {
 
 int main() {
     OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
-    myVehicle.etape1();
+    myVehicle.simulation_etape1();
     // etape2();
     // etape3();
     // etape4();
