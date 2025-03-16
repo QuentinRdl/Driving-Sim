@@ -135,12 +135,27 @@ $b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière
 $\theta$ = La vitesse de \textbf{lacet}, \\
 $V_\xi$ = La vitesse \textbf{latérale}, \\
 $V_\eta$ = La vitesse \textbf{longitudinale}. \\
-\center{\text{(tiré de \cite{vtech})}}
-
+\center{\text{(Formules tirées de \cite{vtech})}}
 \end{itemize}
 
+Dans la première étape, nous avions déjà tous ces paramètres, sauf $\delta$, nous avons donc rajouté une variable \texttt{delta}, dans notre objet qui représente donc l'angle de braquage de la voiture. Ces deux formules mathématiques se traduisent donc dans notre code par :
 
-Ensuite, pour correctement implémenter le modèle Bicycle, nous rajouter des paramètres à notre objet véhicule. Nous allons fixer la \textbf{raideur des pneus}, pour la raideur longitudinale $C_x$ et la raideur latérale $C_y$. La raideur est un coefficient qui mesure la réaction d'un pneu à une contrainte appliquée. C'est la relation entre la force exercée sur le pneu et la déformation qui en résulte. Par exemple $C_x$, mesure la résistance du pneu à un glissement dans la direction du déplacement du véhicule. Et $C_y$ mesure la capacité du pneu à générer une force latérale en réponse à un angle de glissement. Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs valeurs.
+\begin{lstlisting}[style=CStyle]
+void updateBicycle(double dt, double delta, double slip) {
+// Calculer les angles de glissement pour les pneus avant (alpha_F) et arriere (alpha_R)
+double alpha_F = 0.0, alpha_R = 0.0;
+if (vx > 0.01) {
+// evite la division par zero
+alpha_F = delta - (vy + dist_cog_front_axle * lacet) / vx;
+alpha_R = -(vy - dist_cog_rear_axle * lacet) / vx;
+}
+...
+}
+\end{lstlisting}
+
+
+
+Ensuite, pour correctement implémenter le modèle Bicycle, nous devons rajouter des paramètres à notre objet véhicule. Nous allons fixer la \textbf{raideur des pneus}, pour la raideur longitudinale $C_x$ et la raideur latérale $C_y$. La raideur est un coefficient qui mesure la réaction d'un pneu à une contrainte appliquée. C'est la relation entre la force exercée sur le pneu et la déformation qui en résulte. Par exemple $C_x$, mesure la résistance du pneu à un glissement dans la direction du déplacement du véhicule. Et $C_y$ mesure la capacité du pneu à générer une force latérale en réponse à un angle de glissement. Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs valeurs.
 
 \textbf{Raideur longitudinale ($C_x$) }:
 \begin{itemize}
@@ -177,5 +192,68 @@ Influence la capacité à prendre les virages et la stabilité du véhicule.
 \end{itemize}
 \end{itemize}
 
-Les paramètres $C_x$ et $C_y$ seront donc calculés à chaque étape de la simulation avec la formule suivante :
+Après avoir fixé ces valeurs, nous avons pu faire le \textbf{calcul des forces sur les pneus}, qui se font de la sorte :
+\begin{itemize}
+\item \textbf{Forces Longitudinales} :
+\begin{itemize}[label=$\star$]
+\item \texttt{F\_x\_front} : C'est la force de traction générée par les pneus avant en fonction du glissement longitudinal. Calculée par : $$2 \times C_x \times \texttt{slip}$$
 
+\item \texttt{F\_x\_rear} : Dans ce modèle, aucune force longitudinale n'est appliquée à l'arrière.
+\end{itemize}
+\item \textbf{Forces Latérales} :
+\begin{itemize}[label=$\star$]
+\item \texttt{F\_y\_front} : C'est la force latérale sur l'essieu, calculée par : $$2 \times C_y \times a_F$$
+\item \texttt{F\_y\_rear} : C'est la force latérale sur l'essieu arrière : $$2 \times C_y \times a_R$$
+\end{itemize}
+\end{itemize}
+
+Ces forces sont nécessaires pour pouvoir modéliser le comportement du véhicule lorsqu'on va changer le véhicule de direction. Nous allons maintenant les utiliser pour calculer les accélérations du véhicule (longitudinale, latéral et lacet), plus seulement grâce aux Lois de Newton comme à la première étape, mais avec les données que nous avons maintenant.
+
+Pour l'accélération longitudinale ($ax$) :
+
+
+$$a_x = v_y \times \texttt{lacet} + \frac{1}{\texttt{mass}}(F_{x\_front} \times \cos(\delta) - F_{y\_front} \times \sin(\delta) + F_{x\_rear} - \texttt{airResCoeff} \times vx^2)$$
+
+Pour l'accélération latérale ($ay$) :
+$$a_y=-v_x\times lacet + \frac{1}{mass}(F_{x\_front} \times \sin(\delta) + F_{y\_front} \times \cos(\delta) + F_{y\_rear})$$
+
+Pour l'accélération de lacet ($r_{dot}$) :
+$$r_{dot} = \frac{1}{I}(a \times (F_{x\_front} \times \sin(\delta) + F_{y\_front} \times \cos(\delta)) - b \times F_{y\_rear})$$
+Avec $I$ qui est le moment d'inertie, que nous fixons au début de notre simulation grâce à la formule : $$I = m \times ({{a+b}\over{2}})^2$$
+Et \texttt{airResCoeff} qui est le coefficient de la résistance de l'air que nous fixons également en construisant notre objet véhicule. \newline
+
+{\Large Question => Faire un rappel sur ce qu'est $a$, $b$ $\delta$ ?}
+
+\center{Formules disponible sur : \cite{VDS_MathWorks}
+
+Ce qui se traduit dans notre code par :
+
+\begin{lstlisting}[style=CStyle]
+void updateBicycle(double dt, double delta, double slip) {
+...
+// Calcul des forces sur les pneus (hypothese : les forces sont identiques sur les deux roues de l'essieu)
+double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels)
+double F_x_rear = 0.0; // Pas de force longitudinale a l'arriere
+double F_y_front = 2.0 * Cy * alpha_F; // Force laterale sur l'essieu avant
+double F_y_rear = 2.0 * Cy * alpha_R; // Force laterale sur l'essieu arriere
+
+// Calcul des accelerations selon le modele "bicycle"
+double ax = vy * lacet + 1.0 / mass * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - airResCoeff * vx * vx);
+double ay = -vx * lacet + 1.0 / mass * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+double r_dot = 1.0 / I * (dist_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - dist_cog_rear_axle * F_y_rear);
+...
+}
+\end{lstlisting}
+
+Et par la suite, dans notre implémentation, nous intégrons les valeurs avec la méthode d'Euler, puis dans notre boucle de simulation, nous appelons, \texttt{myVehicle.updateBicycle(dt, delta, slip);} au lieu de \texttt{myVehicle.update(dt, Fx, Fy, torque);}comme à l'étape 1. Et pour initialiser $I$, le moment d'inertie, nous le faisons donc dans notre constructeur de l'objet véhicule :
+\begin{lstlisting}[style=CStyle]
+Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
+: mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), lacet(0.0), x(0.0), y(0.0), psi(0.0)
+{
+I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
+}
+}
+\end{lstlisting}
+
+Et, nous pouvons donc maintenant visualiser, grâce à Gnuplot, la trajectoire de notre véhicule, en lui donnant un certain angle de braque, une certaine vitesse, orientation, etc. Voici un exemple de simulation sur 1000 itérations, avec un angle de braquage delta fixe, que l'on inverse au bout de 500 itérations.
+Voici
