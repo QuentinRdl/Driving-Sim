@@ -56,7 +56,7 @@ Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAccele
 Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
 Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
-Ensuite pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{Gnuplot} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
+Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{Gnuplot} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]
 void simulation_etape1() {
     // Initialisation du vehicule (mass=1700 kg, dist_cog_front_axle=1.5 m, dist_cog_rear_axle=1.5 m)
@@ -102,5 +102,12 @@ Les graphiques donnés par notre implémentation donnent alors :
     \item \textbf{Graphique de la vitesse latérale ($vy$)} : De même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
 
     \item \textbf{Graphique du taux de lacet ({$\texttt{lacet}$})} : Et dernièrement, ce graphique-ci nous permet de voir l'évolution de l'orientation du véhicule. Grâce à la loi de la dynamique de rotation ($I\dot{r} = \texttt{torque}$), nous constatons que l'accélération angulaire est directement proportionnelle au couple appliqué, ce qui se traduit par une variation linéaire de $\texttt{lacet}$ au fil du temps.
-
 \end{itemize}
+
+\subsection{Implémentation du modèle Bicycle simplifié}
+Après avoir implémenté ces phénomènes physiques de base, nous devions rajouter une façon de pouvoir contrôler notre véhicule de manière réaliste. C'est pourquoi nous avons choisi d'implémenter le modèle Bicycle simplifié. C'est un modèle couramment utilisé en dynamique des véhicules, plutôt que de traiter séparément les quatre roues d'un véhicule, il regroupe les roues avant en une seule roue, et fait de même pour les roues arrière. En procédant de cette façon, nous pouvons capturer les comportements dynamiques des pneus d'un véhicule tout en réduisant la complexité des équations utilisées. Comme le but de cette partie était de pouvoir calculer la trajectoire d'un véhicule, nous avons utilisé le modèle bicycle pour trouver l'angle de glissement des pneus, ainsi que pour trouver les forces appliquées sur ceux-ci, pour pouvoir modéliser la trajectoire.
+Mais qu'est-ce que l'\textbf{angle de glissement} ? L'angle de glissement est l'angle formé entre la direction réelle d'un pneu et l'orientation de la roue. Il est induit par les forces latérales lors d'un virage. Plus cet angle est grand, plus les forces latérales appliquées sur le pneu sont grandes. Chaque pneu a, en fonction de son revêtement et de la condition de la route sur laquelle il se trouve, une limite d'adhérence au-delà de laquelle il ne peut plus maintenir un contact optimal avec la route. Alors le pneu perd son efficacité et commence à déraper. Cet angle a une grande importance dans la dynamique des véhicules, car il influence leur stabilité et
+leur comportement en virage.
+C'est en implémentant cette limite, plus tard dans notre modèle, que nous avons pu simuler le comportement de sous-virage et de survirage.
+
+\newpage{}
