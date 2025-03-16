@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "button.h"
 #include "constants.h"
 
 
@@ -14,9 +15,15 @@ float Game::getZoomFactor() const {
 /**
  * Constructor
  */
-Game::Game(): zoom_factor(0.4) {
-    window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Simulateur de conduite", sf::Style::Default); // TODO check name.
-    window->setPosition(sf::Vector2i(0, 1080)); // Ecran 1
+Game::Game(): software_state(this),
+              zoom_factor(0.4),
+              fps_counter(font_manager), debug_mode(font_manager),
+              play_button({0, 0}, {0, 0}, "", font_manager),
+              resume_button({0, 0}, {0, 0}, "", font_manager)
+{
+    window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(), "Simulateur de conduite",
+                                                sf::Style::Default); // TODO check name.
+    // window->setPosition(sf::Vector2i(0, 1080)); // Ecran 1
     texture_manager = {};
 
     car = std::make_unique<Car>(this);
@@ -28,6 +35,14 @@ Game::Game(): zoom_factor(0.4) {
     hud_view.setSize(win_x, win_y);
     hud_view.setCenter(win_x / 2.f, win_y / 2.f);
 
+    play_button = Button({200, 50}, {
+                             static_cast<float>(window->getSize().x) / 2.f - 100,
+                             static_cast<float>(window->getSize().y) / 2.f - 25
+                         }, "Play", font_manager);
+    resume_button = Button({200, 50}, {
+                               static_cast<float>(window->getSize().x) / 2.f - 100,
+                               static_cast<float>(window->getSize().y) / 3.f - 25
+                           }, "Resume", font_manager);
     circuit = std::make_unique<Circuit>(this);
     updateCircuit();
 }
@@ -48,23 +63,31 @@ void Game::manageEvents() {
     while (window->pollEvent(event)) {
         switch (event.type) {
             case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::F)            fps_counter.toggle();
-                else if (event.key.code == sf::Keyboard::Escape)  window->close();
-                else if (event.key.code == sf::Keyboard::F3) {
-                    debug_mode.toggle();
-                    printf("Debug mode changed to %s\n", debug_mode.isEnabled() ? "ON" : "OFF");
+                switch (software_state()) {
+                    case SoftwareState::MAIN_MENU:
+                        if (event.key.code == sf::Keyboard::Enter)        software_state.switchTo(SoftwareState::PLAYING);
+                        break;
+                    case SoftwareState::PLAYING:
+                        if (event.key.code == sf::Keyboard::F)            fps_counter.toggle();
+                        else if (event.key.code == sf::Keyboard::Escape)  software_state.switchTo(SoftwareState::PAUSED);
+                        else if (event.key.code == sf::Keyboard::F3) {
+                            debug_mode.toggle();
+                            printf("Debug mode changed to %s\n", debug_mode.isEnabled() ? "ON" : "OFF");
+                        }
+                        else if (event.key.code == sf::Keyboard::F5) {
+                            car.reset();
+                            car = std::make_unique<Car>(this);
+                            game_view.setCenter(car->getX() * METER_TO_PIXEL, car->getY() * METER_TO_PIXEL);
+                        }
+                    break;
+                    case SoftwareState::PAUSED:
+                        if (event.key.code == sf::Keyboard::Escape)    software_state.switchTo(SoftwareState::PLAYING);
+                    default: break;
                 }
-                else if (event.key.code == sf::Keyboard::F5) {
-                    car.reset();
-                    car = std::make_unique<Car>(this);
-                    game_view.setCenter(car->getX() * METER_TO_PIXEL, car->getY() * METER_TO_PIXEL);
-                }
-            break;
-            case sf::Event::MouseWheelScrolled:
-                if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-                    circuit->needUpdate();
-                    if (event.mouseWheelScroll.delta < 0)    game_view.zoom(1.1);
-                    else                                     game_view.zoom(0.9);
+                break;
+            case sf::Event::MouseButtonPressed:
+                if (resume_button.isClicked(*window) || play_button.isClicked(*window)) {
+                    software_state.switchTo(SoftwareState::PLAYING);
                 }
                 break;
             case sf::Event::Closed:
@@ -77,22 +100,26 @@ void Game::manageEvents() {
 
 
 void Game::update() {
-    const float dt = clock.restart().asSeconds(); // time delta between the frame N-1 and the frame N
-
     manageEvents();
+    const float dt = clock.restart().asSeconds(); // time delta between the frame N-1 and the frame N
     fps_counter.update(dt);
-    debug_mode.update(car.get());
 
-    if (circuit->shouldBeUpdated()) {
-        updateCircuit();
-    }
+    switch (software_state()) {
+        case SoftwareState::PLAYING:
+            debug_mode.update(car.get());
 
-    car->update(dt);
-    if (car->atTheEdgeOfScreen(game_view)) {
-        car->recenterViewOnCar(game_view, dt);
+            if (circuit->shouldBeUpdated()) {
+                updateCircuit();
+            }
+
+            car->update(dt);
+            if (car->atTheEdgeOfScreen(game_view)) {
+                car->recenterViewOnCar(game_view, dt);
+            }
+            window->setView(game_view);
+            break;
+        default: break;
     }
-    // game_view.setRotation(radToDeg(car->getPsi() + M_PI_2f)); // Here we add PI/2 to have the good direction (car moving to the top of the screen).
-    window->setView(game_view);
 }
 
 void Game::updateCircuit() const {
@@ -102,19 +129,39 @@ void Game::updateCircuit() const {
     circuit->join(ResourceType::Value::SEGMENT_MEDIUM_TURN);
 }
 
+void Game::renderMainMenu() const {
+    play_button.renderOn(*window);
+}
+
 void Game::render() const {
     window->clear();
 
+    switch (software_state()) {
+        case SoftwareState::MAIN_MENU:
+            window->setView(window->getDefaultView());
+            renderMainMenu();
+            break;
+        case SoftwareState::PAUSED:
+        case SoftwareState::PLAYING:
+            /* --- Game View (Car, Circuit, ...) --- */
+            window->setView(game_view);
+            circuit->renderOn(*window);
+            car->renderOn(*window);
 
-    /* --- Game View (Car, Circuit, ...) --- */
-    window->setView(game_view);
-    circuit->renderOn(*window);
-    car->renderOn(*window);
-
-    /* --- HUD View (FPS, Menus, ...) --- */
-    window->setView(hud_view);
-    fps_counter.renderOn(*window);
-    debug_mode.renderOn(*window);
+            /* --- HUD View (FPS, Menus, ...) --- */
+            window->setView(hud_view);
+            fps_counter.renderOn(*window);
+            debug_mode.renderOn(*window);
+            if (software_state() == SoftwareState::PAUSED) {
+                sf::RectangleShape overlay(sf::Vector2f(window->getSize()));
+                overlay.setFillColor(sf::Color(0, 0, 0, 150));
+                window->setView(window->getDefaultView());
+                window->draw(overlay);
+                resume_button.renderOn(*window);
+            }
+            break;
+        default: break;
+    }
 
     window->display();
 }
