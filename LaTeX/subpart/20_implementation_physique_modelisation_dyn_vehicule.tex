@@ -120,22 +120,42 @@ Dans l'illustration ci-dessous, l'angle de glissement est $\delta$.
 \end{figure}
 
 \subsubsection{Implémentation du modèle Bicycle}
-Pour pouvoir implémenter le modèle bicycle dans notre modèle, nous devons en premier temps rajouter des paramètres à notre véhicule. Nous allons fixer la \textbf{raideur des pneus}, pour la raideur longitudinale $C_x$ et la raideur latérale $C_y$. La raideur est un coefficient qui mesure la réaction d'un pneu à une contrainte appliquée. C'est la relation entre la force exercée sur le pneu et la déformation qui en résulte. Par exemple $C_x$, mesure la résistance du pneu à un glissement dans la direction du déplacement du véhicule. Et $C_y$ mesure la capacité du pneu à générer une force latérale en réponse à un angle de glissement. Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs valeurs.
+Premièrement, nous devons calculer les angles de glissements, ce qui se fait avec les formules suivantes :
+
+\begin{itemize}
+    \item Pour l'essieu avant (\texttt{alpha\_F} dans notre code) :
+    $$\alpha_F = \delta - \frac{(a \dot{\theta}+V_{\xi})}{V_\eta}$$
+    \item Pour l'essieu arrière (\texttt{alpha\_R} dans notre code) :
+    $$\alpha_R = \frac{(b \dot{\theta}+V_{\xi})}{V_\eta} $$
+
+    Avec :\\
+$\delta$ = L'angle de braquage, \\
+$a$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu avant},\\
+$b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière},\\
+$\theta$ = La vitesse de \textbf{lacet}, \\
+$V_\xi$ = La vitesse \textbf{latérale}, \\
+$V_\eta$ = La vitesse \textbf{longitudinale}. \\
+\center{\text{(tiré de \cite{vtech})}}
+
+\end{itemize}
+
+
+Ensuite, pour correctement implémenter le modèle Bicycle, nous rajouter des paramètres à notre objet véhicule. Nous allons fixer la \textbf{raideur des pneus}, pour la raideur longitudinale $C_x$ et la raideur latérale $C_y$. La raideur est un coefficient qui mesure la réaction d'un pneu à une contrainte appliquée. C'est la relation entre la force exercée sur le pneu et la déformation qui en résulte. Par exemple $C_x$, mesure la résistance du pneu à un glissement dans la direction du déplacement du véhicule. Et $C_y$ mesure la capacité du pneu à générer une force latérale en réponse à un angle de glissement. Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs valeurs.
 
 \textbf{Raideur longitudinale ($C_x$) }:
 \begin{itemize}
-    \item \textbf{Raideur $C_x$ très faible}:
-    \begin{itemize}
-        \item Le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
-        \item Mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
-        \item Sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
-    \end{itemize}
+\item \textbf{Raideur $C_x$ très faible}:
+\begin{itemize}[label=$\star$]
+\item Le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
+\item Mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
+\item Sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
+\end{itemize}
 
-    \item \textbf{Raideur $C_x$ très élevée}:
-    \begin{itemize}
-        \item Le pneu génère immédiatement une grande force pour un petit glissement,
-        \item Améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
-    \end{itemize}
+\item \textbf{Raideur $C_x$ très élevée}:
+\begin{itemize}[label=$\star$]
+\item Le pneu génère immédiatement une grande force pour un petit glissement,
+\item Améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
+\end{itemize}
 \end{itemize}
 
 \textbf{Raideur latérale ($C_y$)}
@@ -143,36 +163,19 @@ Pour pouvoir implémenter le modèle bicycle dans notre modèle, nous devons en 
 Influence la capacité à prendre les virages et la stabilité du véhicule.
 
 \begin{itemize}
-    \item \textbf{Raideur $C_y$ très faible}:
-    \begin{itemize}
-        \item Le pneu dérive beaucoup avant de générer une force latérale,
-        \item En virage, le véhicule sous-vire énormément.
-    \end{itemize}
-
-    \item \textbf{Raideur $C_y$ très élevée}:
-    \begin{itemize}
-        \item Le pneu génère immédiatement une forte force latérale pour un petit angle de glissement,
-        \item Meilleure tenue de route, réponse précise aux virages,
-        \item Mais risque de survirage et perte soudaine d’adhérence si les limites sont dépassées.
-    \end{itemize}
+\item \textbf{Raideur $C_y$ très faible}:
+\begin{itemize}[label=$\star$]
+\item Le pneu dérive beaucoup avant de générer une force latérale,
+\item En virage, le véhicule sous-vire énormément.
 \end{itemize}
 
-\begin{itemize}
-    \item one \dots{}
-    \begin{itemize}
-        \item Language Models
-        \item Vector Space Models
-    \end{itemize}
-    \item two \dots{}
-    \item three \dots{}
+\item \textbf{Raideur $C_y$ très élevée}:
+\begin{itemize}[label=$\star$]
+\item Le pneu génère immédiatement une forte force latérale pour un petit angle de glissement,
+\item Meilleure tenue de route, réponse précise aux virages,
+\item Mais risque de survirage et perte soudaine d’adhérence si les limites sont dépassées.
+\end{itemize}
 \end{itemize}
 
-\begin{itemize}
-    \item one \dots{}
-    \begin{itemize}[label=$\star$]
-        \item Language Models
-        \item Vector Space Models
-    \end{itemize}
-    \item two \dots{}
-    \item three \dots{}
-\end{itemize}
+Les paramètres $C_x$ et $C_y$ seront donc calculés à chaque étape de la simulation avec la formule suivante :
+
