@@ -14,7 +14,7 @@
 \usepackage{xcolor}   % Importation du package pour la coloration syntaxique
 % \usepackage[toc, nonumberlist]{glossaries} % TODO déplacer le glossaire manuel vers le package glossaries. cf \makeglossaires \printglossaries
 % todo de même avec la bibliographie avec les fichiers .bib
-
+\usepackage{enumitem} % Pour sous-lister différements (* au lieu de -)
 % Définition du style pour le code Cpp
 \lstdefinestyle{CStyle}{
     language=C++,
@@ -34,7 +34,6 @@
 \usepackage[french]{babel}
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
 \renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
-
 % Pour gerer l'espace dans la table of contents
 \usepackage{tocloft}
 \renewcommand{\cftsecnumwidth}{2.3em}
