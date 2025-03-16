@@ -37,9 +37,8 @@
 
 % Pour gerer l'espace dans la table of contents
 \usepackage{tocloft}
-\renewcommand{\cftsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
-\renewcommand{\cftsubsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
-% ---
+\renewcommand{\cftsecnumwidth}{2.3em}
+\renewcommand{\cftsubsecnumwidth}{2.3em}
 
 \hypersetup{
     colorlinks=true,
@@ -97,7 +96,7 @@
             %\vspace*{1.5cm}
             % Image d'illustration
             % \vspace*{1.5cm}
-            \vspace{1cm} % Fonctionne mieux si encapsulé dans un bloc centre
+            \vspace{1cm}
             \begin{center}
                 \includegraphics[width=0.8\textwidth]{illustration}
             \end{center}
@@ -116,7 +115,7 @@
     \section*{Remerciements}
     - Un remerciement particulier est adressé à M. Hufflen pour la guidance et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
 
-% Page dédiée à la table des matières
+    % Page dédiée à la table des matières
     \newpage
     \tableofcontents
     \newpage
@@ -163,51 +162,12 @@
     \input{subpart/40_bilan_technique}
 
 
-    \begin{thebibliography}{99}
-        \bibitem{interview}
-        Abdallah Ben Othman,
-        Interview réalisée le 10 Décembre 2023.
-
-        \bibitem{CreditPhoto}
-        \emph{Crédit photo :}
-        \url{https://www.it-connect.fr/plus-dun-million-de-raspberry-pi-commercialises/},
-        Florian Burnel, sous licence BY-NC-ND 4.0
-
-        \bibitem{APEC}
-        \emph{APEC - Offres d'emploi},
-        \url{https://www.apec.fr/candidat.html},
-        Consulté le 5 Décembre 2023.
-
-        \bibitem{apec}
-        \emph{APEC - Fiche Métier},
-        \url{https://www.apec.fr/tous-nos-metiers/informatique/ingenieur-en-etudes-et-developpement-informatiques.html},
-        Consulté le 19 novembre 2023.
-
-        \bibitem{qt}
-        \emph{QT},
-        \url{https://www.qt.io/embedded-development-talk/embedded-engineers-roles-responsibilities-and-job-descriptions},
-        Consulté le 2 Décembre 2023.
-
-        \bibitem{kicklox}
-        \emph{Kicklox},
-        \url{https://www.kicklox.com/blog-talent/developpeur-logiciel-embarque},
-        Consulté le 2 Décembre 2023.
-
-        \bibitem{yuhiro}
-        \emph{Yuhiro},
-        \url{https://www.software-developer-india.com/fr/developpeur-de-logiciels-embarques-que-fait-il/},
-        Consulté le 2 Décembre 2023.
-
-        \bibitem{ti}
-        \emph{Texas Instruments\\},
-        \url{https://news.ti.com/blog/2023/04/07/3-trends-impacting-future-embedded-processing-technology},
-        Consulté le 12 décembre 2023.
-
-        \bibitem{readwrite}
-        \emph{ReadWrite},
-        \url{https://readwrite.com/embedded-systems-and-the-future/},
-        Consulté le 12 décembre 2023.
-
+    \begin{thebibliography}{9}
+        \bibitem{fermi2023}
+        Thomas Fermi.
+        Kinematic Bicycle Model.
+        Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
+        Sous licence \textit{Creative Commons Attribution 4.0 International}.
     \end{thebibliography}
 
 
