@@ -3,10 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "car.h"
+#include "fontmanager.h"
 
 class DebugMode {
 
-    sf::Font font;
+    sf::Font& font;
     std::vector<sf::Text> texts;
     std::vector<sf::RectangleShape> backgrounds;
     bool enabled;
@@ -23,7 +24,7 @@ public:
     /**
      * Constructor
      */
-    DebugMode();
+    explicit DebugMode(const FontManager& font_manager);
 
     /**
      * Toggle the DebugMode on/off
@@ -34,7 +35,7 @@ public:
      * Check if the DebugMode is enabled
      * @return true if the DebugMode is enabled, false otherwise
      */
-    bool isEnabled() const;
+    [[nodiscard]] bool isEnabled() const;
 
     /**
      * Note: if the DebugMode is disabled, this function does nothing.
