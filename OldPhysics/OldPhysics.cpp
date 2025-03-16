@@ -10,6 +10,8 @@
 #include "../src/Headers/gnuplot-iostream.h"
 #include <cmath>
 
+#include <filesystem>
+
 // Rajouté ici, car pas de fichier header pour OldPhysics
 void plot_etape(
     std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
@@ -222,16 +224,17 @@ public:
                 delta = -delta;
             }
             double t = i * dt;
-            vx_data.push_back({t, myVehicle.vx});
-            vy_data.push_back({t, myVehicle.vy});
-            r_data.push_back({t, myVehicle.lacet});
-            traj_data.push_back({myVehicle.x, myVehicle.y});
+            vx_data.emplace_back(t, myVehicle.vx);
+            vy_data.emplace_back(t, myVehicle.vy);
+            r_data.emplace_back(t, myVehicle.lacet);
+            traj_data.emplace_back(myVehicle.x, myVehicle.y);
+            slip_data.emplace_back(t, myVehicle.slip);
 
             // Mise à jour de la dynamique avec le modèle Bicycle
             myVehicle.updateBicycle(dt, delta, slip);
         }
 
-        plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape2");
+        plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../OldPhysics/Images/Etape2");
     }
 
     void updateBicycleEtape3(double dt, double delta) {
@@ -492,7 +495,7 @@ void plot_etape(
     std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
     std::vector<std::pair<double,double>> slip_data, std::string path)
     {
-    // Création d'un objet Gnuplot pour générer les fichiers images
+
     Gnuplot gp;
     // Plot de vx
     gp << "reset\n";
@@ -653,9 +656,9 @@ void etape4() {
 
 
 int main() {
-    OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
-    myVehicle.simulation_etape1();
-    // etape2();
+     OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
+    // myVehicle.simulation_etape1();
+    myVehicle.etape2();
     // etape3();
     // etape4();
     return 0;
