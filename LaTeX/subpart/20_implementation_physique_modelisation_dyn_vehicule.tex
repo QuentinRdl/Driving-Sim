@@ -307,3 +307,18 @@ Ici, on remarque dans la fonction que le paramètre \texttt{slip} n'est plus don
 
 \subsection{Limites des pneumatiques}
 
+Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes où la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un sous-virage ou survirage. Nous allons donc intégrer les limites physiques des pneumatiques à notre simulation pour représenter la force latérale maximale qu'un pneu peut générer avant de perdre son adhérence. Pour faire cela, nous allons introduire une saturation non linéaire des forces latérales, qui ne peuvent pas fournir une force infinie lors d'un virage.
+
+\subsubsection{Calcul des Charges sur les Essieux}
+
+Pour déterminer la force latérale maximale que peut générer chaque essieu, nous devons déjà connaître la charge verticale des pneus. Ces charges sont obtenues à partir de la répartition du poids du véhicule. Nous utilisons donc les formules suivantes :
+
+\begin{itemize}
+\item \textbf{Essieu avant} :
+$$F_{z\_front} = m \times g \times \frac{b}{a+b}$$
+\item \textbf{Essieu arrière} :
+$$F_{z\_rear} = m \times g \times \frac{b}{a+b}$$
+\end{itemize}
+\begin{center}
+Avec :
+\end{center}
