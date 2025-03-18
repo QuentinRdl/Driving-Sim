@@ -53,7 +53,7 @@
 \pagestyle{fancy}
 \renewcommand\headrulewidth{1pt}
 \fancyhead[L]{Romain GALLAND | Quentin RADLO}
-\fancyhead[R]{Université de Marie \& Louis Pasteur}
+\fancyhead[R]{Université Marie \& Louis Pasteur}
 \renewcommand\footrulewidth{1pt}
 \fancyfoot[L]{}
 \fancyfoot[C]{Rapport de Projet - Simulateur de conduite\\
@@ -114,7 +114,7 @@
 
     \newpage
     \section*{Remerciements}
-    - Un remerciement particulier est adressé à M. Hufflen pour la guidance et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
+    - Un remerciement particulier est adressé à M. Hufflen pour la direction et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
 
     % Page dédiée à la table des matières
     \newpage
@@ -164,11 +164,17 @@
 
 
     \begin{thebibliography}{9}
-        \bibitem{fermi2023}
-        Thomas Fermi.
-        Kinematic Bicycle Model.
-        Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
-        Sous licence \textit{Creative Commons Attribution 4.0 International}.
+        \bibitem{euler_explicite}
+        Frédéric Legrand.
+        Intégration des équations différentielles : méthode d'Euler.
+        Disponible à l'adresse : \url{https://www.f-legrand.fr/scidoc/srcdoc/numerique/euler/eulers/eulers-pdf.pdf}.
+
+        \bibitem{slip-angle}
+        Your Data Driven.
+        Tyre Slip Angle – 2 Clear Explanations.
+        Disponible à l'adresse : \url{https://www.yourdatadriven.com/tyre-slip-angle-explained}.
+
+
         \bibitem{vtech}
         Virginia Tech University.
         Chapter 2, Vehicle Dynamics Modeling.
@@ -179,6 +185,12 @@
         Modeling a Vehicle Dynamics System.
         \url{https://www.mathworks.com/help/ident/ug/modeling-a-vehicle-dynamics-system.html}
 
+        \bibitem{fermi2023}
+        Thomas Fermi.
+        Kinematic Bicycle Model.
+        Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
+        Sous licence \textit{Creative Commons Attribution 4.0 International}.
+
     \end{thebibliography}
 
 
@@ -188,7 +200,7 @@
 
         Ce rapport présente le développement d'un prototype d'un simulateur de conduite réalisé en C++.
         L'objectif principal est de modéliser de manière réaliste divers scénarios de conduite en développant un modèle de physique réaliste pour avoir une gestion dynamique du véhicule par l'utilisateur.
-        L'architecture modulaire et orientée objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
+        L'architecture modulaire et orienté objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
 
         \bigskip
 
