@@ -36,6 +36,9 @@
 
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
 \renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
+%\renewcommand\thesubsubsection{\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules TODO activate ?
+%\setcounter{secnumdepth}{3} % Activer la numérotation jusqu'aux sous-sous-sections
+
 % Pour gerer l'espace dans la table of contents
 \usepackage{tocloft}
 \renewcommand{\cftsecnumwidth}{2.3em}
@@ -152,15 +155,19 @@
     \newpage
     \section{Sujet du projet}\label{sec:sujet-du-projet}
     \input{subpart/10_sujet_du_projet}
+    \newpage
 
     \section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
     \input{subpart/20_implementation_physique_modelisation_dyn_vehicule}
+    \newpage
 
     \section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
     \input{subpart/30_implementation_interface_graphique}
+    \newpage
 
     \section{Bilan Technique}\label{sec:bilan-technique}
     \input{subpart/40_bilan_technique}
+    \newpage
 
 
     \begin{thebibliography}{9}
@@ -190,6 +197,9 @@
         Kinematic Bicycle Model.
         Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
         Sous licence \textit{Creative Commons Attribution 4.0 International}.
+
+        \bibitem{documentationSFML}
+        Documentation SFML \\ \url{https://www.sfml-dev.org/documentation/}
 
     \end{thebibliography}
 
