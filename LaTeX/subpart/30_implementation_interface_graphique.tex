@@ -1,20 +1,161 @@
-\subsection{Technologies utilisées}\label{subsec:technologies-utilisees}
-\subsubsection{Langage et environnement de développement (C++)}\label{subsubsec:c++}
-\subsubsection{Bibliothèques utilisées (SFML)}\label{subsubsec:sfml}
+\subsection{Bibliothèques utilisées (SFML)}\label{subsec:sfml}
+SFML (\textit{Simple and Fast Multimedia Library}) est une bibliothèque C++ qui permet de créer des applications multimédia.
+Elle est particulièrement adaptée pour le développement de jeux vidéo et d'applications graphiques.
+Elle fournit des fonctionnalités pour la gestion des fenêtres, le rendu graphique, la gestion des événements, le son et la communication réseau.
+En interne, elle s'appuie sur OpenGL, une API bas niveau, ce qui permet d'obtenir d'excellentes performances graphiques tout en restant simple d'utilisation.
+
+SFML a été choisie pour plusieurs raisons :
+\begin{itemize}
+    \item \textbf{Simplicité d'utilisation} : Elle permet de se concentrer sur la logique applicative plutôt que sur des détails techniques complexes.
+    \item \textbf{Documentation et communauté} : Sa documentation\cite{documentationSFML} est complète et une large communauté offre de nombreux exemples et ressources.
+    \item \textbf{Multiplateforme} : La compatibilité avec Windows, Linux et macOS permet de développer l'application sans penser à la portabilité.
+\end{itemize}
 
 \subsection{Architecture de l'interface graphique}\label{subsec:architecture-de-l-interface-graphique}
-%\subsubsection{Organisation modulaire du code}\label{subsubsec:organisation-modulaire-du-code}
+\subsubsection{Organisation modulaire du code}\label{subsubsec:organisation-modulaire-du-code}
+Pour garantir la lisibilité et la maintenabilité du code, l'interface graphique a été conçue de manière modulaire.
+Chaque fonctionnalité est encapsulée dans une classe dédiée, permettant ainsi une séparation claire des responsabilités.
+Par exemple, la gestion du véhicule, du circuit, des indicateurs de débogage sont traitées dans des modules distincts.
+Cette approche facilite également l'ajout de nouvelles fonctionnalités sans modifier la structure existante.
+
 \subsubsection{Présentation des classes principales}\label{subsubsec:presentation-des-classes-principales}
-\subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l'interface-graphique-et-la-partie-physique}
+Plusieurs classes clés interagissent pour offrir une interface graphique cohérente et fluide.
+
+\paragraph[Game]{La Classe \textbf{Game}}
+C'est la classe principale du projet, elle orchestre l'application.
+Elle initialise la fenêtre SFML, configure les vues (Game View et HUD View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
+
+Elle contient 3 fonctions principales :
+\begin{lstlisting}[style=CStyle, label={lst:game_class}]
+    void update();
+    void render() const;
+    void manageEvents();
+\end{lstlisting}
+Chaque fonction est appeller une fois par itération de la boucle principale de l'application et donc par image générer.
+Voici leurs rôles respectifs :
+\begin{itemize}
+    \item \texttt{update()}, met à jour l'état de l'application en fonction du temps écoulé et des événements utilisateurs.
+    \item \texttt{render()}, effectue le rendu graphique de la scène actuelle.
+    \item \texttt{manageEvents()}, gère les événements à l'intérieur de l'application (clavier, souris), elle est appellé dans la fonction \texttt{update()}.
+\end{itemize}
+
+\paragraph[Circuit]{La Classe \textbf{Circuit}}
+Elle représente, comme son nom l'indique, un circuit de conduite. Elle est composé de différent segment de routes (comme par exemple une petite ligne droite, un petit virage, un grand virage, ...).
+Chaque segment est une portion de route qui peut être droite ou courbe, et la classe gère la connexion entre ces segments pour former une impression de circuit continue au niveau de l'affichage graphique. \\
+Son fonctionnement interne permet, de l'extérieur de la classe, de simplifier la création de la route.
+Il suffit de rajouter des segments de route dans le circuit en précisant l'angle à donner à la texture et s'il faut lui appliquer un effet mirroir, et la classe se charge de les relier entre eux.
+
+Cette extrait de code permet de réaliser ce bout de circuit :
+\begin{lstlisting}[style=CStyle, label={lst:code_circuit}]
+    Circuit circuit;
+    circuit.setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT, { 500, 40 }); // Petite ligne droite démarrant à la position 500 ; 40.
+    circuit.join(ResourceType::Value::SEGMENT_S_TURN);                           // Ajout d'un virage en S
+    circuit.join(ResourceType::Value::SEGMENT_MEDIUM_TURN);                      // Ajout d'un virage moyen
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{}
+\caption{Illustration de l'angle de glissement. Image tirée de \cite{fermi2023}.}
+\label{fig:bicycle_model}
+\end{figure}
+
+%\begin{itemize}
+%    \item \textbf{Car} : Gère l'affichage du véhicule, en mettant à jour la position, l'orientation et le sprite en fonction des données physiques.
+%    Elle calcule et affiche aussi la trajectoire prédictive du véhicule, offrant ainsi un retour visuel sur le comportement dynamique.
+%    \item \textbf{DebugMode} et \textbf{FPSCounter} : Ces classes fournissent des outils de débogage et de performance. \texttt{DebugMode} affiche des informations en temps réel (paramètres physiques, forces, etc.) avec un fond contrasté pour une meilleure lisibilité, tandis que \texttt{FPSCounter} mesure et affiche le nombre de frames par seconde.
+%\end{itemize}
+
+\subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
+\subsubsubsection{Gestionnaire de ressources}\label{subsubsubsec:gestionnaire-de-ressources}
+La gestion des textures et autres ressources graphiques est centralisée via un gestionnaire de ressources.
+Ce module permet de charger, stocker et réutiliser les images et polices de caractère de manière efficace, réduisant ainsi la consommation de mémoire et le temps de chargement.
+Une telle approche garantit que le même asset n'est pas chargé plusieurs fois et que les ressources sont correctement libérées à la fermeture de l'application.
+
+\subsubsubsection{Connexion des segments de routes}\label{subsubsubsec:connection-des-segment-de-routes}
+En interne la texture d'un segment de route est représenté par une structure \texttt{RoadTexture} défini comme suit :
+
+\begin{lstlisting}[style=CStyle,label={lst:struct_roadtexture}]
+struct RoadTexture {
+    const sf::Texture *texture = nullptr;
+    sf::Sprite sprite;
+    sf::Vector2f point1;
+    sf::Vector2f point2;
+};
+\end{lstlisting}
+
+Elle contient 4 éléments :
+\begin{itemize}
+    \item \texttt{texture} : Un pointeur vers la texture de la route chargé dans le gestionnaire de ressources.
+    \item \texttt{sprite} : Le sprite associé à la texture, utilisé pour le rendu.
+    \item \texttt{point1} et \texttt{point2} : Deux position relatif à la texture représentant les points de connexion entre deux segments de route.
+\end{itemize}
+
+\subsubsubsection{La police d'écriture}\label{subsubsubsec:la-police-d-ecriture}
+
+\subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}
+Bien que l'implémentation de l'interface graphique soit distincte de la simulation physique, les deux composantes interagissent étroitement :
+\begin{itemize}
+    \item La classe \texttt{Car} récupère en temps réel les données issues du modèle physique (position, vitesse, trajectoire prédictive) afin de mettre à jour le sprite et le tracé de la trajectoire.
+    \item La Game View est dynamiquement recentrée sur le véhicule pour garantir sa visibilité, même lors de mouvements rapides.
+    \item La synchronisation entre les calculs physiques et l'affichage permet une expérience fluide et cohérente pour l'utilisateur.
+\end{itemize}
 
 \subsection{Composants et fonctionnalités}\label{subsec:composants-et-fonctionnalites}
+
 \subsubsection{Affichage du véhicule et gestion de la vue}\label{subsubsec:affichage-du-vehicule-et-gestion-de-la-vue}
+
 \subsubsubsection{Rendu du sprite du véhicule}\label{subsubsubsec:rendu-du-sprite-du-vehicule}
+Le véhicule est représenté par un sprite chargé via SFML. La classe \texttt{Car} initialise ce sprite en lui attribuant une texture provenant du gestionnaire de ressources, en définissant un point d'origine pour permettre une rotation naturelle et en appliquant un facteur de mise à l'échelle adapté à la taille de la fenêtre.
+La position et l'orientation du sprite sont mises à jour à chaque cycle de la simulation afin de refléter l'état physique calculé.
+
 \subsubsubsection{Suivi du véhicule}\label{subsubsubsec:suivi-du-vehicule}
+Pour que le véhicule reste toujours visible, la Game View est conçue pour suivre dynamiquement sa position.
+Une méthode dédiée vérifie si le véhicule s'approche des limites de l'écran et demande à la classe \texttt{Game} de recentrer la vue.
+Ce suivi adaptatif assure une expérience de simulation fluide, même en cas de changements brusques de direction ou de vitesse.
+
 \subsubsection{Visualisation des informations dynamiques}\label{subsubsec:visualisation-des-informations-dynamiques}
+
 \subsubsubsection{Mode de Debug}\label{subsubsubsec:mode-de-debug}
-\subsubsubsection{Compteur de FPS}
+Le mode Debug offre une visualisation en temps réel de diverses informations physiques (vitesse, forces, angles, etc.). Activable par un raccourci clavier (F3), il affiche ces données sous forme de texte avec des arrière-plans colorés pour améliorer la lisibilité.
+Cette fonctionnalité est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
+
+\subsubsubsection{Compteur de FPS}\label{subsubsubsec:compteur-de-fps}
+Le compteur de FPS, géré par la classe \texttt{FPSCounter}, affiche le nombre de frames par seconde dans la HUD View.
+Ce suivi de performance permet de vérifier en continu la fluidité de la simulation et d'identifier d'éventuels problèmes de performance, facilitant ainsi l'optimisation du code.
+
 \subsubsection{Affichage de la trajectoire et prédictions}\label{subsubsec:affichage-de-la-trajectoire-et-predictions}
+
 \subsubsubsection{Calcul de la trajectoire prédictive}\label{subsubsubsec:calcul-de-la-trajectoire-predictive}
+Pour anticiper le comportement du véhicule, une trajectoire prédictive est calculée en itérant la dynamique sur plusieurs pas de temps.
+Les positions successives sont stockées dans un tableau et affichées à l'écran sous forme de ligne continue, offrant ainsi à l'utilisateur un aperçu de l'évolution future du véhicule en fonction de ses actions actuelles.
+
 \subsubsubsection{Tracé en temps réel via les données issues de la simulation}\label{subsubsubsec:trace-en-temps-reel-via-les-donnees-issues-de-la-simulation}
+Le tracé de la trajectoire s'effectue en temps réel grâce à un objet \texttt{sf::VertexArray}.
+À chaque mise à jour, les données prédictives sont utilisées pour reconstruire dynamiquement le chemin à afficher sur la Game View.
+Cette visualisation interactive aide l'utilisateur à comprendre l'impact des commandes de conduite sur la trajectoire du véhicule.
+
 \subsubsection{Gestion des événements utilisateurs}\label{subsubsec:gestion-des-evenements-utilisateurs}
+La gestion des interactions se fait principalement via la méthode \texttt{manageEvents()} de la classe \texttt{Game} :
+\begin{itemize}
+    \item \textbf{Clavier} : La touche F active/désactive le compteur de FPS, F3 bascule le mode Debug, F5 réinitialise la position du véhicule et ESC ferme l'application.
+    \item \textbf{Souris} : Le défilement de la molette permet d'ajuster le niveau de zoom sur la Game View, offrant ainsi à l'utilisateur la possibilité de mieux suivre le véhicule ou d'obtenir une vue d'ensemble du circuit.
+\end{itemize}
+Ce système d'événements assure une interactivité réactive et une expérience utilisateur intuitive.
+
+\subsection{Optimisation du rendu et de l'affichage}\label{subsec:optimisation-du-rendu-et-de-l-affichage}
+Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
+\begin{itemize}
+    \item \textbf{Réduction des appels de dessin} : Les objets graphiques statiques (par exemple, le circuit ou les éléments du HUD) sont dessinés en une seule passe, tandis que les objets dynamiques (le véhicule, la trajectoire prédictive) sont mis à jour et redessinés à chaque frame.
+    \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
+    \item \textbf{Gestion efficace de la vue} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
+\end{itemize}
+
+\subsection{Perspectives d'amélioration et évolutions futures}\label{subsec:perspectives-d-evolution}
+Bien que l'interface graphique actuelle réponde aux besoins du projet, plusieurs axes d'amélioration ont été identifiés pour de futures itérations :
+\begin{itemize}
+    \item \textbf{Effets visuels avancés} : L'ajout d'animations, d'effets de particules ou de transitions fluides pourrait enrichir l'expérience utilisateur.
+    \item \textbf{Interface utilisateur interactive} : La mise en place de menus interactifs, d'options de configuration en temps réel ou d'indicateurs graphiques plus sophistiqués permettrait de personnaliser davantage la simulation.
+    \item \textbf{Optimisation multi-threading} : La séparation des calculs physiques et du rendu graphique sur des threads distincts pourrait améliorer la réactivité et la fluidité de la simulation sur des systèmes multi-cœurs.
+    \item \textbf{Extensions de la HUD View} : Intégrer davantage d'informations (comme des graphiques temps réel ou des indicateurs de performance détaillés) pourrait offrir un meilleur retour utilisateur.
+\end{itemize}
