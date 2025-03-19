@@ -27,6 +27,6 @@ pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
 pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
 
 # Nettoyage des fichiers auxiliaires (mais garde le PDF)
-find "$OUT_DIR" -type f ! -name "${TEX_FILE}.pdf" -delete
+#find "$OUT_DIR" -type f ! -name "${TEX_FILE}.pdf" -delete
 
 echo "✅ Compilation terminée : ${OUT_DIR}/${TEX_FILE}.pdf généré avec succès."
