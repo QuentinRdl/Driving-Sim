@@ -46,7 +46,7 @@ Chaque segment est une portion de route qui peut être droite ou courbe, et la c
 Son fonctionnement interne permet, de l'extérieur de la classe, de simplifier la création de la route.
 Il suffit de rajouter des segments de route dans le circuit en précisant l'angle à donner à la texture et s'il faut lui appliquer un effet mirroir, et la classe se charge de les relier entre eux.
 
-L'extrait de code suivant permet de réaliser ce bout de circuit~\ref{fig:example_circuit_1} :
+L'extrait de code suivant permet de réaliser ce bout de circuit (fig.~\ref{fig:example_circuit_1}) :
 \begin{lstlisting}[style=CStyle, label={lst:code_circuit}]
 Circuit circuit;
 circuit.setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT);
@@ -60,7 +60,7 @@ circuit.join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 180);
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/LaTeX/figures/example_circuit_1.png} % TODO FIX PATH
+    \includegraphics[width=0.5\textwidth]{/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/LaTeX/figures/example_circuit_1} % TODO FIX PATH
     \caption{Exemple de circuit pouvant être générer grâce à la classe Circuit}
     \label{fig:example_circuit_1}
 \end{figure}
@@ -127,12 +127,12 @@ Le paramètre \texttt{dt} est le delta de temps entre la dernière image et l'im
 
 
 \subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
-\subsubsubsection{Gestionnaire de ressources}\label{subsubsubsec:gestionnaire-de-ressources}
+\paragraph{Gestionnaire de ressources}
 La gestion des textures et autres ressources graphiques est centralisée via un gestionnaire de ressources.
 Ce module permet de charger, stocker et réutiliser les images et polices de caractère de manière efficace, réduisant ainsi la consommation de mémoire et le temps de chargement.
 Une telle approche garantit que le même asset n'est pas chargé plusieurs fois et que les ressources sont correctement libérées à la fermeture de l'application.
 
-\subsubsubsection{Connexion des segments de routes}\label{subsubsubsec:connection-des-segment-de-routes}
+\paragraph{Connexion des segments de routes}
 En interne la texture d'un segment de route est représenté par une structure \texttt{RoadTexture} défini comme suit :
 
 \begin{lstlisting}[style=CStyle,label={lst:struct_roadtexture}]
@@ -151,7 +151,7 @@ Elle contient 4 éléments :
     \item \texttt{point1} et \texttt{point2} : Deux position relatif à la texture représentant les points de connexion entre deux segments de route.
 \end{itemize}
 
-\subsubsubsection{La police d'écriture}\label{subsubsubsec:la-police-d-ecriture}
+\paragraph{La police d'écriture}
 
 % TODO Si changé, modifier le paragraph Car.
 \subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}
@@ -166,32 +166,32 @@ Bien que l'implémentation de l'interface graphique soit distincte de la simulat
 
 \subsubsection{Affichage du véhicule et gestion de la vue}\label{subsubsec:affichage-du-vehicule-et-gestion-de-la-vue}
 
-\subsubsubsection{Rendu du sprite du véhicule}\label{subsubsubsec:rendu-du-sprite-du-vehicule}
+\paragraph{Rendu du sprite du véhicule}
 Le véhicule est représenté par un sprite chargé via SFML. La classe \texttt{Car} initialise ce sprite en lui attribuant une texture provenant du gestionnaire de ressources, en définissant un point d'origine pour permettre une rotation naturelle et en appliquant un facteur de mise à l'échelle adapté à la taille de la fenêtre.
 La position et l'orientation du sprite sont mises à jour à chaque cycle de la simulation afin de refléter l'état physique calculé.
 
-\subsubsubsection{Suivi du véhicule}\label{subsubsubsec:suivi-du-vehicule}
+\paragraph{Suivi du véhicule}
 Pour que le véhicule reste toujours visible, la Game View est conçue pour suivre dynamiquement sa position.
 Une méthode dédiée vérifie si le véhicule s'approche des limites de l'écran et demande à la classe \texttt{Game} de recentrer la vue.
 Ce suivi adaptatif assure une expérience de simulation fluide, même en cas de changements brusques de direction ou de vitesse.
 
 \subsubsection{Visualisation des informations dynamiques}\label{subsubsec:visualisation-des-informations-dynamiques}
 
-\subsubsubsection{Mode de Debug}\label{subsubsubsec:mode-de-debug}
+\paragraph{Mode de Debug}
 Le mode Debug offre une visualisation en temps réel de diverses informations physiques (vitesse, forces, angles, etc.). Activable par un raccourci clavier (F3), il affiche ces données sous forme de texte avec des arrière-plans colorés pour améliorer la lisibilité.
 Cette fonctionnalité est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
 
-\subsubsubsection{Compteur de FPS}\label{subsubsubsec:compteur-de-fps}
+\paragraph{Compteur de FPS}
 Le compteur de FPS, géré par la classe \texttt{FPSCounter}, affiche le nombre de frames par seconde dans la HUD View.
 Ce suivi de performance permet de vérifier en continu la fluidité de la simulation et d'identifier d'éventuels problèmes de performance, facilitant ainsi l'optimisation du code.
 
 \subsubsection{Affichage de la trajectoire et prédictions}\label{subsubsec:affichage-de-la-trajectoire-et-predictions}
 
-\subsubsubsection{Calcul de la trajectoire prédictive}\label{subsubsubsec:calcul-de-la-trajectoire-predictive}
+\paragraph{Calcul de la trajectoire prédictive}
 Pour anticiper le comportement du véhicule, une trajectoire prédictive est calculée en itérant la dynamique sur plusieurs pas de temps.
 Les positions successives sont stockées dans un tableau et affichées à l'écran sous forme de ligne continue, offrant ainsi à l'utilisateur un aperçu de l'évolution future du véhicule en fonction de ses actions actuelles.
 
-\subsubsubsection{Tracé en temps réel via les données issues de la simulation}\label{subsubsubsec:trace-en-temps-reel-via-les-donnees-issues-de-la-simulation}
+\paragraph{Tracé en temps réel via les données issues de la simulation}
 Le tracé de la trajectoire s'effectue en temps réel grâce à un objet \texttt{sf::VertexArray}.
 À chaque mise à jour, les données prédictives sont utilisées pour reconstruire dynamiquement le chemin à afficher sur la Game View.
 Cette visualisation interactive aide l'utilisateur à comprendre l'impact des commandes de conduite sur la trajectoire du véhicule.
