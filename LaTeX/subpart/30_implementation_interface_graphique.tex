@@ -25,14 +25,14 @@ Plusieurs classes clés interagissent pour offrir une interface graphique cohér
 C'est la classe principale du projet, elle orchestre l'application.
 Elle initialise la fenêtre SFML, configure les vues (Game View et HUD View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
 
-Elle contient 3 fonctions principales :
+Elle contient 3 fonctions principales :
 \begin{lstlisting}[style=CStyle, label={lst:game_class}]
     void update();
     void render() const;
     void manageEvents();
 \end{lstlisting}
 Chaque fonction est appeller une fois par itération de la boucle principale de l'application et donc par image générer.
-Voici leurs rôles respectifs :
+Voici leurs rôles respectifs :
 \begin{itemize}
     \item \texttt{update()}, met à jour l'état de l'application en fonction du temps écoulé et des événements utilisateurs.
     \item \texttt{render()}, effectue le rendu graphique de la scène actuelle.
@@ -40,31 +40,91 @@ Voici leurs rôles respectifs :
 \end{itemize}
 
 \paragraph[Circuit]{La Classe \textbf{Circuit}}
-Elle représente, comme son nom l'indique, un circuit de conduite. Elle est composé de différent segment de routes (comme par exemple une petite ligne droite, un petit virage, un grand virage, ...).
+Elle représente, comme son nom l'indique, un circuit de conduite.
+Elle est composé de différents segments de routes (comme une petite ligne droite, un petit virage, un grand virage, \dots).
 Chaque segment est une portion de route qui peut être droite ou courbe, et la classe gère la connexion entre ces segments pour former une impression de circuit continue au niveau de l'affichage graphique. \\
 Son fonctionnement interne permet, de l'extérieur de la classe, de simplifier la création de la route.
 Il suffit de rajouter des segments de route dans le circuit en précisant l'angle à donner à la texture et s'il faut lui appliquer un effet mirroir, et la classe se charge de les relier entre eux.
 
-Cette extrait de code permet de réaliser ce bout de circuit :
+L'extrait de code suivant permet de réaliser ce bout de circuit~\ref{fig:example_circuit_1} :
 \begin{lstlisting}[style=CStyle, label={lst:code_circuit}]
-    Circuit circuit;
-    circuit.setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT, { 500, 40 }); // Petite ligne droite démarrant à la position 500 ; 40.
-    circuit.join(ResourceType::Value::SEGMENT_S_TURN);                           // Ajout d'un virage en S
-    circuit.join(ResourceType::Value::SEGMENT_MEDIUM_TURN);                      // Ajout d'un virage moyen
+Circuit circuit;
+circuit.setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT);
+circuit.join(ResourceType::Value::SEGMENT_S_TURN);
+circuit.join(ResourceType::Value::SEGMENT_MEDIUM_TURN);
+circuit.join(ResourceType::Value::SEGMENT_LARGE_TURN, 90);
+circuit.join(ResourceType::Value::SEGMENT_U_TURN, 180);
+circuit.join(ResourceType::Value::SEGMENT_U_TURN, 0, false, true);
+circuit.join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 180);
 \end{lstlisting}
 
 \begin{figure}[h]
-\centering
-\includegraphics[width=0.5\textwidth]{}
-\caption{Illustration de l'angle de glissement. Image tirée de \cite{fermi2023}.}
-\label{fig:bicycle_model}
+    \centering
+    \includegraphics[width=0.5\textwidth]{/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/LaTeX/figures/example_circuit_1.png} % TODO FIX PATH
+    \caption{Exemple de circuit pouvant être générer grâce à la classe Circuit}
+    \label{fig:example_circuit_1}
 \end{figure}
 
-%\begin{itemize}
-%    \item \textbf{Car} : Gère l'affichage du véhicule, en mettant à jour la position, l'orientation et le sprite en fonction des données physiques.
-%    Elle calcule et affiche aussi la trajectoire prédictive du véhicule, offrant ainsi un retour visuel sur le comportement dynamique.
-%    \item \textbf{DebugMode} et \textbf{FPSCounter} : Ces classes fournissent des outils de débogage et de performance. \texttt{DebugMode} affiche des informations en temps réel (paramètres physiques, forces, etc.) avec un fond contrasté pour une meilleure lisibilité, tandis que \texttt{FPSCounter} mesure et affiche le nombre de frames par seconde.
-%\end{itemize}
+\paragraph[Car]{La classe \textbf{Car}}
+Cette classe encapsule la classe \texttt{Vehicle} (voir section \ref{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}).
+L'interraction entre les deux classes \texttt{Car} et \texttt{Vehicle} est présenté à la section\ref{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}.
+Elle calcul la ligne de prédiction de la trajectoire du véhicule et gère l'affichage du véhicule.
+
+Lors du développement de la ligne de prédiction de trajectoire, nous avons rencontré un problème.
+Le calcul prend en paramètre un delta de temps qui correspond au temps entre la dernière image et l'image actuelle.
+Ce delta de temps est très volatile et peut varier du simple au double, ce qui cause des grosse différence de longueur de la ligne de prédiction et provoque une impression de scintillement.
+
+Pour résoudre ce problème, nous avons décidé de récupérer le delta de temps médian sur les 1000 dernières images.
+
+\begin{lstlisting}[style=CStyle, label={lst:code_dequeue_dt}]
+std::deque<float> dtBuffer;
+const size_t max_dt_buffer_size = 1000;
+float updateAndGetMedian(const float dt) {
+    dtBuffer.push_back(dt);
+    if (dtBuffer.size() > max_dt_buffer_size) {
+        dtBuffer.pop_front();
+    }
+    std::vector tmp(dtBuffer.begin(), dtBuffer.end());
+    const auto mid = tmp.begin() + tmp.size() / 2;
+    std::nth_element(tmp.begin(), mid, tmp.end());
+    return *mid.base();
+}
+\end{lstlisting}
+
+La complexité de la fonction \texttt{updateAndGetMedian(const float dt)} est en \( O(n) \).
+Voici le détail de la complexité :
+\begin{itemize}
+    \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la deque.
+    \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la deque.
+    \item \texttt{std::vector tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector_copy} pour copier la deque dans un vecteur.
+    \item \texttt{std::nth\_element(tmp.begin(), mid, tmp.end())} : \( O(n) \)\cite{cpp_reference_std_nth_element} pour trier le vecteur jusqu'à l'élément médian.
+\end{itemize}
+
+On a utilisé la fonction \texttt{std::nth\_element()} car elle permet de ne pas trier l'ensemble du vecteur tout en plaçant l'élément médian à la bonne position dans le \texttt{std::vector}.
+Au départ, nous avions utilisé la fonction \texttt{std::sort()}, qui trie un vecteur complet, mais sa complexité aurait été en \( O(n \log n) \)\cite{cpp_reference_std_sort}, ce qui est moins optimal étant donné que la ligne de prédiction est recalculée à chaque image.
+
+\paragraph[FPSCounter \& DebugMode]{Les Classes FPSCounter et DebugMode}
+Ces deux classes sont dédiées à l'affichage d'informations de débogage et de performance.
+
+La classe FPSCounter affiche le nombre de frames par seconde dans la HUD View, permettant ainsi de surveiller la fluidité de l'application.
+Elle nous permet, tout au long du développement de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressource et de l'optimiser en conséquence.
+Pour calculer le nombre d'images par seconde, on compte le nombre d'images générer en une seconde.
+
+La classe contient, parmi ses attributs, un compteur d'image \texttt{frameCount} et un accumulateur de temps \texttt{timeAccumulator}.
+\begin{lstlisting}[style=CStyle, label={lst:code_fpscounter}]
+void FPSCounter::update(const float dt) {
+    timeAccumulator += dt;
+    frameCount++;
+    if (timeAccumulator >= 1.f) {
+        currentFPS = frameCount;
+        frameCount = 0;
+        timeAccumulator = 0.f;
+        text.setString("FPS: " + std::to_string(currentFPS));
+    }
+}
+\end{lstlisting}
+Le paramètre \texttt{dt} est le delta de temps entre la dernière image et l'image actuelle.
+
 
 \subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
 \subsubsubsection{Gestionnaire de ressources}\label{subsubsubsec:gestionnaire-de-ressources}
@@ -93,6 +153,7 @@ Elle contient 4 éléments :
 
 \subsubsubsection{La police d'écriture}\label{subsubsubsec:la-police-d-ecriture}
 
+% TODO Si changé, modifier le paragraph Car.
 \subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}
 Bien que l'implémentation de l'interface graphique soit distincte de la simulation physique, les deux composantes interagissent étroitement :
 \begin{itemize}
