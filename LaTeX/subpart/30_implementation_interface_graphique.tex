@@ -21,7 +21,7 @@ Cette approche facilite également l'ajout de nouvelles fonctionnalités sans mo
 \subsubsection{Présentation des classes principales}\label{subsubsec:presentation-des-classes-principales}
 Plusieurs classes clés interagissent pour offrir une interface graphique cohérente et fluide.
 
-\paragraph[Game]{La Classe \textbf{Game}}
+\paragraph[Game]{La Classe \textbf{Game}}\label{par:class_game}
 C'est la classe principale du projet, elle orchestre l'application.
 Elle initialise la fenêtre SFML, configure les vues (Game View et HUD View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
 
@@ -103,28 +103,6 @@ Voici le détail de la complexité :
 On a utilisé la fonction \texttt{std::nth\_element()} car elle permet de ne pas trier l'ensemble du vecteur tout en plaçant l'élément médian à la bonne position dans le \texttt{std::vector}.
 Au départ, nous avions utilisé la fonction \texttt{std::sort()}, qui trie un vecteur complet, mais sa complexité aurait été en \( O(n \log n) \)\cite{cpp_reference_std_sort}, ce qui est moins optimal étant donné que la ligne de prédiction est recalculée à chaque image.
 
-\paragraph[FPSCounter \& DebugMode]{Les Classes FPSCounter et DebugMode}
-Ces deux classes sont dédiées à l'affichage d'informations de débogage et de performance.
-
-La classe FPSCounter affiche le nombre de frames par seconde dans la HUD View, permettant ainsi de surveiller la fluidité de l'application.
-Elle nous permet, tout au long du développement de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressource et de l'optimiser en conséquence.
-Pour calculer le nombre d'images par seconde, on compte le nombre d'images générer en une seconde.
-
-La classe contient, parmi ses attributs, un compteur d'image \texttt{frameCount} et un accumulateur de temps \texttt{timeAccumulator}.
-\begin{lstlisting}[style=CStyle, label={lst:code_fpscounter}]
-void FPSCounter::update(const float dt) {
-    timeAccumulator += dt;
-    frameCount++;
-    if (timeAccumulator >= 1.f) {
-        currentFPS = frameCount;
-        frameCount = 0;
-        timeAccumulator = 0.f;
-        text.setString("FPS: " + std::to_string(currentFPS));
-    }
-}
-\end{lstlisting}
-Le paramètre \texttt{dt} est le delta de temps entre la dernière image et l'image actuelle.
-
 
 \subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
 \paragraph{Type de ressources}
@@ -200,40 +178,117 @@ Elle contient 4 éléments :
     \item \texttt{point1} et \texttt{point2} : Deux positions relatives à la texture représentant les points de connexion entre deux segments de route.
 \end{itemize}
 
-Lorsque l'on rajoute un segment de route dans le circuit à l'aide de la fonction \texttt{Circuit::join()}, la position du nouveau sprite est déterminé automatiquement grâce au précédent segment de route.
-Le \texttt{point1} du nouveau segment est collée au \texttt{point2} du précédent segment, ce qui donne une impression de continuité.
+Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le processus se déroule comme suit :
+
+\begin{enumerate}
+    \item \textbf{Récupération du segment précédent :}
+    La fonction commence par récupérer le dernier segment inscrit dans le circuit (via \texttt{segments.back()}).
+    Ce segment précédent fournit la position finale (stockée dans \texttt{realPoint2}) qui sera utilisée comme point de départ pour le nouveau segment.
+
+    \item \textbf{Génération et configuration de la texture :}
+    À l'aide de la fonction \\\texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
+    Ensuite, la texture (via son sprite) est mise à l’échelle en fonction du facteur de zoom courant (\texttt{game->getZoomFactor()}) pour garantir une cohérence visuelle.
+
+    \item \textbf{Alignement du nouveau segment :}
+    Pour assurer la continuité, l'origine du sprite du nouveau segment est fixée au point de connexion de départ (\texttt{road\_texture.point1}).
+    Le sprite est ensuite positionné exactement à l'endroit où se termine le segment précédent (\texttt{fromPoint2}).
+    Cela garantit que le nouveau segment démarre précisément à la fin du précédent.
+
+    \item \textbf{Calcul du point de raccord final avec rotation :}
+    Afin de déterminer la position finale du nouveau segment, on calcule un décalage à partir de sa position initiale.
+    \begin{itemize}
+        \item On commence par obtenir la position globale du sprite via \\\texttt{spr->getGlobalBounds().getPosition()}.
+        \item Ce point est ensuite ajusté en y ajoutant l'offset correspondant à \texttt{road\_texture.point2} (après application du zoom), ce qui permet d'estimer où devrait se trouver la fin du segment sans rotation.
+        \item Ensuite, la fonction \texttt{rotatePoint()} est utilisée pour faire pivoter ce point autour du point de raccord initial (\texttt{fromPoint2}) selon l'angle spécifié.
+        Le résultat est le nouveau point final (\texttt{rotatedPoint}) qui définit l'orientation et l'emplacement du bout du segment après application de la rotation.
+    \end{itemize}
+
+    \item \textbf{Application de la rotation et ajout du segment :}
+    Une fois le point final calculé, le sprite est tourné à l’angle désiré (en veillant à appliquer la rotation après le calcul afin d’éviter une double rotation).
+    Finalement, le segment (contenant la texture, la rotation, le point de départ et le point final calculé) est ajouté à la liste des segments du circuit.
+\end{enumerate}
+
+Ce mécanisme garantit que chaque segment est correctement positionné par rapport à celui qui le précède, assurant ainsi une continuité visuelle du circuit.
+L'utilisation de fonctions telles que \texttt{rotatePoint()} permet également de gérer facilement les changements d'orientation, ce qui est crucial pour modéliser des virages et des segments courbes.
+De plus, le support des opérations de mirroring permet de varier les configurations de segments tout en réutilisant la même texture, offrant ainsi une plus grande flexibilité dans la conception du circuit.
+
 
 % TODO Si changé, modifier le paragraph Car.
 \subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}
-Bien que l'implémentation de l'interface graphique soit distincte de la simulation physique, les deux composantes interagissent étroitement :
+Bien que l'interface graphique et la simulation physique soient implémentées dans des modules distincts, leur intégration est cruciale pour offrir une expérience fluide et cohérente. Plusieurs mécanismes d'interaction ont été mis en place :
+
 \begin{itemize}
-    \item La classe \texttt{Car} récupère en temps réel les données issues du modèle physique (position, vitesse, trajectoire prédictive) afin de mettre à jour le sprite et le tracé de la trajectoire.
-    \item La Game View est dynamiquement recentrée sur le véhicule pour garantir sa visibilité, même lors de mouvements rapides.
-    \item La synchronisation entre les calculs physiques et l'affichage permet une expérience fluide et cohérente pour l'utilisateur.
+    \item \textbf{Mise à jour en temps réel :} La classe \texttt{Car} interroge en continu le modèle physique (géré par la classe \texttt{Vehicle}) pour récupérer les données essentielles telles que la position, la vitesse, l'orientation et la trajectoire prédictive.
+    Ces informations sont immédiatement utilisées pour actualiser le sprite du véhicule ainsi que la ligne de prédiction affichée.
+    \item \textbf{Synchronisation et cohérence visuelle :} Les calculs physiques (notamment via l'intégration numérique de la dynamique du véhicule) génèrent des états qui sont transmis à l'interface graphique.
+    Cela garantit que l'affichage du véhicule, de ses effets et de sa trajectoire reflète précisément l'évolution dynamique simulée.
+    \item \textbf{Traçage de la trajectoire prédictive :} En parallèle, la classe \texttt{Car} calcule une trajectoire prédictive basée sur les itérations futures de la dynamique physique.
+    Cette trajectoire, rendue à l'aide d'un \texttt{sf::VertexArray}, permet à l'utilisateur de visualiser l'impact des commandes de conduite sur le comportement futur du véhicule.
 \end{itemize}
 
+Ces interactions étroites entre la partie physique et l'interface graphique permettent non seulement une synchronisation efficace entre les calculs et le rendu, mais également une meilleure compréhension et un contrôle précis du comportement dynamique du véhicule.
+
+
 \subsection{Composants et fonctionnalités}\label{subsec:composants-et-fonctionnalites}
-
-\subsubsection{Affichage du véhicule et gestion de la vue}\label{subsubsec:affichage-du-vehicule-et-gestion-de-la-vue}
-
-\paragraph{Rendu du sprite du véhicule}
-Le véhicule est représenté par un sprite chargé via SFML. La classe \texttt{Car} initialise ce sprite en lui attribuant une texture provenant du gestionnaire de ressources, en définissant un point d'origine pour permettre une rotation naturelle et en appliquant un facteur de mise à l'échelle adapté à la taille de la fenêtre.
-La position et l'orientation du sprite sont mises à jour à chaque cycle de la simulation afin de refléter l'état physique calculé.
-
-\paragraph{Suivi du véhicule}
-Pour que le véhicule reste toujours visible, la Game View est conçue pour suivre dynamiquement sa position.
-Une méthode dédiée vérifie si le véhicule s'approche des limites de l'écran et demande à la classe \texttt{Game} de recentrer la vue.
-Ce suivi adaptatif assure une expérience de simulation fluide, même en cas de changements brusques de direction ou de vitesse.
 
 \subsubsection{Visualisation des informations dynamiques}\label{subsubsec:visualisation-des-informations-dynamiques}
 
 \paragraph{Mode de Debug}
-Le mode Debug offre une visualisation en temps réel de diverses informations physiques (vitesse, forces, angles, etc.). Activable par un raccourci clavier (F3), il affiche ces données sous forme de texte avec des arrière-plans colorés pour améliorer la lisibilité.
-Cette fonctionnalité est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
+Le mode Debug (Figure~\ref{fig:debug_mode}) offre une visualisation en temps réel de diverses informations physiques (vitesse, forces, angles, etc.).
+Cette fonctionnalité, représentée par la classe \texttt{DebugMode}, est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
+Elle permet de suivre l'évolution des paramètres physiques au fil du temps, facilitant ainsi l'identification de problèmes potentiels ou d'anomalies dans le comportement dynamique.
+Il est possible de l'activer ou de la désactiver à l'aide de la touche \texttt{F3}.
+Cette classe contient un attribut \texttt{std::vector<sf::Text>} qui contient les textes à afficher dans la HUD View.
+
+On ajoute un texte à la liste en utilisant la méthode \texttt{addLine()} qui prend en paramètre le texte à afficher, la position et la couleur du texte.
+Cette methode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
+
+\begin{lstlisting}[style=CStyle, label={lst:code_addline}]
+void DebugMode::addLine(const std::string &content, const unsigned int size, const sf::Color &color) {
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+    text.setString(content);
+
+    sf::RectangleShape background;
+    background.setSize(sf::Vector2f(text.getLocalBounds().width, text.getLocalBounds().height + 6.25f));
+    background.setFillColor(sf::Color(64, 64, 64, 255/2));
+
+    texts.push_back(text);
+    backgrounds.push_back(background);
+}
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/LaTeX/figures/example_debug_mode_1} % TODO FIX PATH
+    \caption{Exemple de mode Debug}
+    \label{fig:debug_mode}
+\end{figure}
 
 \paragraph{Compteur de FPS}
-Le compteur de FPS, géré par la classe \texttt{FPSCounter}, affiche le nombre de frames par seconde dans la HUD View.
-Ce suivi de performance permet de vérifier en continu la fluidité de la simulation et d'identifier d'éventuels problèmes de performance, facilitant ainsi l'optimisation du code.
+La classe \texttt{FPSCounter} affiche le nombre de frames par seconde dans la HUD View, permettant ainsi de surveiller la fluidité de l'application.
+Elle nous permet, tout au long du développement de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressource et de l'optimiser en conséquence.
+
+Pour calculer le nombre d'images par seconde, on compte le nombre d'images générer en une seconde.
+La classe contient, parmi ses attributs, un compteur d'image \texttt{frameCount} et un accumulateur de temps \texttt{timeAccumulator}.
+\begin{lstlisting}[style=CStyle, label={lst:code_fpscounter}]
+void FPSCounter::update(const float dt) {
+    timeAccumulator += dt;
+    frameCount++;
+    if (timeAccumulator >= 1.f) {
+        currentFPS = frameCount;
+        frameCount = 0;
+        timeAccumulator = 0.f;
+        text.setString("FPS: " + std::to_string(currentFPS));
+    }
+}
+\end{lstlisting}
+Le paramètre \texttt{dt} est le delta de temps entre la dernière image et l'image actuelle.
+
+À chaque nouvelle image et donc à chaque appel de la fonction \texttt{update()} (paragraphe sur la classe Game :~\ref{par:class_game}) de la classe \texttt{Game}, on appelle la fonction \texttt{update()} de la classe \texttt{FPSCounter} en lui passant le delta de temps.
+On ajoute le delta de temps à l'accumulateur de temps et on incrémente le compteur d'image.
+Lorsque l'accumulateur de temps dépasse 1 seconde, on met à jour le nombre d'images par seconde et on remet le compteur d'image et l'accumulateur de temps à zéro.
 
 \subsubsection{Affichage de la trajectoire et prédictions}\label{subsubsec:affichage-de-la-trajectoire-et-predictions}
 
