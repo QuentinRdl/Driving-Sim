@@ -127,13 +127,53 @@ Le paramètre \texttt{dt} est le delta de temps entre la dernière image et l'im
 
 
 \subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
+\paragraph{Type de ressources}
+Dans le projet, nous avons principalement deux types de ressources :
+\begin{itemize}
+    \item Les \textbf{Textures} : Utilisées pour le rendu graphique des segments de route et du véhicule.
+    Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique.
+    \item Les \textbf{Polices de caractères} : Utilisées pour le rendu du texte dans l'interface graphique.
+\end{itemize}
+
 \paragraph{Gestionnaire de ressources}
-La gestion des textures et autres ressources graphiques est centralisée via un gestionnaire de ressources.
-Ce module permet de charger, stocker et réutiliser les images et polices de caractère de manière efficace, réduisant ainsi la consommation de mémoire et le temps de chargement.
-Une telle approche garantit que le même asset n'est pas chargé plusieurs fois et que les ressources sont correctement libérées à la fermeture de l'application.
+Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différente étant donné leurs utilisations différentes.
+La classe \texttt{TextureManager} gère le chargement des images dans la mémoire de l'application.
+Au sein de la librairie SFML, une image est représentée avec une classe \texttt{sf::Texture} qui contient la représentation en mémoire des pixels de l'image~\cite{sfml_sf_texture}.
+Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prends en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
+Deux cas sont possibles :
+\begin{itemize}
+    \item La texture n'a jamais été demandé depuis le début de l'execution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{std::unordered\_map<ResourceType::Value, sf::Texture>}.
+    \item La texture a déjà été chargée, une référence vers la \texttt{sf::Texture} correspondante est récupérée puis renvoyée.
+    Ici, on utilise une référence et non une copie, car aucun traitement n'est fait directement sur l'objet en mémoire.
+\end{itemize}
+Ce système permet de ne charger qu'une seule fois une texture et de la réutiliser à chaque fois qu'elle est demandée ce qui limite grandement l'utilisation de la mémoire.
+
+Pour ce qui est des polices de caractères, la classe \texttt{FontManager} fonctionne de manière similaire, mais nous n'utilisons qu'une seule police de caractères pour l'ensemble de l'application.
+Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un pointeur (\texttt{std::unique\_ptr<sf::Font>}) dans un attribut de la classe.
+
+\paragraph{La police d'écriture}
+La police d'écriture utilisée dans le projet est la \textit{DejaVu Sans Mono}.
+Pour plus de portabilité de notre code, nous avons décidé de l'inclure dans le projet.
+
+Nous avons généré un fichier C++ contenant les données binaires de la police \textit{DejaVu Sans Mono} en utilisant la commande suivante :
+\begin{lstlisting}[style=BashStyle,label={lst:generation_dejavusansmonottf.h}]
+xxd -i DejaVuSansMono.ttf > dejavu_sans_mono_ttf.cpp
+\end{lstlisting}
+Cette commande convertit le fichier binaire de la police d'écriture en un tableau de bytes C++ que nous pouvons inclure directement dans notre projet.
+Le fichier généré ressemble à ceci :
+\begin{lstlisting}[style=CStyle,label={lst:example_generated_from_xxd_-i}]
+#include "dejavu_sans_mono_ttf.h"
+
+unsigned char dejavu_sans_mono_ttf[] = {
+  // Données binaires de la police d'écriture
+};
+
+unsigned int dejavu_sans_mono_ttf_len = 343140;
+\end{lstlisting}
+Cette solution, trouvée sur Stack Overflow\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
 
 \paragraph{Connexion des segments de routes}
-En interne la texture d'un segment de route est représenté par une structure \texttt{RoadTexture} défini comme suit :
+En interne la texture d'un segment de route est représenté par une structure \texttt{RoadTexture} défini comme suit :
 
 \begin{lstlisting}[style=CStyle,label={lst:struct_roadtexture}]
 struct RoadTexture {
@@ -150,8 +190,6 @@ Elle contient 4 éléments :
     \item \texttt{sprite} : Le sprite associé à la texture, utilisé pour le rendu.
     \item \texttt{point1} et \texttt{point2} : Deux position relatif à la texture représentant les points de connexion entre deux segments de route.
 \end{itemize}
-
-\paragraph{La police d'écriture}
 
 % TODO Si changé, modifier le paragraph Car.
 \subsubsection{Interactions entre l'interface graphique et la partie physique}\label{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}
