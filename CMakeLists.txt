@@ -86,3 +86,20 @@ target_link_libraries(DrivingSimTests PRIVATE
 
 include(GoogleTest)
 gtest_discover_tests(DrivingSimTests)
+
+# ------------------------------------------------------------------
+add_executable(DrivingSim_Plots
+        srcPlots/vehicle.cpp
+        srcPlots/vehicle.h
+        srcPlots/plotting.cpp
+        srcPlots/plotting.h
+)
+
+target_include_directories(DrivingSim_Plots PRIVATE
+        srcPlots/
+        src/Headers/GraphicsUtils
+)
+
+target_link_libraries(DrivingSim_Plots
+        ${Boost_LIBRARIES}
+)
