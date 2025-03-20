@@ -16,6 +16,7 @@
 \usepackage{xcolor}   % Importation du package pour la coloration syntaxique
 % \usepackage[toc, nonumberlist]{glossaries} % TODO déplacer le glossaire manuel vers le package glossaries. cf \makeglossaires \printglossaries
 % todo de même avec la bibliographie avec les fichiers .bib
+\usepackage{float}
 \usepackage{enumitem} % Pour sous-lister différements (* au lieu de -)
 % Définition du style pour le code Cpp
 \lstdefinestyle{CStyle}{
@@ -176,6 +177,7 @@
     \textbf{SS2I :} Société de Services en Ingénierie Informatique.
 
     \newpage
+%    TODO UNCOMMENT THESE PARTS
     \section{Sujet du projet}\label{sec:sujet-du-projet}
     \input{subpart/10_sujet_du_projet}
     \newpage
@@ -221,10 +223,6 @@
         Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
         Sous licence \textit{Creative Commons Attribution 4.0 International}.
 
-        \bibitem{documentationSFML}
-        Documentation de la SFML.
-        Disponible sur : \url{https://www.sfml-dev.org/documentation/}.
-
         \bibitem{cpp_reference_push_back}
         Contributeurs de cppreference.com. \\
         ``\texttt{std::deque::push\_back} - Référence C++''. \\
@@ -235,9 +233,9 @@
         ``\texttt{std::deque::pop\_front} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/container/deque/pop_front}.
 
-        \bibitem{cpp_reference_vector_copy}
+        \bibitem{cpp_reference_vector}
         Contributeurs de cppreference.com.\\
-        ``\texttt{std::vector::vector} - Référence C++''.\\
+        ``\texttt{std::vector} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/container/vector/vector}.
 
         \bibitem{cpp_reference_std_nth_element}
@@ -250,10 +248,29 @@
         ``\texttt{std::sort} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/algorithm/sort}.
 
+        \bibitem{cpp_reference_std_unordered_map}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unordered\_map} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{cpp_reference_std_unique_ptr}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unique\_ptr} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{documentationSFML}
+        Documentation de la SFML. \\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/}.
+
         \bibitem{sfml_sf_texture}
         Contributeurs de sfml-dev.org.\\
         ``\texttt{sf::Texture} - SFML Documentation''.\\
         Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1Texture.html}
+
+        \bibitem{sfml_sf_vertexarray}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::VertexArray} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1VertexArray.html}
 
         \bibitem{stackoverflow_embed_font}
         Karol Szustakowski (2017).
