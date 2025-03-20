@@ -318,7 +318,21 @@ Pour déterminer la force latérale maximale que peut générer chaque essieu, n
 $$F_{z\_front} = m \times g \times \frac{b}{a+b}$$
 \item \textbf{Essieu arrière} :
 $$F_{z\_rear} = m \times g \times \frac{b}{a+b}$$
+
+Avec :\\
+$a$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu avant},\\
+$b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière},\\
+$m$ = La masse du véhicule, \\
+$g$ = La constante gravitationnelle \\
+\center{\text{(Formules tirées de \cite{axle_weights})}}
 \end{itemize}
-\begin{center}
-Avec :
-\end{center}
+
+Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction. Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu. Le coefficient d'adhérence des pneus avant et arrières sont représentés respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$. Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence. Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée. Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
+
+\begin{itemize}
+\item \textbf{Essieu avant} :
+$$F_{y\_max\_front}= \mu_{front} \times F_{z\_front}$$
+\item \textbf{Essieu arrière} :
+$$F_{y_\max\_rear} = \mu_{rear} \times F_{z\_rear}$$
+\end{itemize}
+
