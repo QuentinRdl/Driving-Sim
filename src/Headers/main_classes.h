@@ -7,5 +7,6 @@
 
 class Game;
 class Circuit;
+struct SoftwareState;
 
 #endif //CLASSES_H
