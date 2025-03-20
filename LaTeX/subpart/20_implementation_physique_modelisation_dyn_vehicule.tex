@@ -136,28 +136,28 @@ Premièrement, nous devons calculer les angles de glissement, ce qui se fait ave
     \item Pour l'essieu arrière (\texttt{alpha\_R} dans notre code) :
     $$\alpha_R = \frac{(b \dot{\theta}+V_{\xi})}{V_\eta} $$
 
-    Avec :\\
-$\delta$ = L'angle de braquage, \\
-$a$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu avant},\\
-$b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière},\\
-$\theta$ = La vitesse de \textbf{lacet}, \\
-$V_\xi$ = La vitesse \textbf{latérale}, \\
-$V_\eta$ = La vitesse \textbf{longitudinale}. \\
-\center{\text{(Formules tirées de \cite{vtech})}}
+    Avec :\\
+    $\delta$ = L'angle de braquage, \\
+    $a$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu avant},\\
+    $b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière},\\
+    $\theta$ = La vitesse de \textbf{lacet}, \\
+    $V_\xi$ = La vitesse \textbf{latérale}, \\
+    $V_\eta$ = La vitesse \textbf{longitudinale}. \\
+    \center{\text{(Formules tirées de \cite{vtech})}}
 \end{itemize}
 
 Dans la première étape, nous avions déjà tous ces paramètres, sauf $\delta$, nous avons donc rajouté une variable \texttt{delta}, dans notre objet qui représente donc l'angle de braquage de la voiture. Ces deux formules mathématiques se traduisent donc dans notre code par :
 
 \begin{lstlisting}[style=CStyle]
 void updateBicycle(double dt, double delta, double slip) {
-// Calculer les angles de glissement pour les pneus avant (alpha_F) et arriere (alpha_R)
-double alpha_F = 0.0, alpha_R = 0.0;
-if (vx > 0.01) {
-// evite la division par zero
-alpha_F = delta - (vy + dist_cog_front_axle * lacet) / vx;
-alpha_R = -(vy - dist_cog_rear_axle * lacet) / vx;
-}
-...
+    // Calculer les angles de glissement pour les pneus avant (alpha_F) et arriere (alpha_R)
+    double alpha_F = 0.0, alpha_R = 0.0;
+    if (vx > 0.01) {
+    // evite la division par zero
+        alpha_F = delta - (vy + dist_cog_front_axle * lacet) / vx;
+        alpha_R = -(vy - dist_cog_rear_axle * lacet) / vx;
+    }
+    ...
 }
 \end{lstlisting}
 
@@ -167,18 +167,18 @@ Ensuite, pour correctement implémenter le modèle Bicycle, nous devons rajouter
 
 \textbf{Raideur longitudinale ($C_x$) }:
 \begin{itemize}
-\item \textbf{Raideur $C_x$ très faible}:
-\begin{itemize}[label=$\star$]
-\item Le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
-\item Mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
-\item Sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
-\end{itemize}
+    \item \textbf{Raideur $C_x$ très faible}:
+    \begin{itemize}[label=$\star$]
+        \item Le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
+        \item Mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
+        \item Sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
+    \end{itemize}
 
-\item \textbf{Raideur $C_x$ très élevée}:
-\begin{itemize}[label=$\star$]
-\item Le pneu génère immédiatement une grande force pour un petit glissement,
-\item Améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
-\end{itemize}
+    \item \textbf{Raideur $C_x$ très élevée}:
+    \begin{itemize}[label=$\star$]
+        \item Le pneu génère immédiatement une grande force pour un petit glissement,
+        \item Améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
+    \end{itemize}
 \end{itemize}
 
 \textbf{Raideur latérale ($C_y$)}
@@ -186,33 +186,33 @@ Ensuite, pour correctement implémenter le modèle Bicycle, nous devons rajouter
 Influence la capacité à prendre les virages et la stabilité du véhicule.
 
 \begin{itemize}
-\item \textbf{Raideur $C_y$ très faible}:
-\begin{itemize}[label=$\star$]
-\item Le pneu dérive beaucoup avant de générer une force latérale,
-\item En virage, le véhicule sous-vire énormément.
-\end{itemize}
+    \item \textbf{Raideur $C_y$ très faible}:
+    \begin{itemize}[label=$\star$]
+        \item Le pneu dérive beaucoup avant de générer une force latérale,
+        \item En virage, le véhicule sous-vire énormément.
+    \end{itemize}
 
-\item \textbf{Raideur $C_y$ très élevée}:
-\begin{itemize}[label=$\star$]
-\item Le pneu génère immédiatement une forte force latérale pour un petit angle de glissement,
-\item Meilleure tenue de route, réponse précise aux virages,
-\item Mais risque de survirage et perte soudaine d’adhérence si les limites sont dépassées.
-\end{itemize}
+    \item \textbf{Raideur $C_y$ très élevée}:
+    \begin{itemize}[label=$\star$]
+        \item Le pneu génère immédiatement une forte force latérale pour un petit angle de glissement,
+        \item Meilleure tenue de route, réponse précise aux virages,
+        \item Mais risque de survirage et perte soudaine d’adhérence si les limites sont dépassées.
+    \end{itemize}
 \end{itemize}
 
 Après avoir fixé ces valeurs, nous avons pu faire le \textbf{calcul des forces sur les pneus}, qui se font de la sorte :
 \begin{itemize}
-\item \textbf{Forces Longitudinales} :
-\begin{itemize}[label=$\star$]
-\item \texttt{F\_x\_front} : C'est la force de traction générée par les pneus avant en fonction du glissement longitudinal (\texttt{slip}). Calculée par : $$2 \times C_x \times \texttt{slip}$$
+    \item \textbf{Forces Longitudinales} :
+    \begin{itemize}[label=$\star$]
+        \item \texttt{F\_x\_front} : C'est la force de traction générée par les pneus avant en fonction du glissement longitudinal (\texttt{slip}). Calculée par : $$2 \times C_x \times \texttt{slip}$$
 
-\item \texttt{F\_x\_rear} : Dans ce modèle, aucune force longitudinale n'est appliquée à l'arrière.
-\end{itemize}
-\item \textbf{Forces Latérales} :
-\begin{itemize}[label=$\star$]
-\item \texttt{F\_y\_front} : C'est la force latérale sur l'essieu, calculée par : $$2 \times C_y \times a_F$$
-\item \texttt{F\_y\_rear} : C'est la force latérale sur l'essieu arrière : $$2 \times C_y \times a_R$$
-\end{itemize}
+        \item \texttt{F\_x\_rear} : Dans ce modèle, aucune force longitudinale n'est appliquée à l'arrière.
+    \end{itemize}
+    \item \textbf{Forces Latérales} :
+    \begin{itemize}[label=$\star$]
+        \item \texttt{F\_y\_front} : C'est la force latérale sur l'essieu, calculée par : $$2 \times C_y \times a_F$$
+        \item \texttt{F\_y\_rear} : C'est la force latérale sur l'essieu arrière : $$2 \times C_y \times a_R$$
+    \end{itemize}
 \end{itemize}
 
 Ces forces sont nécessaires pour pouvoir modéliser le comportement du véhicule lorsqu'on va changer la direction du véhicule. Nous allons maintenant les utiliser pour calculer les accélérations du véhicule (longitudinale, latérale et lacet), plus seulement grâce aux lois de Newton comme à la première étape, mais avec les données que nous avons maintenant.
@@ -240,18 +240,18 @@ Ce qui se traduit dans notre code par :
 
 \begin{lstlisting}[style=CStyle]
 void updateBicycle(double dt, double delta, double slip) {
-...
-// Calcul des forces sur les pneus (hypothese : les forces sont identiques sur les deux roues de l'essieu)
-double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels)
-double F_x_rear = 0.0; // Pas de force longitudinale a l'arriere
-double F_y_front = 2.0 * Cy * alpha_F; // Force laterale sur l'essieu avant
-double F_y_rear = 2.0 * Cy * alpha_R; // Force laterale sur l'essieu arriere
+    ...
+    // Calcul des forces sur les pneus (hypothese : les forces sont identiques sur les deux roues de l'essieu)
+    double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels)
+    double F_x_rear = 0.0; // Pas de force longitudinale a l'arriere
+    double F_y_front = 2.0 * Cy * alpha_F; // Force laterale sur l'essieu avant
+    double F_y_rear = 2.0 * Cy * alpha_R; // Force laterale sur l'essieu arriere
 
-// Calcul des accelerations selon le modele "bicycle"
-double ax = vy * lacet + 1.0 / mass * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - airResCoeff * vx * vx);
-double ay = -vx * lacet + 1.0 / mass * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
-double r_dot = 1.0 / I * (dist_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - dist_cog_rear_axle * F_y_rear);
-...
+    // Calcul des accelerations selon le modele "bicycle"
+    double ax = vy * lacet + 1.0 / mass * (F_x_front * cos(delta) - F_y_front * sin(delta) + F_x_rear - airResCoeff * vx * vx);
+    double ay = -vx * lacet + 1.0 / mass * (F_x_front * sin(delta) + F_y_front * cos(delta) + F_y_rear);
+    double r_dot = 1.0 / I * (dist_cog_front_axle * (F_x_front * sin(delta) + F_y_front * cos(delta)) - dist_cog_rear_axle * F_y_rear);
+    ...
 }
 \end{lstlisting}
 
@@ -260,8 +260,7 @@ Et par la suite, dans notre implémentation, nous intégrons les valeurs avec la
 Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
 : mass(mass), dist_cog_front_axle(a_front), dist_cog_rear_axle(b_rear), airResCoeff(airRes), Cx(cx), Cy(cy), vx(0.0), vy(0.0), lacet(0.0), x(0.0), y(0.0), psi(0.0)
 {
-I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
-}
+    I = mass * std::pow(0.5 * (dist_cog_front_axle + dist_cog_rear_axle), 2);
 }
 \end{lstlisting}
 
@@ -296,10 +295,10 @@ Cette équation traduit donc le fait que le taux de variation du \texttt{slip} $
 
 \begin{lstlisting}[style=CStyle]
 void updateBicycleEtape3(double dt, double delta) {
-...
-double slip_dot = (s_desired - slip) / slip_tau;
-slip += slip_dot * dt;
-...
+    ...
+    double slip_dot = (s_desired - slip) / slip_tau;
+    slip += slip_dot * dt;
+    ...
 }
 \end{lstlisting}
 
