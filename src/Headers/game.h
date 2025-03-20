@@ -30,9 +30,11 @@ class Game final {
     DebugMode debug_mode;
 
     /* Main Menu Part */
+    std::vector<sf::Text> main_menu_texts;
     Button play_button;
 
     /* Pause Menu Part */
+    std::vector<sf::Text> pause_menu_texts;
     Button resume_button;
 
     /* Play Part */
@@ -49,7 +51,6 @@ public:
     TextureManager texture_manager;
 
     Game();
-
     ~Game();
 
     void manageEvents();
@@ -59,15 +60,18 @@ public:
     [[nodiscard]] float getZoomFactor() const;
 
     void update();
-    void updateCircuit() const;
-
-    void renderMainMenu() const;
-
     void render() const;
 
     // Accessors
     [[nodiscard]] bool running() const;
 
+private:
+
+    void updateCircuit() const;
+    void renderMainMenu() const;
+
+    void prepare_main_menu();
+    void prepare_pause_menu();
 };
 
 #endif //GAME_H

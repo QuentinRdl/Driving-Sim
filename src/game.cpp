@@ -35,14 +35,8 @@ Game::Game(): software_state(this),
     hud_view.setSize(win_x, win_y);
     hud_view.setCenter(win_x / 2.f, win_y / 2.f);
 
-    play_button = Button({200, 50}, {
-                             static_cast<float>(window->getSize().x) / 2.f - 100,
-                             static_cast<float>(window->getSize().y) / 2.f - 25
-                         }, "Play", font_manager);
-    resume_button = Button({200, 50}, {
-                               static_cast<float>(window->getSize().x) / 2.f - 100,
-                               static_cast<float>(window->getSize().y) / 3.f - 25
-                           }, "Resume", font_manager);
+    prepare_main_menu();
+    prepare_pause_menu();
     circuit = std::make_unique<Circuit>(this);
     updateCircuit();
 }
@@ -131,6 +125,60 @@ void Game::updateCircuit() const {
 
 void Game::renderMainMenu() const {
     play_button.renderOn(*window);
+    for (const auto &drawable : main_menu_texts) {
+        window->draw(drawable);
+    }
+}
+
+void Game::prepare_main_menu() {
+    play_button = Button({200, 50}, {
+                             static_cast<float>(window->getSize().x) / 2.f - 100,
+                             static_cast<float>(window->getSize().y) / 2.f - 25
+                         }, "Play", font_manager);
+
+    sf::Text title;
+    title.setFont(font_manager.getFont());
+    title.setCharacterSize(30);
+    title.setFillColor(sf::Color::White);
+    title.setString("Driving Simulator");
+
+    sf::Text author;
+    author.setFont(font_manager.getFont());
+    author.setCharacterSize(27);
+    author.setFillColor(sf::Color::White);
+    author.setString("Par Quentin RADLO & Romain GALLAND");
+
+    sf::Text encadrant;
+    encadrant.setFont(font_manager.getFont());
+    encadrant.setCharacterSize(27);
+    encadrant.setFillColor(sf::Color::White);
+    encadrant.setString("Supervised by Jean-Michel Hufflen");
+
+
+    const float win_x = static_cast<float>(window->getSize().x);
+    const float win_y = static_cast<float>(window->getSize().y);
+    title.setPosition(win_x / 2.f - title.getGlobalBounds().width / 2.f, win_y / 3.f);
+    author.setPosition(win_x / 2.f - author.getGlobalBounds().width / 2.f, win_y / 3.f + 50);
+    // placer le texte "encadrant" en bas du boutton
+    encadrant.setPosition(win_x / 2.f - encadrant.getGlobalBounds().width / 2.f, win_y / 3.f + 250);
+
+
+    main_menu_texts.push_back(title);
+    main_menu_texts.push_back(author);
+    main_menu_texts.push_back(encadrant);
+}
+
+void Game::prepare_pause_menu() {
+    resume_button = Button({200, 50}, {
+                               static_cast<float>(window->getSize().x) / 2.f - 100,
+                               static_cast<float>(window->getSize().y) / 3.f - 25
+                           }, "Resume", font_manager);
+
+    sf::Text title;
+    title.setFont(font_manager.getFont());
+    title.setCharacterSize(30);
+    title.setFillColor(sf::Color::White);
+    title.setString("Pause Menu");
 }
 
 void Game::render() const {
@@ -158,6 +206,9 @@ void Game::render() const {
                 window->setView(window->getDefaultView());
                 window->draw(overlay);
                 resume_button.renderOn(*window);
+                for (const auto &texts : pause_menu_texts) {
+                    window->draw(texts);
+                }
             }
             break;
         default: break;
