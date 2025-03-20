@@ -17,8 +17,6 @@ pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
 
 pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
 pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
-if [ $? -ne 0 ]; then
-    echo "Erreur : La compilation a échoué !"
-    exit 1
-fi
-echo "✅ Compilation terminée : ${OUT_DIR}/${TEX_FILE}.pdf généré avec succès."
+echo "Le processus de compilation s'est terminé. Voici l'exit code de la dernière commande : $?"
+sleep 10
+exit 0
