@@ -96,11 +96,11 @@ Voici le détail de la complexité :
 \begin{itemize}
     \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la deque.
     \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la deque.
-    \item \texttt{std::vector tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector_copy} pour copier la deque dans un vecteur.
+    \item \texttt{std::vector tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector} pour copier la deque dans un vecteur.
     \item \texttt{std::nth\_element(tmp.begin(), mid, tmp.end())} : \( O(n) \)\cite{cpp_reference_std_nth_element} pour trier le vecteur jusqu'à l'élément médian.
 \end{itemize}
 
-On a utilisé la fonction \texttt{std::nth\_element()} car elle permet de ne pas trier l'ensemble du vecteur tout en plaçant l'élément médian à la bonne position dans le \texttt{std::vector}.
+On a utilisé la fonction \texttt{std::nth\_element()}\cite{cpp_reference_std_nth_element} car elle permet de ne pas trier l'ensemble du vecteur tout en plaçant l'élément médian à la bonne position dans le \texttt{std::vector}\cite{cpp_reference_vector}.
 Au départ, nous avions utilisé la fonction \texttt{std::sort()}, qui trie un vecteur complet, mais sa complexité aurait été en \( O(n \log n) \)\cite{cpp_reference_std_sort}, ce qui est moins optimal étant donné que la ligne de prédiction est recalculée à chaque image.
 
 
@@ -113,7 +113,7 @@ Dans le projet, nous avons principalement deux types de ressources :
 \end{itemize}
 
 \paragraph{Les textures}
-Au sein de la librairie SFML, une image est représentée avec une classe \texttt{sf::Texture} qui contient la représentation en mémoire des pixels de l'image~\cite{sfml_sf_texture}.
+Au sein de la librairie SFML, une image est représentée avec une classe \texttt{sf::Texture}\cite{sfml_sf_texture} qui contient la représentation en mémoire des pixels de l'image.
 Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique, cela conserne les segments de route ainsi que l'image de la voiture.
 Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient les valeurs suivantes :
 \begin{itemize}
@@ -146,17 +146,17 @@ Cette solution, trouvée sur Stack Overflow\cite{stackoverflow_embed_font}, nous
 \paragraph{Gestionnaire de ressources}
 Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différente étant donné leurs utilisations différentes.
 La classe \texttt{TextureManager} gère le chargement des images dans la mémoire de l'application.
-Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prends en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
+Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prends en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
 Deux cas sont possibles :
 \begin{itemize}
-    \item La texture n'a jamais été demandé depuis le début de l'execution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{std::unordered\_map<ResourceType::Value, sf::Texture>}.
-    \item La texture a déjà été chargée, une référence vers la \texttt{sf::Texture} correspondante est récupérée puis renvoyée.
+    \item La texture n'a jamais été demandé depuis le début de l'execution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{std::unordered\_map<ResourceType::Value, sf::Texture>}\cite{cpp_reference_std_unordered_map}.
+    \item La texture a déjà été chargée, une référence vers la \texttt{sf::Texture}\cite{sfml_sf_texture} correspondante est récupérée puis renvoyée.
     Ici, on utilise une référence et non une copie, car aucun traitement n'est fait directement sur l'objet en mémoire.
 \end{itemize}
 Ce système permet de ne charger qu'une seule fois une texture et de la réutiliser à chaque fois qu'elle est demandée ce qui limite grandement l'utilisation de la mémoire.
 
 Pour ce qui est des polices de caractères, la classe \texttt{FontManager} fonctionne de manière similaire, mais nous n'utilisons qu'une seule police de caractères pour l'ensemble de l'application.
-Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un pointeur (\texttt{std::unique\_ptr<sf::Font>}) dans un attribut de la classe.
+Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un pointeur (\texttt{std::unique\_ptr<sf::Font>}\cite{cpp_reference_std_unique_ptr}) dans un attribut de la classe.
 
 
 \paragraph{Connexion des segments de routes}
@@ -223,7 +223,7 @@ Bien que l'interface graphique et la simulation physique soient implémentées d
     \item \textbf{Synchronisation et cohérence visuelle :} Les calculs physiques (notamment via l'intégration numérique de la dynamique du véhicule) génèrent des états qui sont transmis à l'interface graphique.
     Cela garantit que l'affichage du véhicule, de ses effets et de sa trajectoire reflète précisément l'évolution dynamique simulée.
     \item \textbf{Traçage de la trajectoire prédictive :} En parallèle, la classe \texttt{Car} calcule une trajectoire prédictive basée sur les itérations futures de la dynamique physique.
-    Cette trajectoire, rendue à l'aide d'un \texttt{sf::VertexArray}, permet à l'utilisateur de visualiser l'impact des commandes de conduite sur le comportement futur du véhicule.
+    Cette trajectoire, rendue à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, permet à l'utilisateur de visualiser l'impact des commandes de conduite sur le comportement futur du véhicule.
 \end{itemize}
 
 Ces interactions étroites entre la partie physique et l'interface graphique permettent non seulement une synchronisation efficace entre les calculs et le rendu, mais également une meilleure compréhension et un contrôle précis du comportement dynamique du véhicule.
@@ -238,7 +238,7 @@ Le mode Debug (Figure~\ref{fig:debug_mode}) offre une visualisation en temps ré
 Cette fonctionnalité, représentée par la classe \texttt{DebugMode}, est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
 Elle permet de suivre l'évolution des paramètres physiques au fil du temps, facilitant ainsi l'identification de problèmes potentiels ou d'anomalies dans le comportement dynamique.
 Il est possible de l'activer ou de la désactiver à l'aide de la touche \texttt{F3}.
-Cette classe contient un attribut \texttt{std::vector<sf::Text>} qui contient les textes à afficher dans la HUD View.
+Cette classe contient un attribut \texttt{std::vector<sf::Text>}\cite{cpp_reference_vector} qui contient les textes à afficher dans la HUD View.
 
 On ajoute un texte à la liste en utilisant la méthode \texttt{addLine()} qui prend en paramètre le texte à afficher, la position et la couleur du texte.
 Cette methode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
@@ -291,15 +291,27 @@ On ajoute le delta de temps à l'accumulateur de temps et on incrémente le comp
 Lorsque l'accumulateur de temps dépasse 1 seconde, on met à jour le nombre d'images par seconde et on remet le compteur d'image et l'accumulateur de temps à zéro.
 
 \subsubsection{Affichage de la trajectoire et prédictions}\label{subsubsec:affichage-de-la-trajectoire-et-predictions}
+Dans notre simulateur, la trajectoire prédictive joue un rôle clé en offrant à l'utilisateur une estimation visuelle de l'évolution future du véhicule en fonction de son état dynamique actuel.
+Cette fonctionnalité permet non seulement de mieux comprendre l'impact immédiat des commandes de conduite, mais aussi d'anticiper les conséquences de ces actions sur le comportement global du véhicule.
 
 \paragraph{Calcul de la trajectoire prédictive}
-Pour anticiper le comportement du véhicule, une trajectoire prédictive est calculée en itérant la dynamique sur plusieurs pas de temps.
-Les positions successives sont stockées dans un tableau et affichées à l'écran sous forme de ligne continue, offrant ainsi à l'utilisateur un aperçu de l'évolution future du véhicule en fonction de ses actions actuelles.
+Pour obtenir la trajectoire prédictive, nous simulons l'évolution du véhicule en itérant la dynamique physique sur plusieurs pas de temps.
+La fonction \texttt{computePredictionLine} procède de la manière suivante :
+\begin{itemize}
+    \item Le delta de temps utilisé pour ces itérations est déterminé de manière robuste grâce à la fonction \texttt{updateAndGetMedian} (définition dans le paragraph \textbf{La classe Car} :~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
+    \item À partir de l'état courant du véhicule, la dynamique est simulée en appliquant un schéma d'intégration numérique (ici la méthode Runge-Kutta d'ordre 4, ou RK4).
+    Pour chaque itération, la nouvelle position et l'orientation sont calculées et stockées dans un tableau.
+    \item Ces points, une fois convertis en coordonnées écran via le facteur de conversion (par exemple, \texttt{METER\_TO\_PIXEL}), représentent la trajectoire future du véhicule.
+\end{itemize}
 
 \paragraph{Tracé en temps réel via les données issues de la simulation}
-Le tracé de la trajectoire s'effectue en temps réel grâce à un objet \texttt{sf::VertexArray}.
-À chaque mise à jour, les données prédictives sont utilisées pour reconstruire dynamiquement le chemin à afficher sur la Game View.
-Cette visualisation interactive aide l'utilisateur à comprendre l'impact des commandes de conduite sur la trajectoire du véhicule.
+L'affichage de cette trajectoire prédictive est géré en temps réel grâce à un objet \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray} configuré en mode \texttt{LineStrip}.
+À chaque frame :
+\begin{itemize}
+    \item Les points prédits sont recalculés et le \texttt{VertexArray} est mis à jour pour refléter le chemin futur du véhicule.
+    \item La visualisation dynamique permet à l'utilisateur de voir immédiatement l'effet des commandes de conduite sur la trajectoire prévue, offrant ainsi un retour visuel direct sur l'évolution de l'état du véhicule.
+    \item Cette approche interactive aide également à identifier et à ajuster les paramètres du modèle physique en observant comment de petites modifications influent sur le comportement prévisionnel.
+\end{itemize}
 
 \subsubsection{Gestion des événements utilisateurs}\label{subsubsec:gestion-des-evenements-utilisateurs}
 La gestion des interactions se fait principalement via la méthode \texttt{manageEvents()} de la classe \texttt{Game} :
@@ -310,11 +322,23 @@ La gestion des interactions se fait principalement via la méthode \texttt{manag
 Ce système d'événements assure une interactivité réactive et une expérience utilisateur intuitive.
 
 \subsection{Optimisation du rendu et de l'affichage}\label{subsec:optimisation-du-rendu-et-de-l-affichage}
-%TODO paragraph sur les view
+\subsubsection{Gestion des vues}\label{subsubsec:gestion-des-vues}
+Dans le simulateur, on peut distinguer deux vues :
+\begin{itemize}
+    \item \textbf{Game View} : C'est la vue principale où le circuit et le véhicule sont affichés.
+    Elle est centrée sur le véhicule, offrant une perspective immersive de la conduite.
+    \item \textbf{HUD View} : Cette vue affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
+\end{itemize}
+
+Cela nous permet de faire varier tout les éléments d'une vue sans affecter l'autre.
+C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la HUD View.
+
+\subsubsection{Optimisations mises en œuvre}\label{subsubsec:optimisations-mises-en-oeuvre}
 Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
 \begin{itemize}
-    \item \textbf{Réduction des appels de dessin} : Les objets graphiques statiques (par exemple, le circuit ou les éléments du HUD) sont dessinés en une seule passe, tandis que les objets dynamiques (le véhicule, la trajectoire prédictive) sont mis à jour et redessinés à chaque frame.
-    \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
+    \item \textbf{Calcul du circuit} : Le circuit est calculé une première fois, puis stocké dans un tableau de segments de route (\texttt{std::vector<RoadSegment>}\cite{cpp_reference_vector}).
+    Lorsque le circuit a besoin d'être recalculé, un appel à la méthode \texttt{needUpdate()} le définis comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
+    \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
     \item \textbf{Gestion efficace de la vue} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
 \end{itemize}
 
