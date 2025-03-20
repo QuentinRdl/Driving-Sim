@@ -31,17 +31,17 @@ Elle contient 3 fonctions principales :
     void render() const;
     void manageEvents();
 \end{lstlisting}
-Chaque fonction est appeller une fois par itération de la boucle principale de l'application et donc par image générer.
+Chaque fonction est appelée une fois par itération de la boucle principale de l'application et donc par image générée.
 Voici leurs rôles respectifs :
 \begin{itemize}
     \item \texttt{update()}, met à jour l'état de l'application en fonction du temps écoulé et des événements utilisateurs.
     \item \texttt{render()}, effectue le rendu graphique de la scène actuelle.
-    \item \texttt{manageEvents()}, gère les événements à l'intérieur de l'application (clavier, souris), elle est appellé dans la fonction \texttt{update()}.
+    \item \texttt{manageEvents()}, gère les événements à l'intérieur de l'application (clavier, souris), elle est appelée dans la fonction \texttt{update()}.
 \end{itemize}
 
 \paragraph[Circuit]{La Classe \textbf{Circuit}}
 Elle représente, comme son nom l'indique, un circuit de conduite.
-Elle est composé de différents segments de routes (comme une petite ligne droite, un petit virage, un grand virage, \dots).
+Elle est composée de différents segments de routes (comme une petite ligne droite, un petit virage, un grand virage, \dots).
 Chaque segment est une portion de route qui peut être droite ou courbe, et la classe gère la connexion entre ces segments pour former une impression de circuit continue au niveau de l'affichage graphique. \\
 Son fonctionnement interne permet, de l'extérieur de la classe, de simplifier la création de la route.
 Il suffit de rajouter des segments de route dans le circuit en précisant l'angle à donner à la texture et s'il faut lui appliquer un effet mirroir, et la classe se charge de les relier entre eux.
@@ -61,18 +61,18 @@ circuit.join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 180);
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{/home/rgld_/01-dev-projects/cpp-projects/Driving-Sim/LaTeX/figures/example_circuit_1} % TODO FIX PATH
-    \caption{Exemple de circuit pouvant être générer grâce à la classe Circuit}
+    \caption{Exemple de circuit pouvant être généré grâce à la classe Circuit}
     \label{fig:example_circuit_1}
 \end{figure}
 
 \paragraph[Car]{La classe \textbf{Car}}
 Cette classe encapsule la classe \texttt{Vehicle} (voir section \ref{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}).
-L'interraction entre les deux classes \texttt{Car} et \texttt{Vehicle} est présenté à la section\ref{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}.
-Elle calcul la ligne de prédiction de la trajectoire du véhicule et gère l'affichage du véhicule.
+L'interaction entre les deux classes \texttt{Car} et \texttt{Vehicle} est présentée à la section\ref{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}.
+Elle calcule la ligne de prédiction de la trajectoire du véhicule et gère l'affichage du véhicule.
 
 Lors du développement de la ligne de prédiction de trajectoire, nous avons rencontré un problème.
 Le calcul prend en paramètre un delta de temps qui correspond au temps entre la dernière image et l'image actuelle.
-Ce delta de temps est très volatile et peut varier du simple au double, ce qui cause des grosse différence de longueur de la ligne de prédiction et provoque une impression de scintillement.
+Ce delta de temps est très volatile et peut varier du simple au double, ce qui cause de grosses différences de longueur de la ligne de prédiction et provoque une impression de scintillement.
 
 Pour résoudre ce problème, nous avons décidé de récupérer le delta de temps médian sur les 1000 dernières images.
 
@@ -114,7 +114,7 @@ Dans le projet, nous avons principalement deux types de ressources :
 
 \paragraph{Les textures}
 Au sein de la librairie SFML, une image est représentée avec une classe \texttt{sf::Texture}\cite{sfml_sf_texture} qui contient la représentation en mémoire des pixels de l'image.
-Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique, cela conserne les segments de route ainsi que l'image de la voiture.
+Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique, cela concerne les segments de route ainsi que l'image de la voiture.
 Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient les valeurs suivantes :
 \begin{itemize}
     \item \texttt{SEGMENT\_SMALL\_STRAIGHT} : Une petite ligne droite.
@@ -122,7 +122,7 @@ Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient le
     \item \texttt{SEGMENT\_SMALL\_TURN} : Un virage moyen.
     \item \texttt{SEGMENT\_MEDIUM\_TURN} : Un virage moyen.
     \item \texttt{SEGMENT\_LARGE\_TURN} : Un virage large.
-    \item \texttt{SEGMENT\_S\_TURN} : Un virage en S (plus communément appllé une chicane)
+    \item \texttt{SEGMENT\_S\_TURN} : Un virage en S (plus communément appelé une chicane)
     \item \texttt{SEGMENT\_U\_TURN} : Un virage en U\@.
     \item \texttt{CAR} : La texture de la voiture.
 \end{itemize}
@@ -144,23 +144,22 @@ Le fichier généré contient deux éléments :
 Cette solution, trouvée sur Stack Overflow\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
 
 \paragraph{Gestionnaire de ressources}
-Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différente étant donné leurs utilisations différentes.
+Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différentes étant donné leurs utilisations différentes.
 La classe \texttt{TextureManager} gère le chargement des images dans la mémoire de l'application.
-Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prends en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
+Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prend en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
 Deux cas sont possibles :
 \begin{itemize}
-    \item La texture n'a jamais été demandé depuis le début de l'execution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{std::unordered\_map<ResourceType::Value, sf::Texture>}\cite{cpp_reference_std_unordered_map}.
+    \item La texture n'a jamais été demandée depuis le début de l'exécution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{std::unordered\_map<ResourceType::Value, sf::Texture>}\cite{cpp_reference_std_unordered_map}.
     \item La texture a déjà été chargée, une référence vers la \texttt{sf::Texture}\cite{sfml_sf_texture} correspondante est récupérée puis renvoyée.
     Ici, on utilise une référence et non une copie, car aucun traitement n'est fait directement sur l'objet en mémoire.
 \end{itemize}
-Ce système permet de ne charger qu'une seule fois une texture et de la réutiliser à chaque fois qu'elle est demandée ce qui limite grandement l'utilisation de la mémoire.
+Ce système permet de ne charger qu'une seule fois une texture et de la réutiliser à chaque fois qu'elle est demandée, ce qui limite grandement l'utilisation de la mémoire.
 
 Pour ce qui est des polices de caractères, la classe \texttt{FontManager} fonctionne de manière similaire, mais nous n'utilisons qu'une seule police de caractères pour l'ensemble de l'application.
 Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un pointeur (\texttt{std::unique\_ptr<sf::Font>}\cite{cpp_reference_std_unique_ptr}) dans un attribut de la classe.
 
-
 \paragraph{Connexion des segments de routes}
-En interne la texture d'un segment de route est représenté par une structure \texttt{RoadTexture} défini comme suit :
+En interne, la texture d'un segment de route est représentée par une structure \texttt{RoadTexture} définie comme suit :
 
 \begin{lstlisting}[style=CStyle,label={lst:struct_roadtexture}]
 struct RoadTexture {
@@ -186,7 +185,7 @@ Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le proce
     Ce segment précédent fournit la position finale (stockée dans \texttt{realPoint2}) qui sera utilisée comme point de départ pour le nouveau segment.
 
     \item \textbf{Génération et configuration de la texture :}
-    À l'aide de la fonction \\\texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
+    À l'aide de la fonction \texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
     Ensuite, la texture (via son sprite) est mise à l’échelle en fonction du facteur de zoom courant (\texttt{game->getZoomFactor()}) pour garantir une cohérence visuelle.
 
     \item \textbf{Alignement du nouveau segment :}
@@ -197,7 +196,7 @@ Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le proce
     \item \textbf{Calcul du point de raccord final avec rotation :}
     Afin de déterminer la position finale du nouveau segment, on calcule un décalage à partir de sa position initiale.
     \begin{itemize}
-        \item On commence par obtenir la position globale du sprite via \\\texttt{spr->getGlobalBounds().getPosition()}.
+        \item On commence par obtenir la position globale du sprite via \texttt{spr->getGlobalBounds().getPosition()}.
         \item Ce point est ensuite ajusté en y ajoutant l'offset correspondant à \texttt{road\_texture.point2} (après application du zoom), ce qui permet d'estimer où devrait se trouver la fin du segment sans rotation.
         \item Ensuite, la fonction \texttt{rotatePoint()} est utilisée pour faire pivoter ce point autour du point de raccord initial (\texttt{fromPoint2}) selon l'angle spécifié.
         Le résultat est le nouveau point final (\texttt{rotatedPoint}) qui définit l'orientation et l'emplacement du bout du segment après application de la rotation.
@@ -241,7 +240,7 @@ Il est possible de l'activer ou de la désactiver à l'aide de la touche \texttt
 Cette classe contient un attribut \texttt{std::vector<sf::Text>}\cite{cpp_reference_vector} qui contient les textes à afficher dans la HUD View.
 
 On ajoute un texte à la liste en utilisant la méthode \texttt{addLine()} qui prend en paramètre le texte à afficher, la position et la couleur du texte.
-Cette methode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
+Cette méthode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
 
 \begin{lstlisting}[style=CStyle, label={lst:code_addline}]
 void DebugMode::addLine(const std::string &content, const unsigned int size, const sf::Color &color) {
@@ -268,9 +267,9 @@ void DebugMode::addLine(const std::string &content, const unsigned int size, con
 
 \paragraph{Compteur de FPS}
 La classe \texttt{FPSCounter} affiche le nombre de frames par seconde dans la HUD View, permettant ainsi de surveiller la fluidité de l'application.
-Elle nous permet, tout au long du développement de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressource et de l'optimiser en conséquence.
+Elle nous permet, tout au long du développement, de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressources et de l'optimiser en conséquence.
 
-Pour calculer le nombre d'images par seconde, on compte le nombre d'images générer en une seconde.
+Pour calculer le nombre d'images par seconde, on compte le nombre d'images générées en une seconde.
 La classe contient, parmi ses attributs, un compteur d'image \texttt{frameCount} et un accumulateur de temps \texttt{timeAccumulator}.
 \begin{lstlisting}[style=CStyle, label={lst:code_fpscounter}]
 void FPSCounter::update(const float dt) {
@@ -298,7 +297,7 @@ Cette fonctionnalité permet non seulement de mieux comprendre l'impact immédia
 Pour obtenir la trajectoire prédictive, nous simulons l'évolution du véhicule en itérant la dynamique physique sur plusieurs pas de temps.
 La fonction \texttt{computePredictionLine} procède de la manière suivante :
 \begin{itemize}
-    \item Le delta de temps utilisé pour ces itérations est déterminé de manière robuste grâce à la fonction \texttt{updateAndGetMedian} (définition dans le paragraph \textbf{La classe Car} :~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
+    \item Le delta de temps utilisé pour ces itérations est déterminé de manière robuste grâce à la fonction \texttt{updateAndGetMedian} (définition dans le paragraphe \textbf{La classe Car} :~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
     \item À partir de l'état courant du véhicule, la dynamique est simulée en appliquant un schéma d'intégration numérique (ici la méthode Runge-Kutta d'ordre 4, ou RK4).
     Pour chaque itération, la nouvelle position et l'orientation sont calculées et stockées dans un tableau.
     \item Ces points, une fois convertis en coordonnées écran via le facteur de conversion (par exemple, \texttt{METER\_TO\_PIXEL}), représentent la trajectoire future du véhicule.
@@ -330,14 +329,14 @@ Dans le simulateur, on peut distinguer deux vues :
     \item \textbf{HUD View} : Cette vue affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
 \end{itemize}
 
-Cela nous permet de faire varier tout les éléments d'une vue sans affecter l'autre.
+Cela nous permet de faire varier tous les éléments d'une vue sans affecter l'autre.
 C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la HUD View.
 
 \subsubsection{Optimisations mises en œuvre}\label{subsubsec:optimisations-mises-en-oeuvre}
 Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
 \begin{itemize}
     \item \textbf{Calcul du circuit} : Le circuit est calculé une première fois, puis stocké dans un tableau de segments de route (\texttt{std::vector<RoadSegment>}\cite{cpp_reference_vector}).
-    Lorsque le circuit a besoin d'être recalculé, un appel à la méthode \texttt{needUpdate()} le définis comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
+    Lorsque le circuit a besoin d'être recalculé, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
     \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
     \item \textbf{Gestion efficace de la vue} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
 \end{itemize}
