@@ -1,8 +1,6 @@
 #ifndef ROADTEXTUREGENERATOR_H
 #define ROADTEXTUREGENERATOR_H
 
-#include <complex>
-
 #include "resourcetype.h"
 #include "texturemanager.h"
 

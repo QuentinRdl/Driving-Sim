@@ -8,13 +8,16 @@
 \usepackage{fancyhdr}
 \usepackage{ifthen}
 \usepackage{lastpage}
+\usepackage[french]{babel}
+\usepackage{amsmath} % Pour citation dans code block ? A tester si c'set bon ou non
 \usepackage{xurl}  % Permet de casser les URL de manière améliorée
 \usepackage[breaklinks]{hyperref}  % Permet de casser les liens URL
 \usepackage{listings} % Importation du package pour le code source
 \usepackage{xcolor}   % Importation du package pour la coloration syntaxique
 % \usepackage[toc, nonumberlist]{glossaries} % TODO déplacer le glossaire manuel vers le package glossaries. cf \makeglossaires \printglossaries
 % todo de même avec la bibliographie avec les fichiers .bib
-
+\usepackage{float}
+\usepackage{enumitem} % Pour sous-lister différements (* au lieu de -)
 % Définition du style pour le code Cpp
 \lstdefinestyle{CStyle}{
     language=C++,
@@ -26,20 +29,44 @@
     numberstyle=\tiny\color{gray},
     stepnumber=1,
     breaklines=true,
-    frame=single
+    frame=single,
+    inputencoding=utf8,
+    extendedchars=\true,
+    literate={é}{{\'e}}1
+             {è}{{\`e}}1
+             {à}{{\`a}}1
+             {ê}{{\^e}}1
+             {ô}{{\^o}}1
+             {ù}{{\`u}}1
+}
+
+\lstdefinestyle{BashStyle}{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single,
+    morekeywords={sudo,apt,echo,ls,cd,mkdir,rm,mv,cp,chmod,chown,grep,awk,sed,tar,zip,unzip,xxd}
 }
 
 
+
 \def\UrlBreaks{\do\/\do-}
-\usepackage[french]{babel}
+
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
 \renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
+\renewcommand\thesubsubsection{\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules TODO activate ?
+\setcounter{secnumdepth}{3} % Activer la numérotation jusqu'aux sous-sous-sections
 
 % Pour gerer l'espace dans la table of contents
 \usepackage{tocloft}
-\renewcommand{\cftsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
-\renewcommand{\cftsubsecnumwidth}{2.3em} % Ajustez la largeur en fonction de vos besoins
-% ---
+\renewcommand{\cftsecnumwidth}{2.3em}
+\renewcommand{\cftsubsecnumwidth}{2.3em}
 
 \hypersetup{
     colorlinks=true,
@@ -53,7 +80,7 @@
 \pagestyle{fancy}
 \renewcommand\headrulewidth{1pt}
 \fancyhead[L]{Romain GALLAND | Quentin RADLO}
-\fancyhead[R]{Université de Marie \& Louis Pasteur}
+\fancyhead[R]{Université Marie \& Louis Pasteur}
 \renewcommand\footrulewidth{1pt}
 \fancyfoot[L]{}
 \fancyfoot[C]{Rapport de Projet - Simulateur de conduite\\
@@ -97,7 +124,7 @@
             %\vspace*{1.5cm}
             % Image d'illustration
             % \vspace*{1.5cm}
-            \vspace{1cm} % Fonctionne mieux si encapsulé dans un bloc centre
+            \vspace{1cm}
             \begin{center}
                 \includegraphics[width=0.8\textwidth]{illustration}
             \end{center}
@@ -114,9 +141,9 @@
 
     \newpage
     \section*{Remerciements}
-    - Un remerciement particulier est adressé à M. Hufflen pour la guidance et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
+    - Un remerciement particulier est adressé à M. Hufflen pour la direction et la pédagogie qu'il nous a apporté lors de la réalisation de notre projet.
 
-% Page dédiée à la table des matières
+    % Page dédiée à la table des matières
     \newpage
     \tableofcontents
     \newpage
@@ -150,64 +177,105 @@
     \textbf{SS2I :} Société de Services en Ingénierie Informatique.
 
     \newpage
+%    TODO UNCOMMENT THESE PARTS
     \section{Sujet du projet}\label{sec:sujet-du-projet}
     \input{subpart/10_sujet_du_projet}
+    \newpage
 
     \section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
     \input{subpart/20_implementation_physique_modelisation_dyn_vehicule}
+    \newpage
 
     \section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
     \input{subpart/30_implementation_interface_graphique}
+    \newpage
 
     \section{Bilan Technique}\label{sec:bilan-technique}
     \input{subpart/40_bilan_technique}
+    \newpage
 
 
-    \begin{thebibliography}{99}
-        \bibitem{interview}
-        Abdallah Ben Othman,
-        Interview réalisée le 10 Décembre 2023.
+    \begin{thebibliography}{9}
+        \bibitem{euler_explicite}
+        Frédéric Legrand.
+        Intégration des équations différentielles : méthode d'Euler.
+        Disponible à l'adresse : \url{https://www.f-legrand.fr/scidoc/srcdoc/numerique/euler/eulers/eulers-pdf.pdf}.
 
-        \bibitem{CreditPhoto}
-        \emph{Crédit photo :}
-        \url{https://www.it-connect.fr/plus-dun-million-de-raspberry-pi-commercialises/},
-        Florian Burnel, sous licence BY-NC-ND 4.0
+        \bibitem{slip-angle}
+        Your Data Driven.
+        Tyre Slip Angle – 2 Clear Explanations.
+        Disponible à l'adresse : \url{https://www.yourdatadriven.com/tyre-slip-angle-explained}.
 
-        \bibitem{APEC}
-        \emph{APEC - Offres d'emploi},
-        \url{https://www.apec.fr/candidat.html},
-        Consulté le 5 Décembre 2023.
 
-        \bibitem{apec}
-        \emph{APEC - Fiche Métier},
-        \url{https://www.apec.fr/tous-nos-metiers/informatique/ingenieur-en-etudes-et-developpement-informatiques.html},
-        Consulté le 19 novembre 2023.
+        \bibitem{vtech}
+        Virginia Tech University.
+        Chapter 2, Vehicle Dynamics Modeling.
+        Disponible à l'adresse : \url{https://vtechworks.lib.vt.edu/server/api/core/bitstreams/fe6d4ca1-514b-4e2b-b1ac-6561824a9de1/content}.
+        Sous licence \textit{Creative Commons Attribution 4.0 International}.
+        \bibitem{VDS_MathWorks}
+        MathWorks.
+        Modeling a Vehicle Dynamics System.
+        \url{https://www.mathworks.com/help/ident/ug/modeling-a-vehicle-dynamics-system.html}
 
-        \bibitem{qt}
-        \emph{QT},
-        \url{https://www.qt.io/embedded-development-talk/embedded-engineers-roles-responsibilities-and-job-descriptions},
-        Consulté le 2 Décembre 2023.
+        \bibitem{fermi2023}
+        Thomas Fermi.
+        Kinematic Bicycle Model.
+        Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
+        Sous licence \textit{Creative Commons Attribution 4.0 International}.
 
-        \bibitem{kicklox}
-        \emph{Kicklox},
-        \url{https://www.kicklox.com/blog-talent/developpeur-logiciel-embarque},
-        Consulté le 2 Décembre 2023.
+        \bibitem{cpp_reference_push_back}
+        Contributeurs de cppreference.com. \\
+        ``\texttt{std::deque::push\_back} - Référence C++''. \\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/deque/push_back}.
 
-        \bibitem{yuhiro}
-        \emph{Yuhiro},
-        \url{https://www.software-developer-india.com/fr/developpeur-de-logiciels-embarques-que-fait-il/},
-        Consulté le 2 Décembre 2023.
+        \bibitem{cpp_reference_pop_front}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::deque::pop\_front} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/deque/pop_front}.
 
-        \bibitem{ti}
-        \emph{Texas Instruments\\},
-        \url{https://news.ti.com/blog/2023/04/07/3-trends-impacting-future-embedded-processing-technology},
-        Consulté le 12 décembre 2023.
+        \bibitem{cpp_reference_vector}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::vector} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/vector/vector}.
 
-        \bibitem{readwrite}
-        \emph{ReadWrite},
-        \url{https://readwrite.com/embedded-systems-and-the-future/},
-        Consulté le 12 décembre 2023.
+        \bibitem{cpp_reference_std_nth_element}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::nth\_element} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/algorithm/nth_element}.
 
+        \bibitem{cpp_reference_std_sort}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::sort} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/algorithm/sort}.
+
+        \bibitem{cpp_reference_std_unordered_map}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unordered\_map} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{cpp_reference_std_unique_ptr}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unique\_ptr} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{documentationSFML}
+        Documentation de la SFML. \\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/}.
+
+        \bibitem{sfml_sf_texture}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::Texture} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1Texture.html}
+
+        \bibitem{sfml_sf_vertexarray}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::VertexArray} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1VertexArray.html}
+
+        \bibitem{stackoverflow_embed_font}
+        Karol Szustakowski (2017).
+        StackOverFlow \\
+        Disponible sur : \url{https://stackoverflow.com/a/45802538}
     \end{thebibliography}
 
 
@@ -217,7 +285,7 @@
 
         Ce rapport présente le développement d'un prototype d'un simulateur de conduite réalisé en C++.
         L'objectif principal est de modéliser de manière réaliste divers scénarios de conduite en développant un modèle de physique réaliste pour avoir une gestion dynamique du véhicule par l'utilisateur.
-        L'architecture modulaire et orientée objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
+        L'architecture modulaire et orienté objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
 
         \bigskip
 

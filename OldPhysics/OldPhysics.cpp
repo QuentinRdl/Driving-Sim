@@ -10,6 +10,14 @@
 #include "../src/Headers/gnuplot-iostream.h"
 #include <cmath>
 
+#include <filesystem>
+
+// Rajouté ici, car pas de fichier header pour OldPhysics
+void plot_etape(
+    std::vector<std::pair<double,double>> vx_data, std::vector<std::pair<double,double>>vy_data,
+    std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
+    std::vector<std::pair<double,double>> slip_data, std::string path);
+
 class OldVehicle {
 public:
     double mass;   // Masse [kg]
@@ -70,68 +78,68 @@ public:
         lacet  += r_dot * dt;
     }
 
-void simulation_etape1() {
-    // Initialisation du véhicule (mass=1700 kg, dist_cog_front_axle=1.5 mass, dist_cog_rear_axle=1.5 mass)
-    OldVehicle myVehicle(1700.0, 1.5, 1.5);
+    void simulation_etape1() {
+        // Initialisation du véhicule (mass=1700 kg, dist_cog_front_axle=1.5 mass, dist_cog_rear_axle=1.5 mass)
+        OldVehicle myVehicle(1700.0, 1.5, 1.5);
 
-    // Paramètres de simulation
-    double Fx = 500.0;     // Force longitudinale (N)
-    double Fy = 200.0;     // Force latérale (N)
-    double torque = -150.0; // Moment de lacet (Nm)
-    double dt = 0.1;       // Pas de temps (s)
-    int steps = 10000;       // Simulation sur 10 secondes
+        // Paramètres de simulation
+        double Fx = 500.0;     // Force longitudinale (N)
+        double Fy = 200.0;     // Force latérale (N)
+        double torque = -150.0; // Moment de lacet (Nm)
+        double dt = 0.1;       // Pas de temps (s)
+        int steps = 10000;       // Simulation sur 10 secondes
 
-    // Vecteurs pour stocker les données : paire (temps, valeur)
-    std::vector<std::pair<double, double>> vx_data, vy_data, r_data;
+        // Vecteurs pour stocker les données : paire (temps, valeur)
+        std::vector<std::pair<double, double>> vx_data, vy_data, r_data;
 
-    // Simulation : enregistrement des états à chaque pas de temps
-    for (int i = 0; i <= steps; ++i) {
-        double t = i * dt;
-        vx_data.push_back({t, myVehicle.vx});
-        vy_data.push_back({t, myVehicle.vy});
-        r_data.push_back({t, myVehicle.lacet});
-        myVehicle.update(dt, Fx, Fy, torque);
+        // Simulation : enregistrement des états à chaque pas de temps
+        for (int i = 0; i <= steps; ++i) {
+            double t = i * dt;
+            vx_data.push_back({t, myVehicle.vx});
+            vy_data.push_back({t, myVehicle.vy});
+            r_data.push_back({t, myVehicle.lacet});
+            myVehicle.update(dt, Fx, Fy, torque);
+        }
+
+        // Création d'un objet Gnuplot
+        Gnuplot gp;
+
+        // Pour vx :
+        gp << "reset\n";
+        gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+        gp << "set output 'vx.png'\n";
+        gp << "set title 'Vitesse Longitudinale (vx)'\n";
+        gp << "set xlabel 'Temps (s)'\n";
+        gp << "set ylabel 'vx (mass/s)'\n";
+        gp << "plot '-' with lines lw 2 title 'vx'\n";
+        gp.send1d(vx_data);
+        gp << "unset output\n";
+        gp.flush();
+
+        // Pour vy :
+        gp << "reset\n";
+        gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+        gp << "set output 'vy.png'\n";
+        gp << "set title 'Vitesse Latérale (vy)'\n";
+        gp << "set xlabel 'Temps (s)'\n";
+        gp << "set ylabel 'vy (mass/s)'\n";
+        gp << "plot '-' with lines lw 2 title 'vy'\n";
+        gp.send1d(vy_data);
+        gp << "unset output\n";
+        gp.flush();
+
+        // Pour lacet :
+        gp << "reset\n";
+        gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+        gp << "set output 'lacet.png'\n";
+        gp << "set title 'Taux de Lacet (lacet)'\n";
+        gp << "set xlabel 'Temps (s)'\n";
+        gp << "set ylabel 'lacet (rad/s)'\n";
+        gp << "plot '-' with lines lw 2 title 'lacet'\n";
+        gp.send1d(r_data);
+        gp << "unset output\n";
+        gp.flush();
     }
-
-    // Création d'un objet Gnuplot
-    Gnuplot gp;
-
-    // Pour vx :
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'vx.png'\n";
-    gp << "set title 'Vitesse Longitudinale (vx)'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'vx (mass/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'vx'\n";
-    gp.send1d(vx_data);
-    gp << "unset output\n";
-    gp.flush();
-
-    // Pour vy :
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'vy.png'\n";
-    gp << "set title 'Vitesse Latérale (vy)'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'vy (mass/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'vy'\n";
-    gp.send1d(vy_data);
-    gp << "unset output\n";
-    gp.flush();
-
-    // Pour lacet :
-    gp << "reset\n";
-    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
-    gp << "set output 'lacet.png'\n";
-    gp << "set title 'Taux de Lacet (lacet)'\n";
-    gp << "set xlabel 'Temps (s)'\n";
-    gp << "set ylabel 'lacet (rad/s)'\n";
-    gp << "plot '-' with lines lw 2 title 'lacet'\n";
-    gp.send1d(r_data);
-    gp << "unset output\n";
-    gp.flush();
-}
 
     // Constructeur étape 2
     OldVehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
@@ -193,6 +201,40 @@ void simulation_etape1() {
         // Mise dist_cog_front_axle jour des positions globales par intégration :
         x += v_global_x * dt;
         y += v_global_y * dt;
+    }
+
+    void etape2() {
+        // Initialisation du véhicule avec modèle Bicycle
+        // Paramètres : Masse = 1700 kg, dist_cog_front_axle = 1.5 mass, dist_cog_rear_axle = 1.5 mass, airResCoeff = 0.5, Cx = 150000 N, Cy = 40000 N/rad
+        OldVehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0);
+
+        double dt = 0.2;
+        int steps = 1000;
+        // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
+        double delta = 0.05; // en radians
+        double slip  = 0.1;  // valeur de glissement
+
+        // Vecteurs pour stocker les données (temps, valeur)
+        std::vector<std::pair<double,double>> vx_data, vy_data, r_data, slip_data;
+        std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
+
+
+        for (int i = 0; i <= steps; ++i) {
+            if (i == 500) {
+                delta = -delta;
+            }
+            double t = i * dt;
+            vx_data.emplace_back(t, myVehicle.vx);
+            vy_data.emplace_back(t, myVehicle.vy);
+            r_data.emplace_back(t, myVehicle.lacet);
+            traj_data.emplace_back(myVehicle.x, myVehicle.y);
+            slip_data.emplace_back(t, myVehicle.slip);
+
+            // Mise à jour de la dynamique avec le modèle Bicycle
+            myVehicle.updateBicycle(dt, delta, slip);
+        }
+
+        plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../OldPhysics/Images/Etape2");
     }
 
     void updateBicycleEtape3(double dt, double delta) {
@@ -453,7 +495,7 @@ void plot_etape(
     std::vector<std::pair<double,double>>r_data, std::vector<std::pair<double,double>> traj_data,
     std::vector<std::pair<double,double>> slip_data, std::string path)
     {
-    // Création d'un objet Gnuplot pour générer les fichiers images
+
     Gnuplot gp;
     // Plot de vx
     gp << "reset\n";
@@ -525,38 +567,6 @@ void plot_etape(
 
 
 
-void etape2() {
-    // Initialisation du véhicule avec modèle Bicycle
-    // Paramètres : Masse = 1700 kg, dist_cog_front_axle = 1.5 mass, dist_cog_rear_axle = 1.5 mass, airResCoeff = 0.5, Cx = 150000 N, Cy = 40000 N/rad
-    OldVehicle myVehicle(1700.0, 1.5, 1.5, 0.5, 150000.0, 40000.0);
-
-    double dt = 0.2;
-    int steps = 1000;
-    // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
-    double delta = 0.05; // en radians
-    double slip  = 0.1;  // valeur de glissement
-
-    // Vecteurs pour stocker les données (temps, valeur)
-    std::vector<std::pair<double,double>> vx_data, vy_data, r_data, slip_data;
-    std::vector<std::pair<double,double>> traj_data; // Pour stocker les données relatives à la trajectoire du véhicule
-
-
-    for (int i = 0; i <= steps; ++i) {
-        if (i == 500) {
-            delta = -delta;
-        }
-        double t = i * dt;
-        vx_data.push_back({t, myVehicle.vx});
-        vy_data.push_back({t, myVehicle.vy});
-        r_data.push_back({t, myVehicle.lacet});
-        traj_data.push_back({myVehicle.x, myVehicle.y});
-
-        // Mise à jour de la dynamique avec le modèle Bicycle
-        myVehicle.updateBicycle(dt, delta, slip);
-    }
-
-    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "Images/Etape2");
-}
 
 void etape3() {
     // Initialisation du véhicule avec modèle Bicycle
@@ -646,9 +656,9 @@ void etape4() {
 
 
 int main() {
-    OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
-    myVehicle.simulation_etape1();
-    // etape2();
+     OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
+    // myVehicle.simulation_etape1();
+    myVehicle.etape2();
     // etape3();
     // etape4();
     return 0;

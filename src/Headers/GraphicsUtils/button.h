@@ -55,8 +55,9 @@ public:
      * @return true if the button is clicked, false otherwise
      */
     bool isClicked(const sf::RenderWindow& window) const {
-        printf("isClicked called \n");
-        return shape.getGlobalBounds().contains(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+        const sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window),
+                                                                    window.getDefaultView());
+        return shape.getGlobalBounds().contains(mousePos);
     }
 };
 

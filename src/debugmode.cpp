@@ -69,13 +69,13 @@ void DebugMode::update(const Car *car) {
     addLine("", 10);
     addLine("Variables:", 25, gray);
     addLine("Position (X/Y): " + round(v->x, 1) + " / " + round(v->y, 1), 20);
-    addLine("Speed (km/h): " + round(v->vx*3.6), 20);
+    addLine("Speed (in km/h): " + round(v->vx*3.6), 20);
     addLine("Heading (in deg): " + round(std::fmod(radToDeg(v->psi), 360.0f)), 20); // heading in ° mod 360
     addLine("Steering Wheel (in deg): " + round(car->getSteeringAngle()), 20);
     addLine("Lacet (in deg/s): " + round(radToDeg(v->lacet)), 20); // Lacet in ° mod 360
 }
 
-void DebugMode::addLine(const std::string &content, const uint size, const sf::Color &color) {
+void DebugMode::addLine(const std::string &content, const unsigned int size, const sf::Color &color) {
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(size);
