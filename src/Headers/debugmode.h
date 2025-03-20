@@ -18,7 +18,7 @@ class DebugMode {
      * @param size
      * @param color
      */
-    void addLine(const std::string &content, uint size = 20, const sf::Color &color = sf::Color::White);
+    void addLine(const std::string &content, unsigned int size = 20, const sf::Color &color = sf::Color::White);
 
 public:
     /**
