@@ -147,6 +147,7 @@ Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient le
     \item \texttt{SEGMENT\_S\_TURN} : Un virage en S (plus communément appllé une chicane)
     \item \texttt{SEGMENT\_U\_TURN} : Un virage en U\@.
     \item \texttt{CAR} : La texture de la voiture.
+\end{itemize}
 
 \paragraph{La police d'écriture}
 La police d'écriture utilisée dans le projet est la \textit{DejaVu Sans Mono}.
@@ -157,16 +158,11 @@ Nous avons généré un fichier C++ contenant les données binaires de la police
 xxd -i DejaVuSansMono.ttf > dejavu_sans_mono_ttf.cpp
 \end{lstlisting}
 Cette commande convertit le fichier binaire de la police d'écriture en un tableau de bytes C++ que nous pouvons inclure directement dans notre projet.
-Le fichier généré ressemble à ceci :
-\begin{lstlisting}[style=CStyle,label={lst:example_generated_from_xxd_i}]
-#include "dejavu_sans_mono_ttf.h"
-
-unsigned char dejavu_sans_mono_ttf[] = {
-  // Données binaires de la police d'écriture
-};
-
-unsigned int dejavu_sans_mono_ttf_len = 343140;
-\end{lstlisting}
+Le fichier généré contient deux éléments :
+\begin{itemize}
+    \item Un tableau de bytes contenant les données binaires de la police d'écriture.
+    \item La taille du tableau de bytes.
+\end{itemize}
 Cette solution, trouvée sur Stack Overflow\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
 
 \paragraph{Gestionnaire de ressources}
