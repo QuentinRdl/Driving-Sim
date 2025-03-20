@@ -1,14 +1,9 @@
 #include "debugmode.h"
 
 #include <cmath>
-#include "dejavu_sans_mono_ttf.h"
 #include "calculationhelper.h"
 
-DebugMode::DebugMode(): enabled(false) {
-    if (!font.loadFromMemory(dejavu_sans_mono_ttf, dejavu_sans_mono_ttf_len)) {
-        throw std::runtime_error("Failed to load Arial font from memory.");
-    }
-}
+DebugMode::DebugMode(const FontManager& font_manager): font(font_manager.getFont()), enabled(false) {}
 
 void DebugMode::toggle() {
     enabled = !enabled;

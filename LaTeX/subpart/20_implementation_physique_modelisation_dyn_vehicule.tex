@@ -84,7 +84,7 @@ void simulation_etape1() {
     for (int i = 0; i <= steps; ++i) {
         vx_data.push_back({t, myVehicle.vx});
         vy_data.push_back({t, myVehicle.vy});
-        r_data.push_back({t, myVehicle.lacet
+        r_data.push_back({t, myVehicle.lacet});
         myVehicle.update(dt, Fx, Fy, torque);
     }
     // ... Plot des donnees stockees dans les vecteurs avec Gnuplot

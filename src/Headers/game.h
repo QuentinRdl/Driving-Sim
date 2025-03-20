@@ -5,12 +5,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+#include "button.h"
 #include "car.h"
 #include "circuit.h"
 #include "fpscounter.h"
 #include "texturemanager.h"
 #include "calculationhelper.h"
 #include "debugmode.h"
+#include "fontmanager.h"
+#include "SoftwareState.h"
 
 /**
  * Class that acts as the game engine.
@@ -19,10 +22,22 @@
 class Game final {
 
     sf::Event event{};
+    SoftwareState software_state;
+    FontManager font_manager;
     float zoom_factor;
 
     FPSCounter fps_counter;
     DebugMode debug_mode;
+
+    /* Main Menu Part */
+    std::vector<sf::Text> main_menu_texts;
+    Button play_button;
+
+    /* Pause Menu Part */
+    std::vector<sf::Text> pause_menu_texts;
+    Button resume_button;
+
+    /* Play Part */
     std::unique_ptr<Circuit> circuit;
     std::unique_ptr<Car> car;
     std::unique_ptr<sf::RenderWindow> window;
@@ -36,7 +51,6 @@ public:
     TextureManager texture_manager;
 
     Game();
-
     ~Game();
 
     void manageEvents();
@@ -46,13 +60,18 @@ public:
     [[nodiscard]] float getZoomFactor() const;
 
     void update();
-    void updateCircuit() const;
-
     void render() const;
 
     // Accessors
     [[nodiscard]] bool running() const;
 
+private:
+
+    void updateCircuit() const;
+    void renderMainMenu() const;
+
+    void prepare_main_menu();
+    void prepare_pause_menu();
 };
 
 #endif //GAME_H

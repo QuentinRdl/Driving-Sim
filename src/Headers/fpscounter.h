@@ -2,13 +2,13 @@
 #define FPSCOUNTER_H
 
 #include <SFML/Graphics.hpp>
+#include "fontmanager.h"
 
 
 class FPSCounter {
     float timeAccumulator;
     int frameCount;
     int currentFPS;
-    sf::Font font;
     sf::Text text;
 
     bool enabled;
@@ -17,7 +17,7 @@ public:
     /**
      * Constructor
      */
-    FPSCounter();
+    explicit FPSCounter(const FontManager& font_manager);
 
     /**
      * Update the FPS counter<br>

@@ -3,11 +3,10 @@
 
 #include <iostream>
 
-FPSCounter::FPSCounter(): timeAccumulator(0.f), frameCount(0), currentFPS(0), enabled(true) {
-    if (!font.loadFromMemory(dejavu_sans_mono_ttf, dejavu_sans_mono_ttf_len)) {
-        throw std::runtime_error("Failed to load Arial font from memory.");
-    }
-    text.setFont(font);
+#include "fontmanager.h"
+
+FPSCounter::FPSCounter(const FontManager& font_manager): timeAccumulator(0.f), frameCount(0), currentFPS(0), enabled(true) {
+    text.setFont(font_manager.getFont());
     text.setCharacterSize(20);
     text.setFillColor(sf::Color::White);
     text.setPosition(10.f, 10.f);

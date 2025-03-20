@@ -39,8 +39,6 @@ class Car {
         if (dtBuffer.size() > max_dt_buffer_size) {
             // O(1) to remove the first element of the deque cf https://en.cppreference.com/w/cpp/container/deque/pop_front#:~:text=Complexity-,Constant.,-Example
             dtBuffer.pop_front();
-        } else {
-            printf("dtBuffer size / max: %zu / %zu\n", dtBuffer.size(), max_dt_buffer_size);
         }
         if constexpr (false) { // change this to true to use the old implementation
             /**
