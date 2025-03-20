@@ -28,8 +28,31 @@
     numberstyle=\tiny\color{gray},
     stepnumber=1,
     breaklines=true,
-    frame=single
+    frame=single,
+    inputencoding=utf8,
+    extendedchars=\true,
+    literate={é}{{\'e}}1
+             {è}{{\`e}}1
+             {à}{{\`a}}1
+             {ê}{{\^e}}1
+             {ô}{{\^o}}1
+             {ù}{{\`u}}1
 }
+
+\lstdefinestyle{BashStyle}{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single,
+    morekeywords={sudo,apt,echo,ls,cd,mkdir,rm,mv,cp,chmod,chown,grep,awk,sed,tar,zip,unzip,xxd}
+}
+
 
 
 \def\UrlBreaks{\do\/\do-}
@@ -226,6 +249,16 @@
         Contributeurs de cppreference.com.\\
         ``\texttt{std::sort} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/algorithm/sort}.
+
+        \bibitem{sfml_sf_texture}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::Texture} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1Texture.html}
+
+        \bibitem{stackoverflow_embed_font}
+        Karol Szustakowski (2017).
+        StackOverFlow \\
+        Disponible sur : \url{https://stackoverflow.com/a/45802538}
     \end{thebibliography}
 
 
