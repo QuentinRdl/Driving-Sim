@@ -82,10 +82,10 @@
 \fancyhead[L]{Romain GALLAND | Quentin RADLO}
 \fancyhead[R]{Université Marie \& Louis Pasteur}
 \renewcommand\footrulewidth{1pt}
-\fancyfoot[L]{}
+\fancyfoot[L]{ }
 \fancyfoot[C]{Rapport de Projet - Simulateur de conduite\\
 \textbf{Page \thepage/\pageref{LastPage}}}
-\fancyfoot[R]{}
+\fancyfoot[R]{ }
 \geometry{
     bindingoffset=1cm,  % Décalage pour la reliure
     left=2cm,
@@ -177,22 +177,13 @@
     \textbf{SS2I :} Société de Services en Ingénierie Informatique.
 
     \newpage
-%    TODO UNCOMMENT THESE PARTS
-    \section{Sujet du projet}\label{sec:sujet-du-projet}
-    \input{subpart/10_sujet_du_projet}
-    \newpage
+    \include{subpart/10_sujet_du_projet}
 
-    \section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
-    \input{subpart/20_implementation_physique_modelisation_dyn_vehicule}
-    \newpage
+    \include{subpart/20_implementation_physique_modelisation_dyn_vehicule}
 
-    \section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
-    \input{subpart/30_implementation_interface_graphique}
-    \newpage
+    \include{subpart/30_implementation_interface_graphique}
 
-    \section{Bilan Technique}\label{sec:bilan-technique}
-    \input{subpart/40_bilan_technique}
-    \newpage
+    \include{subpart/40_bilan_technique}
 
 
     \begin{thebibliography}{9}
@@ -206,12 +197,12 @@
         Tyre Slip Angle – 2 Clear Explanations.
         Disponible à l'adresse : \url{https://www.yourdatadriven.com/tyre-slip-angle-explained}.
 
-
         \bibitem{vtech}
         Virginia Tech University.
         Chapter 2, Vehicle Dynamics Modeling.
         Disponible à l'adresse : \url{https://vtechworks.lib.vt.edu/server/api/core/bitstreams/fe6d4ca1-514b-4e2b-b1ac-6561824a9de1/content}.
         Sous licence \textit{Creative Commons Attribution 4.0 International}.
+
         \bibitem{VDS_MathWorks}
         MathWorks.
         Modeling a Vehicle Dynamics System.

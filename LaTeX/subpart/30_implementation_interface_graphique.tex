@@ -1,3 +1,4 @@
+\section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
 \subsection{Bibliothèques utilisées (SFML)}\label{subsec:sfml}
 SFML (\textit{Simple and Fast Multimedia Library}) est une bibliothèque C++ qui permet de créer des applications multimédia.
 Elle est particulièrement adaptée pour le développement de jeux vidéo et d'applications graphiques.
@@ -185,7 +186,7 @@ Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le proce
     Ce segment précédent fournit la position finale (stockée dans \texttt{realPoint2}) qui sera utilisée comme point de départ pour le nouveau segment.
 
     \item \textbf{Génération et configuration de la texture :}
-    À l'aide de la fonction \texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
+    À l'aide de la fonction \\\texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
     Ensuite, la texture (via son sprite) est mise à l’échelle en fonction du facteur de zoom courant (\texttt{game->getZoomFactor()}) pour garantir une cohérence visuelle.
 
     \item \textbf{Alignement du nouveau segment :}
@@ -196,8 +197,8 @@ Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le proce
     \item \textbf{Calcul du point de raccord final avec rotation :}
     Afin de déterminer la position finale du nouveau segment, on calcule un décalage à partir de sa position initiale.
     \begin{itemize}
-        \item On commence par obtenir la position globale du sprite via \texttt{spr->getGlobalBounds().getPosition()}.
-        \item Ce point est ensuite ajusté en y ajoutant l'offset correspondant à \texttt{road\_texture.point2} (après application du zoom), ce qui permet d'estimer où devrait se trouver la fin du segment sans rotation.
+        \item On commence par obtenir la position globale du sprite via \\\texttt{spr->getGlobalBounds().getPosition()}.
+        \item Ce point est ensuite ajusté en y ajoutant l'offset correspondant à \\\texttt{road\_texture.point2} (après application du zoom), ce qui permet d'estimer où devrait se trouver la fin du segment sans rotation.
         \item Ensuite, la fonction \texttt{rotatePoint()} est utilisée pour faire pivoter ce point autour du point de raccord initial (\texttt{fromPoint2}) selon l'angle spécifié.
         Le résultat est le nouveau point final (\texttt{rotatedPoint}) qui définit l'orientation et l'emplacement du bout du segment après application de la rotation.
     \end{itemize}

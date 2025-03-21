@@ -8,15 +8,16 @@ if [ ! -f "${TEX_FILE}.tex" ]; then
     exit 1
 fi
 
+#rm -rf "$OUT_DIR/*.pdf"
+
 mkdir -p "$OUT_DIR"
 
-pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
+# Utilisation de latexmk pour compiler en PDF avec les passes nécessaires (bibtex, glossaires, etc.)
+latexmk -pdf -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
+EXIT_CODE=$?
 
-# bibtex "$OUT_DIR/${TEX_FILE}"
-# makeglossaries "$OUT_DIR/${TEX_FILE}"
+# On supprime tout les fichiers excepter le PDF
+#find "$OUT_DIR" -type f ! -name "${TEX_FILE}.pdf" -delete
 
-pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
-pdflatex -interaction=nonstopmode -output-directory="$OUT_DIR" "${TEX_FILE}.tex"
-echo "Le processus de compilation s'est terminé. Voici l'exit code de la dernière commande : $?"
-sleep 10
-exit 0
+echo "Le processus de compilation s'est terminé. Voici l'exit code de la dernière commande : ${EXIT_CODE}"
+exit $EXIT_CODE
