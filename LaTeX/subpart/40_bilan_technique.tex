@@ -53,4 +53,23 @@ Pour compiler le projet, il est nécessaire d'installer les dépendances suivant
 \end{itemize}
 
 \subsubsection{Installation}\label{subsubsec:installation}
-% [Cette partie sera rédigée en détail dans la suite du document pour guider l'installation du projet sur les différents environnements de développement.]
+Le projet est disponible sur \gls{github} à l'adresse suivante : \url{https://github.com/QuentinRdl/Driving-Sim/}.
+
+Pour l'installer, il est nécessaire de cloner le dépôt, et de construire les executables correspondants aux différentes parties du projet grâce à ces commandes :
+
+\begin{lstlisting}[style=bashStyle,label={lst:build}]
+git clone 'https://github.com/QuentinRdl/Driving-Sim.git'
+cd Driving-Sim
+mkdir build
+cd build
+cmake ..
+make
+\end{lstlisting}
+
+Une fois fait, il est possible de lancer les différents exécutables :
+\begin{itemize}
+    \item \texttt{Driving\_Sim} : pour le simulateur de conduite.
+    \item \texttt{drivingSim\_test} : pour les tests unitaires.
+    \item \texttt{drivingSim\_plot} : pour la génération des graphiques.
+\end{itemize}
+
