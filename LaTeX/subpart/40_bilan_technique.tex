@@ -1,17 +1,29 @@
-\section{Bilan Technique}
+\section{Bilan Technique}\label{sec:bilan-technique}
 
-\subsection{Problèmes rencontrés et surmontés}
+\subsection{Problèmes rencontrés et surmontés}\label{subsec:problemes-rencontres-et-surmontes}
 Durant le développement du simulateur de conduite, plusieurs difficultés ont été rencontrées.
-Tout d'abord, il a fallu se familiariser avec la bibliothèque SFML, qui était totalement inconnue pour nous, et imaginer une interface graphique adaptée.
-De plus, l'utilisation du fichier \texttt{CMakeLists.txt} pour gérer les bibliothèques et la création des différents exécutables a représenté un défi technique supplémentaire.
-Enfin, la gestion du temps s'est avérée délicate, notamment en raison de la charge liée aux autres projets universitaires en cours.
 
-\subsection{Retour sur les technologies utilisées}
+\subsubsection{Git}\label{subsubsec:git}
+Lors des différentes phases de développement, nous avons travailler avec \gls{git} sur plusieurs \gls{git_branches} pour éviter les conflits de code si plusieurs personnes travaillaient sur le même fichier.
+Malgrès tout, nous avons rencontré des conflits de code à certains moments, notamment lors de la fusion de branches.
+Plus le temps passait, moins nous avions de conflits, car nous avons appris à mieux gérer les \gls{git_branches} et à mieux communiquer entre nous.
+
+\subsubsection{CMake}\label{subsubsec:cmake}
+L'utilisation du fichier \texttt{CMakeLists.txt} pour gérer les bibliothèques et la création des différents exécutables a représenté un défi technique supplémentaire.
+Les problèmes que nous avons pu rencontrer venaient principalement du fait que nous ne travaillons pas sur les mêmes systèmes d'exploitations.
+Tout les deux sur un environnement Linux, mais l'un travaillait depuis un environnement \gls{arch-linux} et l'autre depuis un environnement \gls{ubuntu}, ce qui créait des différences dans la gestion de certaines bibliothèques.
+
+\subsubsection{SFML}\label{subsubsec:SFML}
+Tout d'abord, il a fallu se familiariser avec la bibliothèque SFML, qui était totalement inconnue pour nous, et imaginer une interface graphique adaptée.
+
+\subsubsection{La gestion du temps}\label{subsubsec:la-gestion-du-temps}
+
+\subsection{Retour sur les technologies utilisées}\label{subsec:retour-sur-les-technologies-utilisees}
 Le choix du langage C++ s'est révélé très judicieux du fait de sa polyvalence.
 Bien que notre connaissance initiale du langage ait constitué une limite, ce projet nous a permis de progresser significativement dans sa maîtrise.
 L'utilisation de SFML a également été un atout majeur, facilitant le développement d'applications graphiques sans nécessiter l'emploi de techniques excessivement complexes.
 
-\subsection{Perspectives d'améliorations}
+\subsection{Perspectives d'améliorations}\label{subsec:perspectives-d'ameliorations}
 Pour les futures itérations du projet, plusieurs axes d'amélioration ont été identifiés :
 \begin{itemize}
     \item Enrichir la diversité des circuits proposés pour varier l'expérience de conduite.
@@ -19,10 +31,22 @@ Pour les futures itérations du projet, plusieurs axes d'amélioration ont été
     \item Rendre le modèle physique encore plus réaliste en intégrant des phénomènes supplémentaires et en affinant les paramètres.
 \end{itemize}
 
-\subsection{Ce que nous ferions différemment}
+\subsection{Ce que nous ferions différemment}\label{subsec:ce-que-nous-ferions-differemment}
 Avec le recul, nous aurions intégré dès le départ des tests unitaires et des tests d'intégration afin de détecter plus tôt les erreurs et d'améliorer la robustesse du code.
 Une phase de planification et de prototypage plus approfondie aurait permis de réduire les imprévus liés à l'apprentissage de nouvelles bibliothèques, notamment SFML.
 Ce changement méthodologique aurait sans doute accéléré le développement et renforcé la qualité du produit final.
 
-\subsection{Mise en route du projet}
-\texttt{A rédiger: Instruction de compilation ...}
+\subsection{Mise en route du projet}\label{subsec:mise-en-route-du-projet}
+\subsubsection{Dépendances}\label{subsubsec:dependances}
+Pour compiler le projet, il est nécessaire d'installer certaines dépendances, les voici:
+
+\begin{itemize}
+    \item \textbf{Un Compilateur supportant C++17}, pour la compilation, par exemple: \texttt{g++} ou \texttt{clang++}
+    \item \texttt{cmake}, en version 3.30 ou supérieur, pour la gestion de la compilation
+    \item \texttt{SFML}, en version 2.5, pour la gestion de l'interface graphique
+    \item \texttt{gnuplot}, pour la génération des graphiques
+    \item \texttt{GoogleTest}, installer automatiquement par le fichier \texttt{CMakeLists.txt}, pour les tests unitaires
+    \item \texttt{Boost},
+\end{itemize}
+
+\subsubsection{Installation}\label{subsubsec:installation}

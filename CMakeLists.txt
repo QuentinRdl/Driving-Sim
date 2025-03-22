@@ -30,7 +30,6 @@ add_executable(Driving_Sim
         src/Headers/plotting.h
         src/Headers/gnuplot-iostream.h
         src/plotting.cpp
-        OldPhysics/OldPhysics.cpp     # Ajout du fichier OldPhysics.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
@@ -53,7 +52,7 @@ add_custom_command(TARGET Driving_Sim POST_BUILD
 # Ajout de l'exécutable de tests avec GoogleTest
 # ------------------------------------------------------------------
 
-include(FetchContent)
+include(FetchContent )
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git

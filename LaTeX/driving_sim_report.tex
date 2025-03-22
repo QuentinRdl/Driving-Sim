@@ -124,34 +124,49 @@
     description={Outil de configuration et de gestion de compilation des projets C++.}
 }
 
+\newglossaryentry{sprite}{
+    name={sprite},
+    description={}
+}
+
 \newglossaryentry{std_deque}{
-    name={\texttt{std::deque}},
+    name={std::deque},
     description={Structure de données de la STL C++ utilisée pour gérer une file de deltas de temps.}
 }
 
 \newglossaryentry{std_vector}{
-    name={\texttt{std::vector}},
+    name={std::vector},
     description={Conteneur dynamique de la STL C++ servant à stocker des données, par exemple, les points de la trajectoire prédictive.}
 }
 
 \newglossaryentry{std_nth_element}{
-    name={\texttt{std::nth\_element}},
+    name={std::nth\_element},
     description={Algorithme de la STL C++ permettant d’obtenir efficacement l’élément médian dans un conteneur non trié.}
 }
 
 \newglossaryentry{std_sort}{
-    name={\texttt{std::sort}},
+    name={std::sort},
     description={Algorithme de tri de la STL C++ utilisé pour ordonner les éléments d’un conteneur.}
 }
 
 \newglossaryentry{std_unordered_map}{
-    name={\texttt{std::unordered\_map}},
+    name={std::unordered\_map},
     description={Structure de données de la STL C++ qui associe des clés à des valeurs, utilisée pour la gestion des ressources (textures, etc.).}
 }
 
 \newglossaryentry{std_unique_ptr}{
-    name={\texttt{std::unique\_ptr}},
+    name={std::unique\_ptr},
     description={Pointeur intelligent de la STL C++ assurant la gestion automatique de la mémoire pour des objets, par exemple, la police de caractères.}
+}
+
+\newglossaryentry{git}{
+    name={Git},
+    description={Système de gestion de versions distribué, utilisé pour le suivi des modifications du code source.}
+}
+
+\newglossaryentry{git_branches}{
+    name={Branches},
+    description={Branches de développement dans Git, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale.}
 }
 
 
@@ -284,15 +299,14 @@
     \newpage
     \tableofcontents
 
-    \glsaddall
-    \printglossaries
-    \newpage
-
     \include{subpart/10_sujet_du_projet}
     \include{subpart/20_implementation_physique_modelisation_dyn_vehicule}
     \include{subpart/30_implementation_interface_graphique}
     \include{subpart/40_bilan_technique}
 
+    \glsaddall
+    \printglossaries
+    \newpage
 
     \begin{thebibliography}{9}
         \bibitem{euler_explicite}

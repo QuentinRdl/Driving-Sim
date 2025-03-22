@@ -61,7 +61,7 @@ circuit.join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 180);
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{resources/example_circuit_1} % TODO FIX PATH
+    \includegraphics[width=0.5\textwidth]{resources/example_circuit_1}
     \caption{Exemple de circuit pouvant être généré grâce à la classe Circuit}
     \label{fig:example_circuit_1}
 \end{figure}
@@ -174,7 +174,7 @@ struct RoadTexture {
 Elle contient 4 éléments :
 \begin{itemize}
     \item \texttt{texture} : Un pointeur vers la texture de la route chargée par le \texttt{TextureManager}.
-    \item \texttt{sprite} : Le sprite associé à la texture, utilisé pour le rendu. % TODO sprite => glossaire.
+    \item \texttt{sprite} : Le \gls{sprite} associé à la texture, utilisé pour le rendu.
     \item \texttt{point1} et \texttt{point2} : Deux positions relatives à la texture représentant les points de connexion entre deux segments de route.
 \end{itemize}
 
@@ -187,24 +187,24 @@ Lorsque l'on ajoute un nouveau segment via la fonction \texttt{join()}, le proce
 
     \item \textbf{Génération et configuration de la texture :}
     À l'aide de la fonction \\\texttt{generate\_road\_texture()}, on crée la texture du nouveau segment en passant par le gestionnaire de textures, tout en tenant compte des éventuelles opérations de mirroring (horizontal et/ou vertical).
-    Ensuite, la texture (via son sprite) est mise à l’échelle en fonction du facteur de zoom courant (\texttt{game->getZoomFactor()}) pour garantir une cohérence visuelle.
+    Ensuite, la texture (via son \gls{sprite}) est mise à l’échelle en fonction du facteur de zoom courant (\texttt{game->getZoomFactor()}) pour garantir une cohérence visuelle.
 
     \item \textbf{Alignement du nouveau segment :}
-    Pour assurer la continuité, l'origine du sprite du nouveau segment est fixée au point de connexion de départ (\texttt{road\_texture.point1}).
-    Le sprite est ensuite positionné exactement à l'endroit où se termine le segment précédent (\texttt{fromPoint2}).
+    Pour assurer la continuité, l'origine du \gls{sprite} du nouveau segment est fixée au point de connexion de départ (\texttt{road\_texture.point1}).
+    Le \gls{sprite} est ensuite positionné exactement à l'endroit où se termine le segment précédent (\texttt{fromPoint2}).
     Cela garantit que le nouveau segment démarre précisément à la fin du précédent.
 
     \item \textbf{Calcul du point de raccord final avec rotation :}
     Afin de déterminer la position finale du nouveau segment, on calcule un décalage à partir de sa position initiale.
     \begin{itemize}
-        \item On commence par obtenir la position globale du sprite via \\\texttt{spr->getGlobalBounds().getPosition()}.
+        \item On commence par obtenir la position globale du \gls{sprite} via \\\texttt{spr->getGlobalBounds().getPosition()}.
         \item Ce point est ensuite ajusté en y ajoutant l'offset correspondant à \\\texttt{road\_texture.point2} (après application du zoom), ce qui permet d'estimer où devrait se trouver la fin du segment sans rotation.
         \item Ensuite, la fonction \texttt{rotatePoint()} est utilisée pour faire pivoter ce point autour du point de raccord initial (\texttt{fromPoint2}) selon l'angle spécifié.
         Le résultat est le nouveau point final (\texttt{rotatedPoint}) qui définit l'orientation et l'emplacement du bout du segment après application de la rotation.
     \end{itemize}
 
     \item \textbf{Application de la rotation et ajout du segment :}
-    Une fois le point final calculé, le sprite est tourné à l’angle désiré (en veillant à appliquer la rotation après le calcul afin d’éviter une double rotation).
+    Une fois le point final calculé, le \gls{sprite} est tourné à l’angle désiré (en veillant à appliquer la rotation après le calcul afin d’éviter une double rotation).
     Finalement, le segment (contenant la texture, la rotation, le point de départ et le point final calculé) est ajouté à la liste des segments du circuit.
 \end{enumerate}
 
@@ -219,7 +219,7 @@ Bien que l'interface graphique et la simulation physique soient implémentées d
 
 \begin{itemize}
     \item \textbf{Mise à jour en temps réel :} La classe \texttt{Car} interroge en continu le modèle physique (géré par la classe \texttt{Vehicle}) pour récupérer les données essentielles telles que la position, la vitesse, l'orientation et la trajectoire prédictive.
-    Ces informations sont immédiatement utilisées pour actualiser le sprite du véhicule ainsi que la ligne de prédiction affichée.
+    Ces informations sont immédiatement utilisées pour actualiser le \gls{sprite} du véhicule ainsi que la ligne de prédiction affichée.
     \item \textbf{Synchronisation et cohérence visuelle :} Les calculs physiques (notamment via l'intégration numérique de la dynamique du véhicule) génèrent des états qui sont transmis à l'interface graphique.
     Cela garantit que l'affichage du véhicule, de ses effets et de sa trajectoire reflète précisément l'évolution dynamique simulée.
     \item \textbf{Traçage de la trajectoire prédictive :} En parallèle, la classe \texttt{Car} calcule une trajectoire prédictive basée sur les itérations futures de la dynamique physique.
@@ -261,7 +261,7 @@ void DebugMode::addLine(const std::string &content, const unsigned int size, con
 \end{lstlisting}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{resources/example_debug_mode_1} % TODO FIX PATH
+    \includegraphics[width=0.5\textwidth]{resources/example_debug_mode_1}
     \caption{Exemple de mode Debug}
     \label{fig:debug_mode}
 \end{figure}
@@ -294,8 +294,15 @@ Lorsque l'accumulateur de temps dépasse 1 seconde, on met à jour le nombre d'i
 Dans notre simulateur, la trajectoire prédictive joue un rôle clé en offrant à l'utilisateur une estimation visuelle de l'évolution future du véhicule en fonction de son état dynamique actuel.
 Cette fonctionnalité permet non seulement de mieux comprendre l'impact immédiat des commandes de conduite, mais aussi d'anticiper les conséquences de ces actions sur le comportement global du véhicule.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{resources/example_prediction_line_1}
+    \caption{Exemple de ligne de prédiction des mouvements.}
+    \label{fig:prediction_line}
+\end{figure}
+
 \paragraph{Calcul de la trajectoire prédictive}
-Pour obtenir la trajectoire prédictive, nous simulons l'évolution du véhicule en itérant la dynamique physique sur plusieurs pas de temps.
+Pour obtenir la trajectoire prédictive, nous simulons l'évolution du véhicule en itérant la dynamique physique sur plusieurs pas de temps à chaque image.
 La fonction \texttt{computePredictionLine} procède de la manière suivante :
 \begin{itemize}
     \item Le delta de temps utilisé pour ces itérations est déterminé de manière robuste grâce à la fonction \texttt{updateAndGetMedian} (définition dans le paragraphe \textbf{La classe Car} :~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
@@ -330,14 +337,13 @@ Dans le simulateur, on peut distinguer deux vues :
     \item \textbf{HUD View} : Cette vue affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
 \end{itemize}
 
-Cela nous permet de faire varier tous les éléments d'une vue sans affecter l'autre.
 C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la HUD View.
 
 \subsubsection{Optimisations mises en œuvre}\label{subsubsec:optimisations-mises-en-oeuvre}
 Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
 \begin{itemize}
     \item \textbf{Calcul du circuit} : Le circuit est calculé une première fois, puis stocké dans un tableau de segments de route (\texttt{std::vector<RoadSegment>}\cite{cpp_reference_vector}).
-    Lorsque le circuit a besoin d'être recalculé, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
+    Lorsque le circuit a besoin d'être recalculé, par exemple lors d'une modification du zoom, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
     \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
     \item \textbf{Gestion efficace de la vue} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
 \end{itemize}

@@ -655,11 +655,11 @@ void etape4() {
 
 
 
-int main() {
-     OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
-    // myVehicle.simulation_etape1();
-    myVehicle.etape2();
-    // etape3();
-    // etape4();
-    return 0;
-}
+// int main() {
+//      OldVehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0, 2, 2, 2, 0.9, 0.9, 9.81);
+//     // myVehicle.simulation_etape1();
+//     myVehicle.etape2();
+//     // etape3();
+//     // etape4();
+//     return 0;
+// }
