@@ -14,9 +14,148 @@
 \usepackage[breaklinks]{hyperref}  % Permet de casser les liens URL
 \usepackage{listings} % Importation du package pour le code source
 \usepackage{xcolor}   % Importation du package pour la coloration syntaxique
-% \usepackage[toc, nonumberlist]{glossaries} % TODO déplacer le glossaire manuel vers le package glossaries. cf \makeglossaires \printglossaries
 % todo de même avec la bibliographie avec les fichiers .bib
+\usepackage{float}
 \usepackage{enumitem} % Pour sous-lister différements (* au lieu de -)
+
+\usepackage[toc,nonumberlist]{glossaries}
+\makeglossaries
+\newglossaryentry{dynamique_vehicule}{
+    name={Dynamique de véhicule},
+    description={Ensemble des lois physiques qui régissent le mouvement, la stabilité et le comportement d’un véhicule.}
+}
+
+\newglossaryentry{integration_numerique}{
+    name={Intégration numérique},
+    description={Méthode permettant d’approximer la solution des équations différentielles dans les simulations en temps réel.}
+}
+
+\newglossaryentry{euler_explicite}{
+    name={Méthode d'Euler explicite},
+    description={Technique d’intégration numérique simple utilisée pour mettre à jour l’état d’un système (vitesse, position, etc.).}
+}
+
+\newglossaryentry{modele_bicycle}{
+    name={Modèle Bicycle simplifié},
+    description={Modèle mathématique regroupant les roues avant et arrière en deux entités distinctes afin de simplifier la simulation de la dynamique du véhicule.}
+}
+
+\newglossaryentry{angle_glissement}{
+    name={Angle de glissement (Slip angle)},
+    description={Angle formé entre la direction réelle d’un pneu et son orientation, déterminant la force latérale développée.}
+}
+
+\newglossaryentry{sous_virage}{
+    name={Sous-virage},
+    description={Comportement où le véhicule tourne moins que la trajectoire attendue, généralement dû à une perte d’adhérence à l’avant.}
+}
+
+\newglossaryentry{survirage}{
+    name={Survirage},
+    description={Comportement où le véhicule tourne plus que prévu, souvent lié à une perte d’adhérence à l’arrière.}
+}
+
+\newglossaryentry{centre_gravite}{
+    name={Centre de gravité},
+    description={Point de concentration de la masse d’un véhicule, influençant sa stabilité et la répartition des forces.}
+}
+
+\newglossaryentry{essieu}{
+    name={Essieu},
+    description={Composant reliant les roues d’un véhicule sur le même axe, dont la répartition du poids influe sur la dynamique.}
+}
+
+\newglossaryentry{moment_inertie}{
+    name={Moment d'inertie},
+    description={Mesure de la résistance d’un corps à un changement de rotation, calculée à partir de la masse et de la répartition des distances par rapport au centre de gravité.}
+}
+
+\newglossaryentry{raideur_pneus}{
+    name={Raideur des pneus},
+    description={Caractéristique des pneus qui détermine leur réponse aux forces appliquées. Voir aussi \gls{raideur_longitudinale} et \gls{raideur_laterale}.}
+}
+
+\newglossaryentry{raideur_longitudinale}{
+    name={Raideur longitudinale (Cx)},
+    description={Mesure de la réactivité des pneus aux forces de traction ou de freinage.}
+}
+
+\newglossaryentry{raideur_laterale}{
+    name={Raideur latérale (Cy)},
+    description={Mesure de la réponse des pneus aux forces générées lors des virages.}
+}
+
+\newglossaryentry{glissement_dynamique}{
+    name={Glissement dynamique},
+    description={Évolution dans le temps du glissement d’un pneu par rapport à la surface de la route.}
+}
+
+\newglossaryentry{saturation_forces_laterales}{
+    name={Saturation non linéaire des forces latérales},
+    description={Phénomène limitant la force latérale qu’un pneu peut générer une fois qu’un certain angle de glissement est dépassé.}
+}
+
+\newglossaryentry{coefficient_adherence}{
+    name={Coefficient d'adhérence},
+    description={Paramètre définissant l’adhérence maximale d’un pneu sur la route, influençant les comportements de sous-virage et survirage.}
+}
+
+\newglossaryentry{delta_temps}{
+    name={Delta de temps (dt)},
+    description={Intervalle de temps entre deux itérations de la simulation, essentiel pour l’intégration numérique.}
+}
+
+\newglossaryentry{gnuplot}{
+    name={Gnuplot},
+    description={Outil de traçage graphique utilisé pour visualiser les résultats de la simulation (courbes de vitesse, trajectoire, etc.).}
+}
+
+\newglossaryentry{sfml}{
+    name={SFML (Simple and Fast Multimedia Library)},
+    description={Bibliothèque C++ facilitant la création d’applications graphiques et multimédia.}
+}
+
+\newglossaryentry{hud}{
+    name={HUD (Head-Up Display)},
+    description={Système d’affichage superposé sur l’écran, utilisé ici pour présenter des informations telles que le compteur de FPS et les données de débogage.}
+}
+
+\newglossaryentry{cmake}{
+    name={CMake},
+    description={Outil de configuration et de gestion de compilation des projets C++.}
+}
+
+\newglossaryentry{std_deque}{
+    name={\texttt{std::deque}},
+    description={Structure de données de la STL C++ utilisée pour gérer une file de deltas de temps.}
+}
+
+\newglossaryentry{std_vector}{
+    name={\texttt{std::vector}},
+    description={Conteneur dynamique de la STL C++ servant à stocker des données, par exemple, les points de la trajectoire prédictive.}
+}
+
+\newglossaryentry{std_nth_element}{
+    name={\texttt{std::nth\_element}},
+    description={Algorithme de la STL C++ permettant d’obtenir efficacement l’élément médian dans un conteneur non trié.}
+}
+
+\newglossaryentry{std_sort}{
+    name={\texttt{std::sort}},
+    description={Algorithme de tri de la STL C++ utilisé pour ordonner les éléments d’un conteneur.}
+}
+
+\newglossaryentry{std_unordered_map}{
+    name={\texttt{std::unordered\_map}},
+    description={Structure de données de la STL C++ qui associe des clés à des valeurs, utilisée pour la gestion des ressources (textures, etc.).}
+}
+
+\newglossaryentry{std_unique_ptr}{
+    name={\texttt{std::unique\_ptr}},
+    description={Pointeur intelligent de la STL C++ assurant la gestion automatique de la mémoire pour des objets, par exemple, la police de caractères.}
+}
+
+
 % Définition du style pour le code Cpp
 \lstdefinestyle{CStyle}{
     language=C++,
@@ -28,8 +167,31 @@
     numberstyle=\tiny\color{gray},
     stepnumber=1,
     breaklines=true,
-    frame=single
+    frame=single,
+    inputencoding=utf8,
+    extendedchars=\true,
+    literate={é}{{\'e}}1
+             {è}{{\`e}}1
+             {à}{{\`a}}1
+             {ê}{{\^e}}1
+             {ô}{{\^o}}1
+             {ù}{{\`u}}1
 }
+
+\lstdefinestyle{BashStyle}{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single,
+    morekeywords={sudo,apt,echo,ls,cd,mkdir,rm,mv,cp,chmod,chown,grep,awk,sed,tar,zip,unzip,xxd}
+}
+
 
 
 \def\UrlBreaks{\do\/\do-}
@@ -58,10 +220,10 @@
 \fancyhead[L]{Romain GALLAND | Quentin RADLO}
 \fancyhead[R]{Université Marie \& Louis Pasteur}
 \renewcommand\footrulewidth{1pt}
-\fancyfoot[L]{}
+\fancyfoot[L]{ }
 \fancyfoot[C]{Rapport de Projet - Simulateur de conduite\\
 \textbf{Page \thepage/\pageref{LastPage}}}
-\fancyfoot[R]{}
+\fancyfoot[R]{ }
 \geometry{
     bindingoffset=1cm,  % Décalage pour la reliure
     left=2cm,
@@ -79,7 +241,7 @@
 
         \begin{center}
             \vspace{2cm}
-            \includegraphics[width=0.3\textwidth]{university_logo}\par
+            \includegraphics[width=0.3\textwidth]{resources/university_logo}\par
         \end{center}
 
 
@@ -102,7 +264,7 @@
             % \vspace*{1.5cm}
             \vspace{1cm}
             \begin{center}
-                \includegraphics[width=0.8\textwidth]{illustration}
+                \includegraphics[width=0.8\textwidth]{resources/illustration}
             \end{center}
 
 
@@ -127,47 +289,14 @@
 
     \newpage
     \section*{Glossaire}
-
-    \textbf{APEC :} Agence pour l'Emploi des Cadres, une association française qui propose des offres d'emploi pour les cadres.
-
-    \textbf{Bluetooth :} Norme de communication sans fil à courte portée.
-
-    \textbf{C, C++ :} Langages de programmation populaires dans le milieu embarqué.
-
-    \textbf{ESP32 :} Microcontrôleur très utilisé dans le développement de projets embarqués.
-
-    \textbf{Framework :} Ensemble d'outils et de conventions facilitant le développement.
-
-    \textbf{Git :} Système de gestion de versions décentralisé.
-
-    \textbf{I2C :} Protocole de communication entre plusieurs dispositifs.
-
-    \textbf{LinkedIn :} Réseau social professionnel en ligne.
-
-    \textbf{OS :} Système d'exploitation (\textit{Operating System} en anglais).
-
-    \textbf{RTOS :} Système d'exploitation temps réel (\textit{Real-Time Operating System} en anglais).
-
-    \textbf{SPI :} Protocole de communication série synchrone utilisé principalement pour la communication entre microcontrôleurs et périphériques.
-
-    \textbf{SS2I :} Société de Services en Ingénierie Informatique.
-
-    \newpage
-    \section{Sujet du projet}\label{sec:sujet-du-projet}
-    \input{subpart/10_sujet_du_projet}
+    \glsaddall
+    \printglossaries
     \newpage
 
-    \section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
-    \input{subpart/20_implementation_physique_modelisation_dyn_vehicule}
-    \newpage
-
-    \section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
-    \input{subpart/30_implementation_interface_graphique}
-    \newpage
-
-    \section{Bilan Technique}\label{sec:bilan-technique}
-    \input{subpart/40_bilan_technique}
-    \newpage
+    \include{subpart/10_sujet_du_projet}
+    \include{subpart/20_implementation_physique_modelisation_dyn_vehicule}
+    \include{subpart/30_implementation_interface_graphique}
+    \include{subpart/40_bilan_technique}
 
 
     \begin{thebibliography}{9}
@@ -181,12 +310,12 @@
         Tyre Slip Angle – 2 Clear Explanations.
         Disponible à l'adresse : \url{https://www.yourdatadriven.com/tyre-slip-angle-explained}.
 
-
         \bibitem{vtech}
         Virginia Tech University.
         Chapter 2, Vehicle Dynamics Modeling.
         Disponible à l'adresse : \url{https://vtechworks.lib.vt.edu/server/api/core/bitstreams/fe6d4ca1-514b-4e2b-b1ac-6561824a9de1/content}.
         Sous licence \textit{Creative Commons Attribution 4.0 International}.
+
         \bibitem{VDS_MathWorks}
         MathWorks.
         Modeling a Vehicle Dynamics System.
@@ -198,10 +327,6 @@
         Disponible à l'adresse : \url{https://thomasfermi.github.io/Algorithms-for-Automated-Driving/Control/BicycleModel.html#kinematic-bicycle-model}.
         Sous licence \textit{Creative Commons Attribution 4.0 International}.
 
-        \bibitem{documentationSFML}
-        Documentation de la SFML.
-        Disponible sur : \url{https://www.sfml-dev.org/documentation/}.
-
         \bibitem{cpp_reference_push_back}
         Contributeurs de cppreference.com. \\
         ``\texttt{std::deque::push\_back} - Référence C++''. \\
@@ -212,9 +337,9 @@
         ``\texttt{std::deque::pop\_front} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/container/deque/pop_front}.
 
-        \bibitem{cpp_reference_vector_copy}
+        \bibitem{cpp_reference_vector}
         Contributeurs de cppreference.com.\\
-        ``\texttt{std::vector::vector} - Référence C++''.\\
+        ``\texttt{std::vector} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/container/vector/vector}.
 
         \bibitem{cpp_reference_std_nth_element}
@@ -226,13 +351,45 @@
         Contributeurs de cppreference.com.\\
         ``\texttt{std::sort} - Référence C++''.\\
         Disponible sur : \url{https://en.cppreference.com/w/cpp/algorithm/sort}.
+
+        \bibitem{cpp_reference_std_unordered_map}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unordered\_map} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{cpp_reference_std_unique_ptr}
+        Contributeurs de cppreference.com.\\
+        ``\texttt{std::unique\_ptr} - Référence C++''.\\
+        Disponible sur : \url{https://en.cppreference.com/w/cpp/container/unordered_map}.
+
+        \bibitem{documentationSFML}
+        Documentation de la SFML. \\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/}.
+
+        \bibitem{sfml_sf_texture}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::Texture} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1Texture.html}
+
+        \bibitem{sfml_sf_vertexarray}
+        Contributeurs de sfml-dev.org.\\
+        ``\texttt{sf::VertexArray} - SFML Documentation''.\\
+        Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1VertexArray.html}
+
+        \bibitem{stackoverflow_embed_font}
+        Karol Szustakowski (2017).
+        StackOverFlow \\
+        Disponible sur : \url{https://stackoverflow.com/a/45802538}
     \end{thebibliography}
 
-
-
-
-    \begin{abstract}
-
+    \clearpage
+    \vspace*{\fill}
+    \begin{center}
+    {\Large \textbf{Résumé}}
+    \end{center}
+    \bigskip
+    \noindent
+    \begin{minipage}{\textwidth}
         Ce rapport présente le développement d'un prototype d'un simulateur de conduite réalisé en C++.
         L'objectif principal est de modéliser de manière réaliste divers scénarios de conduite en développant un modèle de physique réaliste pour avoir une gestion dynamique du véhicule par l'utilisateur.
         L'architecture modulaire et orienté objet du code source est pensée pour faciliter l'ajout de nouvelles fonctionnalités.
@@ -242,7 +399,7 @@
         This report presents the development of a prototype for a driving simulator realized in C++.
         The main objective is to model in a realistic way multiple driving scenarios using a realistic vehicle dynamics model to have a dynamic management of the vehicle by the user.
         The source code uses a modular architecture and is object-oriented to facilitate adding new features.
-
-    \end{abstract}
-
+    \end{minipage}
+    \vspace*{\fill} % Espace après pour centrer verticalement
+    \clearpage
 \end{document}
