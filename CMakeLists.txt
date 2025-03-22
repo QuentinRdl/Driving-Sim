@@ -63,25 +63,25 @@ FetchContent_MakeAvailable(googletest)
 
 find_package(Threads REQUIRED)
 
-add_executable(DrivingSimTests
+add_executable(DrivingSim_Tests
         src/vehicle.cpp
         src/plotting.cpp
         tests/vehicle_test.cpp)
 
-target_include_directories(DrivingSimTests PRIVATE
+target_include_directories(DrivingSim_Tests PRIVATE
         src/Headers
         src/Headers/GraphicsUtils
         src/Headers/Physics
 )
 
-target_compile_options(DrivingSimTests PRIVATE "-Wall" "-Wextra" "-g" "-O0" "-fsanitize=address,undefined")
-set_target_properties(DrivingSimTests PROPERTIES LINK_FLAGS "-fsanitize=address,undefined")
+target_compile_options(DrivingSim_Tests PRIVATE "-Wall" "-Wextra" "-g" "-O0" "-fsanitize=address,undefined")
+set_target_properties(DrivingSim_Tests PROPERTIES LINK_FLAGS "-fsanitize=address,undefined")
 
-target_link_libraries(DrivingSimTests PRIVATE
+target_link_libraries(DrivingSim_Tests PRIVATE
         GTest::gtest_main
         Threads::Threads
         ${Boost_LIBRARIES}
 )
 
 include(GoogleTest)
-gtest_discover_tests(DrivingSimTests)
+gtest_discover_tests(DrivingSim_Tests)

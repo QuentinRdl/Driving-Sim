@@ -32,7 +32,7 @@ Driving Sim is a 2D driving simulator designed to simulate vehicle physics, incl
    ```
 2. Create a build directory and compile the project:
    ```sh
-   mkdir build && cd build
+   mkdir -p build && cd build
    cmake ..
    make
    ```
@@ -83,13 +83,6 @@ Driving_Sim/
 │   └── rk4_integration_test.cpp
 ├── CMakeLists.txt
 └── README.md
-```
-
-## Testing
-Run unit tests using Google Test:
-```sh
-cd build
-make test
 ```
 
 ## License
