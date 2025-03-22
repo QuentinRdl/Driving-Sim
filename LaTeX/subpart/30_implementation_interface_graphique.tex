@@ -1,9 +1,9 @@
 \section{L'implémentation de l'interface graphique}\label{sec:l'implementation-de-l-interface-graphique}
-\subsection{Bibliothèques utilisées (SFML)}\label{subsec:sfml}
+\subsection{Bibliothèques utilisées (\gls{sfml})}\label{subsec:sfml}
 \gls{sfml} (\textit{Simple and Fast Multimedia Library}) est une bibliothèque \gls{cpp} qui permet de créer des applications multimédia.
 Elle est particulièrement adaptée pour le développement de jeux vidéo et d'applications graphiques.
 Elle fournit des fonctionnalités pour la gestion des fenêtres, le rendu graphique, la gestion des événements, le son et la communication réseau.
-En interne, elle s'appuie sur OpenGL, une API bas niveau, ce qui permet d'obtenir d'excellentes performances graphiques tout en restant simple d'utilisation.
+En interne, elle s'appuie sur \gls{opengl}, une API bas niveau, ce qui permet d'obtenir d'excellentes performances graphiques tout en restant simple d'utilisation.
 
 \gls{sfml} a été choisie pour plusieurs raisons :
 \begin{itemize}
@@ -24,7 +24,7 @@ Plusieurs classes clés interagissent pour offrir une interface graphique cohér
 
 \paragraph[Game]{La Classe \textbf{Game}}\label{par:class_game}
 C'est la classe principale du projet, elle orchestre l'application.
-Elle initialise la fenêtre \gls{sfml}, configure les \glspl{view} (Game View et \gls{hud} View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
+Elle initialise la fenêtre \gls{sfml}, configure les \glspl{view} (Game \glslink{view}{View} et \gls{hud} \glslink{view}{View}), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
 
 Elle contient 3 fonctions principales :
 \begin{lstlisting}[style=CStyle, label={lst:game_class}]
@@ -68,12 +68,12 @@ circuit.join(ResourceType::Value::SEGMENT_LONG_STRAIGHT, 180);
 
 \paragraph[Car]{La classe \textbf{Car}}
 Cette classe encapsule la classe \texttt{Vehicle} (voir section \ref{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}).
-L'interaction entre les deux classes \texttt{Car} et \texttt{Vehicle} est présentée à la section\ref{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}.
+L'interaction entre les deux classes \texttt{Car} et \texttt{Vehicle} est présentée au paragraphe ~\ref{subsubsec:interactions-entre-l-interface-graphique-et-la-partie-physique}.
 Elle calcule la ligne de prédiction de la trajectoire du véhicule et gère l'affichage du véhicule.
 
 Lors du développement de la ligne de prédiction de trajectoire, nous avons rencontré un problème.
 Le calcul prend en paramètre un \gls{delta_temps} (\texttt{dt}) qui correspond au temps entre la dernière image et l'image actuelle.
-Ce \gls{delta_temps} est très volatile et peut varier du simple au double, ce qui cause de grosses différences de longueur de la ligne de prédiction et provoque une impression de scintillement.
+Ce \gls{delta_temps} est très volatile et peut varier du simple au double entre deux images, ce qui cause de grosses différences de longueur de la ligne de prédiction et provoque une impression de scintillement.
 
 Pour résoudre ce problème, nous avons décidé de récupérer le \gls{delta_temps} médian sur les 1000 dernières images.
 
@@ -92,17 +92,17 @@ float updateAndGetMedian(const float dt) {
 }
 \end{lstlisting}
 
-La complexité de la fonction \texttt{updateAndGetMedian(const float dt)} est en \( O(n) \).
-Voici le détail de la complexité :
+La \gls{complexity} de la fonction \texttt{updateAndGetMedian(const float dt)} est en \( O(n) \).
+Voici le détail du calcul :
 \begin{itemize}
-    \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la deque.
-    \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la deque.
-    \item \texttt{\gls{std_vector} tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector} pour copier la deque dans un vecteur.
-    \item \texttt{\gls{std_nth_element}(tmp.begin(), mid, tmp.end())} : \( O(n) \)\cite{cpp_reference_std_nth_element} pour trier le vecteur jusqu'à l'élément médian.
+    \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la \gls{deque}.
+    \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la \gls{deque}.
+    \item \texttt{\gls{std_vector} tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector} pour copier la \gls{deque} dans un \texttt{\gls{std_vector}}.
+    \item \texttt{\gls{std_nth_element}(tmp.begin(), mid, tmp.end())} : \( O(n) \)\cite{cpp_reference_std_nth_element} pour trier le \texttt{\gls{std_vector}} jusqu'à l'élément médian.
 \end{itemize}
 
-On a utilisé la fonction \texttt{\gls{std_nth_element}()}\cite{cpp_reference_std_nth_element} car elle permet de ne pas trier l'ensemble du vecteur tout en plaçant l'élément médian à la bonne position dans le \texttt{\gls{std_vector}}\cite{cpp_reference_vector}.
-Au départ, nous avions utilisé la fonction \texttt{\gls{std_sort}()}, qui trie un vecteur complet, mais sa complexité aurait été en \( O(n \log n) \)\cite{cpp_reference_std_sort}, ce qui est moins optimal étant donné que la ligne de prédiction est recalculée à chaque image.
+On a utilisé la fonction \texttt{\gls{std_nth_element}()}\cite{cpp_reference_std_nth_element} car elle permet de ne pas trier l'ensemble du conteneur tout en plaçant l'élément médian à la bonne position dans le \texttt{\gls{std_vector}}\cite{cpp_reference_vector}.
+Au départ, nous avions utilisé la fonction \texttt{\gls{std_sort}()}, qui trie un conteneur complet, mais sa \gls{complexity} aurait été en \( O(n \log n) \)\cite{cpp_reference_std_sort}, ce qui est moins optimal étant donné que la ligne de prédiction est recalculée à chaque image.
 
 
 \subsubsection{Les ressources}\label{subsubsec:gestion-des-ressources}
@@ -114,7 +114,7 @@ Dans le projet, nous avons principalement deux types de ressources :
 \end{itemize}
 
 \paragraph{Les textures}
-Au sein de la librairie \gls{sfml}, une image est représentée avec une classe \texttt{sf::Texture}\cite{sfml_sf_texture} qui contient la représentation en mémoire des pixels de l'image.
+Au sein de la librairie \gls{sfml}, une image est représentée avec une classe \texttt{sf::Texture}\cite{sfml_sf_texture} qui contient la représentation en mémoire de ses pixels.
 Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique, cela concerne les segments de route ainsi que l'image de la voiture.
 Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient les valeurs suivantes :
 \begin{itemize}
@@ -125,7 +125,7 @@ Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient le
     \item \texttt{SEGMENT\_LARGE\_TURN} : Un virage large.
     \item \texttt{SEGMENT\_S\_TURN} : Un virage en S (plus communément appelé une chicane)
     \item \texttt{SEGMENT\_U\_TURN} : Un virage en U\@.
-    \item \texttt{CAR} : La texture de la voiture.
+    \item \texttt{CAR} : La voiture.
 \end{itemize}
 
 \paragraph{La police d'écriture}
@@ -142,22 +142,22 @@ Le fichier généré contient deux éléments :
     \item Un tableau de bytes contenant les données binaires de la police d'écriture.
     \item La taille du tableau de bytes.
 \end{itemize}
-Cette solution, trouvée sur Stack Overflow\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
+Cette solution, trouvée sur \gls{stackoverflow}\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
 
 \paragraph{Gestionnaire de ressources}
 Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différentes étant donné leurs utilisations différentes.
 La classe \texttt{TextureManager} gère le chargement des images dans la mémoire de l'application.
-Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prend en paramètre un \texttt{ResourceType::Value} et renvoie un pointeur vers la texture correspondante.
+Lorsque l'on a besoin d'utiliser une \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prend en paramètre un \texttt{ResourceType::Value} et renvoie une \gls{cpp_reference} vers la texture correspondante.
 Deux cas sont possibles :
 \begin{itemize}
     \item La texture n'a jamais été demandée depuis le début de l'exécution, elle est donc chargée depuis le disque dur et stockée dans une \texttt{\gls{std_unordered_map}<ResourceType::Value, sf::Texture>}\cite{cpp_reference_std_unordered_map}.
-    \item La texture a déjà été chargée, une référence vers la \texttt{sf::Texture}\cite{sfml_sf_texture} correspondante est récupérée puis renvoyée.
-    Ici, on utilise une référence et non une copie, car aucun traitement n'est fait directement sur l'objet en mémoire.
+    \item La texture a déjà été chargée, une \gls{cpp_reference} vers la \texttt{sf::Texture}\cite{sfml_sf_texture} correspondante est récupérée puis renvoyée.
+    Ici, on utilise une \gls{cpp_reference} et non une copie, car aucun traitement n'est fait directement sur l'objet en mémoire.
 \end{itemize}
 Ce système permet de ne charger qu'une seule fois une texture et de la réutiliser à chaque fois qu'elle est demandée, ce qui limite grandement l'utilisation de la mémoire.
 
 Pour ce qui est des polices de caractères, la classe \texttt{FontManager} fonctionne de manière similaire, mais nous n'utilisons qu'une seule police de caractères pour l'ensemble de l'application.
-Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un pointeur (\texttt{\gls{std_unique_ptr}<sf::Font>}\cite{cpp_reference_std_unique_ptr}) dans un attribut de la classe.
+Lors de la création de l'objet, la police est chargée depuis le disque dur et stockée dans un \gls{pointer} (\texttt{\gls{std_unique_ptr}<sf::Font>}\cite{cpp_reference_std_unique_ptr}) dans un attribut de la classe.
 
 \paragraph{Connexion des segments de routes}
 En interne, la texture d'un segment de route est représentée par une structure \texttt{RoadTexture} définie comme suit :
@@ -224,7 +224,7 @@ Plusieurs mécanismes d'interaction ont été mis en place :
     \item \textbf{Synchronisation et cohérence visuelle :} Les calculs physiques (notamment via l'intégration numérique de la dynamique du véhicule) génèrent des états qui sont transmis à l'interface graphique.
     Cela garantit que l'affichage du véhicule, de ses effets et de sa trajectoire reflète précisément l'évolution dynamique simulée.
     \item \textbf{Traçage de la trajectoire prédictive :} En parallèle, la classe \texttt{Car} calcule une trajectoire prédictive basée sur les itérations futures de la dynamique physique.
-    Cette trajectoire, rendue à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, permet à l'utilisateur de visualiser l'impact des commandes de conduite sur le comportement futur du véhicule.
+    Cette trajectoire, rendue à l'aide d'un \texttt{\gls{sf_vertex_array}}\cite{sfml_sf_vertexarray}, permet à l'utilisateur de visualiser l'impact des commandes de conduite sur le comportement futur du véhicule.
 \end{itemize}
 
 Ces interactions étroites entre la partie physique et l'interface graphique permettent non seulement une synchronisation efficace entre les calculs et le rendu, mais également une meilleure compréhension et un contrôle précis du comportement dynamique du véhicule.
@@ -239,7 +239,7 @@ Le mode Debug (Figure~\ref{fig:debug_mode}) offre une visualisation en temps ré
 Cette fonctionnalité, représentée par la classe \texttt{DebugMode}, est particulièrement utile pour le débogage et l'analyse du comportement du véhicule.
 Elle permet de suivre l'évolution des paramètres physiques au fil du temps, facilitant ainsi l'identification de problèmes potentiels ou d'anomalies dans le comportement dynamique.
 Il est possible de l'activer ou de la désactiver à l'aide de la touche \texttt{F3}.
-Cette classe contient un attribut \texttt{\gls{std_vector}<sf::Text>}\cite{cpp_reference_vector} qui contient les textes à afficher dans la \gls{hud} View.
+Cette classe contient un attribut \texttt{\gls{std_vector}<sf::Text>}\cite{cpp_reference_vector} qui contient les textes à afficher dans la \gls{hud} \glslink{view}{View}.
 
 On ajoute un texte à la liste en utilisant la méthode \texttt{addLine()} qui prend en paramètre le texte à afficher, la position et la couleur du texte.
 Cette méthode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
@@ -268,7 +268,7 @@ void DebugMode::addLine(const std::string &content, const unsigned int size, con
 \end{figure}
 
 \paragraph{Compteur de FPS}
-La classe \texttt{FPSCounter} affiche le nombre de frames par seconde dans la \gls{hud} View, permettant ainsi de surveiller la fluidité de l'application.
+La classe \texttt{FPSCounter} affiche le nombre d'images par seconde (\gls{fps}) dans la \gls{hud} \glslink{view}{View}, permettant ainsi de surveiller la fluidité de l'application.
 Elle nous permet, tout au long du développement, de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressources et de l'optimiser en conséquence.
 
 Pour calculer le nombre d'images par seconde, on compte le nombre d'images générées en une seconde.
@@ -287,7 +287,7 @@ void FPSCounter::update(const float dt) {
 \end{lstlisting}
 Le paramètre \texttt{dt} est le \gls{delta_temps} entre la dernière image et l'image actuelle.
 
-À chaque nouvelle image et donc à chaque appel de la fonction \texttt{update()} (paragraphe sur la classe Game :~\ref{par:class_game}) de la classe \texttt{Game}, on appelle la fonction \texttt{update()} de la classe \texttt{FPSCounter} en lui passant le delta de temps.
+À chaque nouvelle image et donc à chaque appel de la fonction \texttt{update()} (paragraphe sur la classe Game :~\ref{par:class_game}) de la classe \texttt{Game}, on appelle la fonction \texttt{update()} de la classe \texttt{FPSCounter} en lui passant le \gls{delta_temps}.
 On ajoute le \gls{delta_temps} à l'accumulateur de temps et on incrémente le compteur d'image.
 Lorsque l'accumulateur de temps dépasse 1 seconde, on met à jour le nombre d'images par seconde et on remet le compteur d'image et l'accumulateur de temps à zéro.
 
@@ -313,7 +313,7 @@ La fonction \texttt{computePredictionLine} procède de la manière suivante :
 \end{itemize}
 
 \paragraph{Tracé en temps réel via les données issues de la simulation}
-L'affichage de cette trajectoire prédictive est géré en temps réel grâce à un objet \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray} configuré en mode \texttt{LineStrip}.
+L'affichage de cette trajectoire prédictive est géré en temps réel grâce à un objet \texttt{\gls{sf_vertex_array}}\cite{sfml_sf_vertexarray} configuré en mode \texttt{LineStrip}.
 À chaque frame :
 \begin{itemize}
     \item Les points prédits sont recalculés et le \texttt{VertexArray} est mis à jour pour refléter le chemin futur du véhicule.
@@ -328,7 +328,7 @@ Ce système s'appuie sur le mécanisme d'événements de la bibliothèque \gls{s
 
 \begin{itemize}
     \item \textbf{Clavier} : La touche F active/désactive le compteur de FPS, F3 bascule le mode Debug, F5 réinitialise la position du véhicule et ESC ferme l'application.
-    \item \textbf{Souris} : Le défilement de la molette permet d'ajuster le niveau de zoom sur la Game View, offrant ainsi à l'utilisateur la possibilité de mieux suivre le véhicule ou d'obtenir une vue d'ensemble du circuit.
+    \item \textbf{Souris} : Le défilement de la molette permet d'ajuster le niveau de zoom sur la Game \glslink{view}{View}, offrant ainsi à l'utilisateur la possibilité de mieux suivre le véhicule ou d'obtenir une vue d'ensemble du circuit.
 \end{itemize}
 
 Ce système d'événements, en tirant parti des fonctionnalités offertes par \gls{sfml}, assure une interactivité réactive et une expérience utilisateur intuitive.
@@ -337,12 +337,12 @@ Ce système d'événements, en tirant parti des fonctionnalités offertes par \g
 \subsubsection{Gestion des \glspl{view}}\label{subsubsec:gestion-des-vues}
 Dans le simulateur, on peut distinguer deux \glspl{view} :
 \begin{itemize}
-    \item \textbf{Game View} : C'est la \gls{view} principale où le circuit et le véhicule sont affichés.
+    \item \textbf{Game \glslink{view}{View}} : C'est la \gls{view} principale où le circuit et le véhicule sont affichés.
     Elle est centrée sur le véhicule, offrant une perspective immersive de la conduite.
-    \item \textbf{\gls{hud} View} : Cette \gls{view} affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
+    \item \textbf{\gls{hud} \glslink{view}{View}} : Cette \gls{view} affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
 \end{itemize}
 
-C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la \gls{hud} View.
+C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la \gls{hud} \glslink{view}{View}.
 
 \subsubsection{Optimisations mises en œuvre}\label{subsubsec:optimisations-mises-en-oeuvre}
 Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
@@ -350,8 +350,8 @@ Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont
     \item \textbf{Calcul du circuit} : Le circuit est calculé une première fois, puis stocké dans un tableau de segments de route (\texttt{\gls{std_vector}<RoadSegment>}\cite{cpp_reference_vector}).
     Lorsque le circuit a besoin d'être recalculé, par exemple lors d'une modification du zoom, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète.
     À la prochaine itération de la boucle principale, il est recalculé et le tableau de segments de route est mis à jour.
-    \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
-    \item \textbf{Gestion efficace de la \gls{view}} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
+    \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{\gls{sf_vertex_array}}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
+    \item \textbf{Gestion efficace de la \gls{view}} : La Game \glslink{view}{View} est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
 \end{itemize}
 
 \subsection{Perspectives d'amélioration et évolutions futures}\label{subsec:perspectives-d-evolution}
@@ -360,5 +360,5 @@ Bien que l'interface graphique actuelle réponde aux besoins du projet, plusieur
     \item \textbf{Effets visuels avancés} : L'ajout d'animations, d'effets de particules ou de transitions fluides pourrait enrichir l'expérience utilisateur.
     \item \textbf{Interface utilisateur interactive} : La mise en place de menus interactifs, d'options de configuration en temps réel ou d'indicateurs graphiques plus sophistiqués permettrait de personnaliser davantage la simulation.
     \item \textbf{Optimisation \gls{multi_threading}} : La séparation des calculs physiques et du rendu graphique sur des threads distincts pourrait améliorer la réactivité et la fluidité de la simulation sur des systèmes multi-cœurs.
-    \item \textbf{Extensions de la \gls{hud} View} : Intégrer davantage d'informations (comme des graphiques temps réel ou des indicateurs de performance détaillés) pourrait offrir un meilleur retour utilisateur.
+    \item \textbf{Extensions de la \gls{hud} \glslink{view}{View}} : Intégrer davantage d'informations (comme des graphiques temps réel ou des indicateurs de performance détaillés) pourrait offrir un meilleur retour utilisateur.
 \end{itemize}

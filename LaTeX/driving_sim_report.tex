@@ -100,12 +100,13 @@
 }
 
 \newglossaryentry{delta_temps}{
-    name={Delta de temps},
+    name={delta de temps},
     description={Intervalle de temps entre deux itérations de la simulation, essentiel pour l’intégration numérique}
 }
 
 \newglossaryentry{gnuplot}{
     name={Gnuplot},
+    plural={gnuplot},
     description={Outil de traçage graphique utilisé pour visualiser les résultats de la simulation (courbes de vitesse, trajectoire, etc.)}
 }
 
@@ -117,6 +118,11 @@
 \newglossaryentry{sfml}{
     name={SFML},
     description={\og Simple and Fast Multimedia Library \fg{}, Bibliothèque \gls{cpp} facilitant la création d’applications graphiques et multimédia}
+}
+
+\newglossaryentry{opengl}{
+    name={OpenGL},
+    description={API de rendu graphique 2D et 3D, utilisée par \gls{sfml} pour le rendu graphique}
 }
 
 \newglossaryentry{hud}{
@@ -137,32 +143,47 @@
 
 \newglossaryentry{std_deque}{
     name={std::deque},
-    description={Structure de données de la STL \gls{cpp} utilisée pour gérer une file de deltas de temps}
+    description={Structure de données de la \gls{stl} \gls{cpp} utilisée pour gérer une file de deltas de temps}
 }
 
 \newglossaryentry{std_vector}{
     name={std::vector},
-    description={Conteneur dynamique de la STL \gls{cpp} servant à stocker des données, par exemple, les points de la trajectoire prédictive}
+    description={Conteneur dynamique de la \gls{stl} \gls{cpp} servant à stocker des données, par exemple, les points de la trajectoire prédictive}
 }
 
 \newglossaryentry{std_nth_element}{
     name={std::nth\_element},
-    description={Algorithme de la STL \gls{cpp} permettant d’obtenir efficacement l’élément médian dans un conteneur non trié}
+    description={Algorithme de la \gls{stl} \gls{cpp} permettant d’obtenir efficacement l’élément médian dans un conteneur non trié}
 }
 
 \newglossaryentry{std_sort}{
     name={std::sort},
-    description={Algorithme de tri de la STL \gls{cpp} utilisé pour ordonner les éléments d’un conteneur}
+    description={Algorithme de tri de la \gls{stl} \gls{cpp} utilisé pour ordonner les éléments d’un conteneur}
 }
 
 \newglossaryentry{std_unordered_map}{
     name={std::unordered\_map},
-    description={Structure de données de la STL \gls{cpp} qui associe des clés à des valeurs, utilisée pour la gestion des ressources (textures, etc.)}
+    description={Structure de données de la \gls{stl} \gls{cpp} qui associe des clés à des valeurs, utilisée pour la gestion des ressources (textures, etc.)}
+}
+
+\newglossaryentry{sf_vertex_array}{
+    name={sf::VertexArray},
+    description={Classe de la \gls{sfml} permettant de représenter un ensemble de sommets, utilisée pour dessiner des formes complexes}
+}
+
+\newglossaryentry{deque}{
+    name={deque},
+    description={De l'anglais \og Double-ended queue \fg{}, structure de données permettant d’ajouter ou de retirer des éléments à chaque extrémité}
 }
 
 \newglossaryentry{std_unique_ptr}{
     name={std::unique\_ptr},
-    description={Pointeur intelligent de la STL \gls{cpp} assurant la gestion automatique de la mémoire pour des objets, par exemple, la police de caractères}
+    description={Pointeur intelligent de la \gls{stl} \gls{cpp} assurant la gestion automatique de la mémoire pour des objets, par exemple, la police de caractères}
+}
+
+\newglossaryentry{stl}{
+    name={bibliothèque standard},
+    description={\og Standard Template Library \fg{}, bibliothèque standard de \gls{cpp} fournissant des conteneurs, algorithmes et itérateurs}
 }
 
 \newglossaryentry{git}{
@@ -171,8 +192,13 @@
 }
 
 \newglossaryentry{git_branches}{
-    name={Branches},
-    description={Branches de développement dans Git, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale}
+    name={branches},
+    description={Branches de développement dans \gls{git}, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale}
+}
+
+\newglossaryentry{stackoverflow}{
+    name={Stack Overflow},
+    description={Site de questions-réponses pour les développeurs, utilisé pour trouver des solutions à des problèmes techniques rencontrés lors du développement}
 }
 
 \newglossaryentry{arch-linux}{
@@ -186,8 +212,14 @@
 }
 
 \newglossaryentry{pointer}{
-    name={Pointeur},
+    name={pointeur},
     description={Variable qui stocke l'adresse mémoire d'une autre variable, utilisée pour gérer la mémoire dynamique et les ressources}
+}
+
+\newglossaryentry{cpp_reference}{
+    name={référence \gls{cpp}},
+    description={Similaire à un \gls{pointer}, mais ne peut pas être modifiée pour pointer vers un autre objet après sa création.
+    Elle est souvent utilisée pour passer des arguments à des fonctions sans les copier}
 }
 
 \newglossaryentry{boost}{
@@ -214,6 +246,11 @@
 \newglossaryentry{fps}{
     name={FPS},
     description={\og Frames Per Second \fg{}, mesure du nombre d'images affichées par seconde dans une animation ou un jeu vidéo, indiquant la fluidité de l'affichage}
+}
+
+\newglossaryentry{complexity}{
+    name={complexité},
+    description={Mesure de la quantité de ressources (temps, espace) nécessaires pour exécuter un algorithme ou une opération, souvent exprimée en fonction de la taille des données d'entrée}
 }
 
 
@@ -259,7 +296,7 @@
 
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
 \renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
-\renewcommand\thesubsubsection{\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules TODO activate ?
+\renewcommand\thesubsubsection{\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules
 \setcounter{secnumdepth}{3} % Activer la numérotation jusqu'aux sous-sous-sections
 
 % Pour gerer l'espace dans la table of contents
@@ -434,12 +471,12 @@
 
         \bibitem{sfml_sf_vertexarray}
         Contributeurs de sfml-dev.org.\\
-        ``\texttt{sf::VertexArray} - \gls{sfml} Documentation''.\\
+        ``\texttt{\gls{sf_vertex_array}} - \gls{sfml} Documentation''.\\
         Disponible sur : \url{https://www.sfml-dev.org/documentation/3.0.0/classsf_1_1VertexArray.html}
 
         \bibitem{stackoverflow_embed_font}
         Karol Szustakowski (2017).
-        StackOverFlow \\
+        \gls{stackoverflow} \\
         Disponible sur : \url{https://stackoverflow.com/a/45802538}
     \end{thebibliography}
 
