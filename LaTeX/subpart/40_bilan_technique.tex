@@ -13,8 +13,8 @@ L'utilisation du fichier \texttt{CMakeLists.txt} pour gérer les bibliothèques 
 Les difficultés sont principalement survenues en raison des différences entre nos environnements de développement.
 Bien que nous travaillions tous les deux sous Linux, l'un utilisait \gls{arch-linux} et l'autre \gls{ubuntu}, ce qui a engendré quelques disparités dans la gestion de certaines bibliothèques.
 
-\subsubsection{Découverte de SFML}\label{subsubsec:SFML}
-Nous avons dû nous familiariser avec la bibliothèque SFML, alors inconnue pour nous, et concevoir une interface graphique adaptée aux besoins du projet.
+\subsubsection{Découverte de \gls{sfml}}\label{subsubsec:sfml}
+Nous avons dû nous familiariser avec la bibliothèque \gls{sfml}, alors inconnue pour nous, et concevoir une interface graphique adaptée aux besoins du projet.
 Cette phase d'apprentissage a été déterminante pour exploiter pleinement les fonctionnalités de \gls{sfml} et réaliser un rendu graphique efficace sans recourir à des techniques trop complexes.
 
 \subsubsection{Gestion du temps et synchronisation}\label{subsubsec:la-gestion-du-temps}
@@ -22,7 +22,7 @@ La synchronisation des mises à jour, notamment la gestion du delta de temps ent
 Il a fallu ajuster nos méthodes de calcul du temps afin d’assurer une fluidité de l’animation et une réactivité optimale de l’interface.
 
 \subsection{Retour sur les technologies utilisées}\label{subsec:retour-sur-les-technologies-utilisees}
-Le choix du langage C++ s'est révélé judicieux en raison de sa polyvalence et de ses performances.
+Le choix du langage \gls{cpp} s'est révélé judicieux en raison de sa polyvalence et de ses performances.
 Malgré une connaissance initiale limitée, ce projet nous a permis de progresser significativement dans sa maîtrise.
 L'utilisation de \gls{sfml} a également été un atout majeur, simplifiant le développement d'interfaces graphiques interactives sans nécessiter de techniques trop complexes.
 
@@ -36,7 +36,7 @@ Pour les futures itérations du projet, plusieurs axes d'amélioration ont été
 
 \subsection{Ce que nous ferions différemment}\label{subsec:ce-que-nous-ferions-differemment}
 Avec le recul, nous aurions intégré dès le départ des tests unitaires et d'intégration afin de détecter plus rapidement les erreurs et d'améliorer la robustesse du code.
-Une phase de planification et de prototypage plus approfondie aurait permis de réduire les imprévus liés à l'apprentissage de nouvelles bibliothèques, notamment SFML\@.
+Une phase de planification et de prototypage plus approfondie aurait permis de réduire les imprévus liés à l'apprentissage de nouvelles bibliothèques, notamment \gls{sfml}\@.
 Ce changement méthodologique aurait sans doute accéléré le développement et renforcé la qualité du produit final.
 
 \subsection{Mise en route du projet}\label{subsec:mise-en-route-du-projet}
@@ -44,9 +44,9 @@ Ce changement méthodologique aurait sans doute accéléré le développement et
 \subsubsection{Dépendances}\label{subsubsec:dependances}
 Pour compiler le projet, il est nécessaire d'installer les dépendances suivantes :
 \begin{itemize}
-    \item \textbf{Un compilateur supportant C++17} : par exemple, \texttt{clang++} ou \texttt{g++}.
+    \item \textbf{Un compilateur supportant \gls{cpp}17} : par exemple, \texttt{clang++} ou \texttt{g++}.
     \item \texttt{cmake} (version 3.30 ou supérieure) : pour la configuration et la gestion de la compilation.
-    \item \texttt{SFML} (version 2.5) : pour la gestion de l'interface graphique et des entrées.
+    \item \texttt{\gls{sfml}} (version 2.5) : pour la gestion de l'interface graphique et des entrées.
     \item \texttt{\gls{gnuplot}} : pour la génération des graphiques.
     \item \texttt{Boost} : utilisé pour la manipulation des flux, notamment en lien avec \texttt{gnuplot}.
     \item \texttt{GoogleTest} : installé automatiquement via le fichier \texttt{CMakeLists.txt}, pour la réalisation des tests unitaires.
