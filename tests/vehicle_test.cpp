@@ -107,7 +107,7 @@ TEST(VehicleTest, SetDataAndGetData) {
 }
 
 // Point d'entrée pour GoogleTest
-int main(char *argv[]) {
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
