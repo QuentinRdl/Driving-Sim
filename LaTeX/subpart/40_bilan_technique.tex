@@ -1,7 +1,7 @@
 \section{Bilan Technique}\label{sec:bilan-technique}
 
 \subsection{Problèmes rencontrés et surmontés}\label{subsec:problemes-rencontres-et-surmontes}
-Durant le développement du simulateur de conduite, nous avons rencontré et surmonté plusieurs difficultés, ce qui nous a permis d'approfondir nos compétences techniques et d'améliorer notre collaboration.
+Durant le développement du simulateur de conduite, nous avons rencontré et surmonté plusieurs difficultés, ce qui nous a permis d'approfondir nos compétences techniques et d'améliorer notre capacité à mener un bon travail en groupe.
 
 \subsubsection{Gestion de Git}\label{subsubsec:git}
 Tout au long du projet, nous avons utilisé \gls{git} et travaillé sur plusieurs \gls{git_branches} afin d'éviter les conflits de code lors du travail simultané sur les mêmes fichiers.
@@ -25,12 +25,13 @@ Il a fallu ajuster nos méthodes de calcul du temps afin d’assurer une fluidit
 Le choix du langage \gls{cpp} s'est révélé judicieux en raison de sa polyvalence et de ses performances.
 Malgré une connaissance initiale limitée, ce projet nous a permis de progresser significativement dans sa maîtrise.
 L'utilisation de \gls{sfml} a également été un atout majeur, simplifiant le développement d'interfaces graphiques interactives sans nécessiter de techniques trop complexes.
+De plus \gls{gnuplot} nous a permis de pouvoir visualiser toutes les données produites par notre modèle, ce qui nous a permis de valider certaines fonctionnalités du modèle physique, et d'en corriger d'autres.
 
 \subsection{Implémentation de la physique}\label{subsec:implem-phys}
-En commançant notre projet, nous avons voulu implémenter trop de principes physiques en m�me temps, ce qui nous menait à de nombreuses erreurs.
+En commançant notre projet, nous avons voulu implémenter trop de principes physiques en même temps, ce qui nous menait à de nombreuses erreurs.
 Ceci nous a contraint à recommencer l'implémentation de la physique plusieurs fois.
 Cette erreur nous a cependant appris qu'il ne faut pas essayer d'implémenter toutes les fonctionnalités en un bloc, mais de faire pas à pas.
-C'est en adoptant une manière itérative, en implémentant les différents phénomènes physique un à un, que nous avons réussi à avoir un modèle physique fonctionnel.
+C'est finalement en adoptant une manière itérative, en implémentant les différents phénomènes physique un à un, que nous avons réussi à avoir un modèle physique fonctionnel.
 
 \subsection{Le manque de ressources}\label{subsec:manque-ressources}
 L'étude de la dynamique des véhicules est quelque chose d'assez documenté, cependant aucune ressource que nous avons trouvée lie chaque phénomène physique que nous avons implémenté ensemble.
@@ -38,13 +39,17 @@ Nous avons donc dû fournir un travail de recherche approfondi pour pouvoir lier
 
 \subsection{Le manque de données}\label{subsec:manque-data}
 Similaire au manque de ressources, il y avait encore moins de données disponibles, cela voulait dire qu'après avoir implémenté les différentes formules trouvées, nous devions lancer notre modèle avec différentes données pour trouver les données qui donnaient les résultats obtenus.
-Par exemple, il a été difficile de trouver
+De plus, cela nous a mené à plusieurs reprises, lorsqu'on implémentait une nouvelle fonctionnalité que cela casse totalement le code.
+Celui-ci nous donnait alors des données dépassantes $9e^{12}$.
+À chaque implémentation de nouvelles fonctionnalités, nous devions donc mener un travail de recherche pour identifier les variables qui nous posaient problème, puis en itérant notre modèle de nombreuses fois avec des données différentes, trouver les valeurs adaptées.
+
 
 
 \subsection{Perspectives d'amélioration}\label{subsec:perspectives-d'ameliorations}
-Pour les futures itérations du projet, plusieurs axes d'amélioration ont été identifiés :
+Pour une future amélioration du projet, nous avons identifié plusieurs axes d'améliorations :
 \begin{itemize}
-    \item Enrichir la diversité des circuits proposés afin d'offrir une expérience de conduite plus variée et immersive.
+    \item Implémenter divers scénarios de conduite, afin d'offrir à l'utilisateur des expériences des différents phénomènes physiques implémentés.
+    \item Comme proposé dans le sujet original, implémenter des phénomènes aléatoires, par exemple avoir un animal qui traverse la route, forçant l'utilisateur à changer sa trajectoire.
     \item Améliorer l'esthétique globale du projet, tant au niveau de l'interface graphique que des animations.
     \item Affiner le modèle physique en intégrant des phénomènes supplémentaires et en ajustant les paramètres pour une simulation encore plus réaliste.
     Plus précisément, on pourrait par exemple introduire un centre de gravité dynamique, ce qui permettrait de modéliser le transfert de forces du véhicule lors d'un freinage, d'une accélération ou de la prise d'un virage.
@@ -67,7 +72,7 @@ Pour compiler le projet, il est nécessaire d'installer les dépendances suivant
     \item \texttt{\gls{cmake}} (version 3.30 ou supérieure) : pour la configuration et la gestion de la compilation.
     \item \texttt{\gls{sfml}} (versions $\left[2.5 ; 3.0\left[$) : pour la gestion de l'interface graphique et des entrées.
     \item \texttt{\gls{gnuplot}} : pour la génération des graphiques.
-    \item \texttt{\gls{boost}} : utilisé pour la manipulation des flux, notamment en lien avec \texttt{\glspl{gnuplot}}.
+    \item \texttt{\gls{boost}} : utilisé pour la manipulation des flux, particulièrement en lien avec \texttt{\glspl{gnuplot}}.
     \item \texttt{\gls{googletest}} : installé automatiquement via le fichier \texttt{CMakeLists.txt}, pour la réalisation des tests unitaires.
 \end{itemize}
 \newpage
