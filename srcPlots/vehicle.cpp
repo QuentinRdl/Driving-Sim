@@ -265,7 +265,7 @@ void Vehicle::plotTestIterative() {
     }
 
     Plotting p;
-    p.plotStepFromArray(data, steps, "../Plots/Iterative");
+    p.plotStepFromArray(data, steps, ITERATIVE_PLOT_PATH);
 }
 
 void Vehicle::plot() {
@@ -308,7 +308,7 @@ void Vehicle::plot() {
     }
 
     Plotting p;
-    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, "../Plots");
+    p.plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, PLOT_PATH);
     // We print count (Number of time saturation is reached)
     std::cout << "Saturation count : " << myVehicle.count << std::endl;
 }

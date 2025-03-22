@@ -5,6 +5,7 @@
 #include "plotting.h"
 
 #include <utility>
+#include <filesystem>
 #include "vehicle.h"
 
 void Plotting::plot_etape(
@@ -110,7 +111,7 @@ void Plotting::convertToArray(
     }
 }
 
-void Plotting::plotStepFromArray(vehicleData *data, size_t size, std::string path) {
+void Plotting::plotStepFromArray(vehicleData *data, size_t size, const std::string& path) {
     // On s'assure que le path exists
     if (!std::filesystem::exists(path)) {
         std::cerr << "Error: Path does not exist: " << path << std::endl;
@@ -122,10 +123,12 @@ void Plotting::plotStepFromArray(vehicleData *data, size_t size, std::string pat
     convertToArray(vx_data, vy_data, r_data, traj_data, slip_data, data, size);
 
     // Appel a la fonction de plot
-    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, std::move(path));
+    plot_etape(vx_data, vy_data, r_data, traj_data, slip_data, path);
 }
 
 int main() {
+    std::filesystem::create_directories(FULL_PATH);
+
     Vehicle::plotTestIterative();
     Vehicle::plot();
 }

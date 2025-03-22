@@ -11,6 +11,11 @@
 #include <filesystem> // Etre sûr que le fichier à plot existe
 #include "vehicle.h"
 
+#define PLOT_PATH "../Plots/"
+
+#define ITERATIVE_PLOT_PATH (PLOT_PATH "Iterative")
+#define FULL_PATH ITERATIVE_PLOT_PATH
+
 class Plotting {
 public:
     void plot_etape(
@@ -23,7 +28,7 @@ public:
         std::vector<std::pair<float, float>>& r_data, std::vector<std::pair<float, float>>& traj_data,
         std::vector<std::pair<float, float>>& slip_data, vehicleData *data, size_t size);
 
-    void plotStepFromArray(vehicleData *data, size_t size, std::string path);
+    void plotStepFromArray(vehicleData *data, size_t size, const std::string& path);
 
 };
 
