@@ -26,12 +26,31 @@ Le choix du langage \gls{cpp} s'est révélé judicieux en raison de sa polyvale
 Malgré une connaissance initiale limitée, ce projet nous a permis de progresser significativement dans sa maîtrise.
 L'utilisation de \gls{sfml} a également été un atout majeur, simplifiant le développement d'interfaces graphiques interactives sans nécessiter de techniques trop complexes.
 
+\subsection{Implémentation de la physique}\label{subsec:implem-phys}
+En commançant notre projet, nous avons voulu implémenter trop de principes physiques en m�me temps, ce qui nous menait à de nombreuses erreurs.
+Ceci nous a contraint à recommencer l'implémentation de la physique plusieurs fois.
+Cette erreur nous a cependant appris qu'il ne faut pas essayer d'implémenter toutes les fonctionnalités en un bloc, mais de faire pas à pas.
+C'est en adoptant une manière itérative, en implémentant les différents phénomènes physique un à un, que nous avons réussi à avoir un modèle physique fonctionnel.
+
+\subsection{Le manque de ressources}\label{subsec:manque-ressources}
+L'étude de la dynamique des véhicules est quelque chose d'assez documenté, cependant aucune ressource que nous avons trouvée lie chaque phénomène physique que nous avons implémenté ensemble.
+Nous avons donc dû fournir un travail de recherche approfondi pour pouvoir lier tous les phénomènes physiques entre eux.
+
+\subsection{Le manque de données}\label{subsec:manque-data}
+Similaire au manque de ressources, il y avait encore moins de données disponibles, cela voulait dire qu'après avoir implémenté les différentes formules trouvées, nous devions lancer notre modèle avec différentes données pour trouver les données qui donnaient les résultats obtenus.
+Par exemple, il a été difficile de trouver
+
+
 \subsection{Perspectives d'amélioration}\label{subsec:perspectives-d'ameliorations}
 Pour les futures itérations du projet, plusieurs axes d'amélioration ont été identifiés :
 \begin{itemize}
     \item Enrichir la diversité des circuits proposés afin d'offrir une expérience de conduite plus variée et immersive.
     \item Améliorer l'esthétique globale du projet, tant au niveau de l'interface graphique que des animations.
     \item Affiner le modèle physique en intégrant des phénomènes supplémentaires et en ajustant les paramètres pour une simulation encore plus réaliste.
+    Plus précisément, on pourrait par exemple introduire un centre de gravité dynamique, ce qui permettrait de modéliser le transfert de forces du véhicule lors d'un freinage, d'une accélération ou de la prise d'un virage.
+    \item La physique du modèle, pensée, initialement, uniquement pour l'interface graphique ne permet pas de générer une trajectoire sur un \texttt{dt} dépassant 9999.
+    Bien que ce soit amplement suffisant pour l'interface, cette limite restraint la visualisation d'un scénario fixe en traçant les graphiques des différentes données.
+
 \end{itemize}
 
 \subsection{Ce que nous ferions différemment}\label{subsec:ce-que-nous-ferions-differemment}
