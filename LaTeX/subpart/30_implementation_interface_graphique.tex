@@ -24,7 +24,7 @@ Plusieurs classes clés interagissent pour offrir une interface graphique cohér
 
 \paragraph[Game]{La Classe \textbf{Game}}\label{par:class_game}
 C'est la classe principale du projet, elle orchestre l'application.
-Elle initialise la fenêtre \gls{sfml}, configure les vues (Game View et \gls{hud} View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
+Elle initialise la fenêtre \gls{sfml}, configure les \glspl{view} (Game View et \gls{hud} View), gère le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et coordonne les interactions entre les différents modules.
 
 Elle contient 3 fonctions principales :
 \begin{lstlisting}[style=CStyle, label={lst:game_class}]
@@ -322,20 +322,30 @@ L'affichage de cette trajectoire prédictive est géré en temps réel grâce à
 \end{itemize}
 
 \subsubsection{Gestion des événements utilisateurs}\label{subsubsec:gestion-des-evenements-utilisateurs}
-La gestion des interactions se fait principalement via la méthode \texttt{manageEvents()} de la classe \texttt{Game} :
+La gestion des interactions se fait principalement via la méthode \texttt{manageEvents()} de la classe \texttt{Game}.
+Ce système s'appuie sur le mécanisme d'événements de la bibliothèque \gls{sfml}, qui capture et gère de manière asynchrone toutes les interactions (clavier, souris, redimensionnement de fenêtre, etc.).
+\gls{sfml} place les événements dans une file d'attente, permettant à l'application de les traiter un par un afin d'assurer une réponse immédiate aux actions de l'utilisateur.
+
 \begin{itemize}
     \item \textbf{Clavier} : La touche F active/désactive le compteur de FPS, F3 bascule le mode Debug, F5 réinitialise la position du véhicule et ESC ferme l'application.
     \item \textbf{Souris} : Le défilement de la molette permet d'ajuster le niveau de zoom sur la Game View, offrant ainsi à l'utilisateur la possibilité de mieux suivre le véhicule ou d'obtenir une vue d'ensemble du circuit.
 \end{itemize}
-Ce système d'événements assure une interactivité réactive et une expérience utilisateur intuitive.
+
+Ce système d'événements, en tirant parti des fonctionnalités offertes par \gls{sfml}, assure une interactivité réactive et une expérience utilisateur intuitive.
+
+\newglossaryentry{view}{ % TODO METTRE DANS DRIVING_SIM_REPORT.tex
+    name=vue,
+    plural=vues,
+    description={Vue, en anglais. Dans le contexte de l'interface graphique, cela fait référence à la manière dont les éléments sont affichés à l'utilisateur.}
+}
 
 \subsection{Optimisation du rendu et de l'affichage}\label{subsec:optimisation-du-rendu-et-de-l-affichage}
-\subsubsection{Gestion des vues}\label{subsubsec:gestion-des-vues}
-Dans le simulateur, on peut distinguer deux vues :
+\subsubsection{Gestion des \glspl{view}}\label{subsubsec:gestion-des-vues}
+Dans le simulateur, on peut distinguer deux \glspl{view} :
 \begin{itemize}
-    \item \textbf{Game View} : C'est la vue principale où le circuit et le véhicule sont affichés.
+    \item \textbf{Game View} : C'est la \gls{view} principale où le circuit et le véhicule sont affichés.
     Elle est centrée sur le véhicule, offrant une perspective immersive de la conduite.
-    \item \textbf{\gls{hud} View} : Cette vue affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
+    \item \textbf{\gls{hud} View} : Cette \gls{view} affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage.
 \end{itemize}
 
 C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la \gls{hud} View.
@@ -344,9 +354,10 @@ C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans q
 Afin d'assurer une fluidité optimale du simulateur, plusieurs optimisations ont été mises en œuvre :
 \begin{itemize}
     \item \textbf{Calcul du circuit} : Le circuit est calculé une première fois, puis stocké dans un tableau de segments de route (\texttt{\gls{std_vector}<RoadSegment>}\cite{cpp_reference_vector}).
-    Lorsque le circuit a besoin d'être recalculé, par exemple lors d'une modification du zoom, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète, et il est recalculé lors de la prochaine itération de la boucle principale.
+    Lorsque le circuit a besoin d'être recalculé, par exemple lors d'une modification du zoom, un appel à la méthode \texttt{needUpdate()} le définit comme obsolète.
+    À la prochaine itération de la boucle principale, il est recalculé et le tableau de segments de route est mis à jour.
     \item \textbf{Utilisation de Vertex Arrays} : Le tracé de la trajectoire est réalisé à l'aide d'un \texttt{sf::VertexArray}\cite{sfml_sf_vertexarray}, ce qui permet de dessiner une série de points connectés en un seul appel de rendu.
-    \item \textbf{Gestion efficace de la vue} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
+    \item \textbf{Gestion efficace de la \gls{view}} : La Game View est ajustée dynamiquement en se recentrant sur le véhicule, minimisant ainsi les recalculs inutiles et garantissant que seul le contenu pertinent est redessiné.
 \end{itemize}
 
 \subsection{Perspectives d'amélioration et évolutions futures}\label{subsec:perspectives-d-evolution}
