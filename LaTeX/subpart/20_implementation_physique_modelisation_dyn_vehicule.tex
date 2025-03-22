@@ -68,7 +68,7 @@ Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAccele
 Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
 Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
-Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{Gnuplot} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
+Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]
 void simulation_etape1() {
@@ -97,7 +97,7 @@ void simulation_etape1() {
 }
 \end{lstlisting}
 
-{\LARGE Question => Doit-on ajouter la partie code Gnuplot à la figure précédente ?}
+{\LARGE Question => Doit-on ajouter la partie code \gls{gnuplot} à la figure précédente ?}
 
 Les graphiques donnés par notre implémentation donnent alors :
 
@@ -277,7 +277,7 @@ Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, do
 }
 \end{lstlisting}
 
-Et, nous pouvons donc maintenant visualiser, grâce à Gnuplot, la trajectoire de notre véhicule, en lui donnant un certain angle de braquage, une certaine vitesse, orientation, etc. Voici un exemple de simulation sur 1000 itérations, avec un angle de braquage delta fixe, que l'on inverse au bout de 500 itérations.
+Et, nous pouvons donc maintenant visualiser, grâce à \gls{gnuplot}, la trajectoire de notre véhicule, en lui donnant un certain angle de braquage, une certaine vitesse, orientation, etc. Voici un exemple de simulation sur 1000 itérations, avec un angle de braquage delta fixe, que l'on inverse au bout de 500 itérations.
 Voici les différents graphiques qui découlent de cette implémentation :
 
 \begin{center}
