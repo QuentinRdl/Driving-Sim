@@ -380,7 +380,11 @@ Cependant, nous avons rencontré un problème fondamental en essayant de faire f
     \item Une instabilité totale de toutes les données pour des pas de temps trop élevés,
     \item Une divergence des valeurs dans certaines conditions.
 \end{itemize}
-Ce tout rendait notre modèle totalement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'intégration numérique. Après une recherche étoffée, nous avons décidé d'utiliser une méthode d'intégration plus avancée : \textbf{Runge-Kutta d'ordre 4 (RK4}. En effet, RK4 s'est révélée être un compromis idéal entre précision et performance. Contrairement à la méthode d'Euler qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision. Elle suit le schéma suivant :
+Ce tout rendait notre modèle complètement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'intégration numérique.
+Après une recherche étoffée, nous avons décidé d'utiliser une méthode d'intégration plus avancée : \textbf{Runge-Kutta d'ordre 4} (RK4).
+En effet, RK4 s'est révélée être un compromis idéal entre précision et performance.
+Contrairement à la méthode d'Euler qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision.
+Elle suit le schéma suivant :
 
 \begin{align}
     k_1 &= f(x_n+t_n)\\
@@ -392,7 +396,8 @@ Ce tout rendait notre modèle totalement inutilisable, nous avons donc décidé 
     Formule disponible sur : \cite{RK4}
 \end{center}
 Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \ k_3, \ k_4)$ qui correspondent aux
-dérivées estimées du système à différents instants au sein d'un même pas de temps. Dans notre cas, ces dérivées
+dérivées estimées du système à différents instants au sein d'un même pas de temps.
+Dans notre cas, ces dérivées
 représentent les variations des états dynamiques du véhicule qui comprennent :
 
 \begin{itemize}
