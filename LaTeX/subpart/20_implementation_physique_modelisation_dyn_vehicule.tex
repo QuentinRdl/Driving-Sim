@@ -391,7 +391,9 @@ Ce tout rendait notre modèle totalement inutilisable, nous avons donc décidé 
 \begin{center}
     Formule disponible sur : \cite{RK4}
 \end{center}
-Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \ k_3, \ k_4)$ qui correspondent aux dérivées estimées du système à différents instants au sein d'un même pas de temps. Dans notre cas, ces dérivées représentent les variations des états dynamiques du véhicule qui comprennent :
+Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \ k_3, \ k_4)$ qui correspondent aux
+dérivées estimées du système à différents instants au sein d'un même pas de temps. Dans notre cas, ces dérivées
+représentent les variations des états dynamiques du véhicule qui comprennent :
 
 \begin{itemize}
     \item La position $(x,y)$,
@@ -400,4 +402,13 @@ Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \
     \item La vitesse angulaire $(\omega)$.
 \end{itemize}
 
-Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$, ce qui restaure la stabilité et la fidélité du modèle. Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de sous-virage.
+Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$,
+ce qui restaure la stabilité et la fidélité du modèle. Avec cette étape du modèle, qui est la dernière, nous pouvons
+donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de sous-virage.
+
+Après avoir produit une physique qui suffisait à notre simulateur, nous avons décidé d'utiliser Gnuplot pour pouvoir
+afficher  les données produites par notre modèle, et ainsi pouvoir visualiser les réactions des différents paramètres
+utilisés dans notre simulation.
+Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce a notre classe \texttt{vehicule.cpp}, et sa
+fonction
+
