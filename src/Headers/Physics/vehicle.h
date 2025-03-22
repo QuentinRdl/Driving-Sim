@@ -129,7 +129,7 @@ public:
      */
     void getData(vehicleData &data) const;
 
-    static void plotTest();
+    static void plot();
 
     static void plotTestIterative();
 

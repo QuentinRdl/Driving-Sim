@@ -221,7 +221,7 @@ void Vehicle::plotTestIterative() {
     p.plotStepFromArray(data, steps, "../Plots/Iterative");
 }
 
-void Vehicle::plotTest() {
+void Vehicle::plot() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
     // vehicleData *data = {};
@@ -230,10 +230,10 @@ void Vehicle::plotTest() {
     float initS_desired = 0.1; // Valeur cible de slip
 
     Vehicle myVehicle(1700.0, 1.5, 1.5, 20, 150000.0, 40000.0,
-                      initSlip, initSlip_tau, initS_desired, 0.9, 0.9, 9.81);
+                      initSlip, initSlip_tau, initS_desired, 0.7, 0.7, 9.81);
 
     float dt = 0.02;
-    int steps = 10000;
+    int steps = 30000;
     // Choix d'un angle de braquage (delta) et d'un slip constant pour la simulation
     //double delta = 0.05; // en radians
     float delta = 0.05; // en radians

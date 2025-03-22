@@ -138,7 +138,7 @@ public:
 
     static void plotTestIterative();
 
-    static void plotTest();
+    static void plot();
 
 private:
 

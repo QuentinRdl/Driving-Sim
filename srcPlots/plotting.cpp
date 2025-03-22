@@ -127,5 +127,5 @@ void Plotting::plotStepFromArray(vehicleData *data, size_t size, std::string pat
 
 int main() {
     Vehicle::plotTestIterative();
-    Vehicle::plotTest();
+    Vehicle::plot();
 }
