@@ -342,15 +342,62 @@ $g$ = La constante gravitationnelle \\
 %%\center{\text{(Formules tirées de \cite{axle_weights})}} % TODO create bib entry
 \end{itemize}
 
-Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction. Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu. Le coefficient d'adhérence des pneus avant et arrières sont représentés respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$. Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence. Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée. Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
+Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction. Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu. Le coefficient d'adhérence des pneus avant et arrières est représenté respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$. Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence. Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée. Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
 
 \begin{itemize}
     \item \textbf{Essieu avant} :
-    \[F_{y_\max\_front}= \mu_{front} \times F_{z\_front}\]
+    $$F_{y\_\texttt{max\_front}}= \mu_{\texttt{front}} \times F_{z\_\texttt{front}}$$
     \item \textbf{Essieu arrière} :
-    \[F_{y_\max\_rear} = \mu_{rear} \times F_{z\_rear}\]
+    $$F_{y\_\texttt{max\_rear}} = \mu_{\texttt{rear}} \times F_{z\_\texttt{rear}}$$
 \end{itemize}
 
+Premièrement, nous calculons les forces latérales, on rappelle que la formule est la suivante :
 
+\begin{itemize}
+    \item \texttt{F\_y\_front} : $$2 \times C_y \times \alpha_F$$
+    \item \texttt{F\_y\_rear} : $$2 \times C_y \times \alpha_R$$
+\end{itemize}
 
-BOLOLOLOLOLO
+Cependant, à ce moment-ci, elles sont linéaires et, pour les différencier des forces finales, on les notera : \texttt{F\_y\_front\_linear} et \texttt{F\_y\_rear\_linear}. Maintenant, pour tenir compte de l'adhérence limitée, nous définissons deux rapports :
+
+\begin{align}
+    \texttt{ratio\_front} &= \frac{\texttt{F\_y\_front}}{\texttt{F\_y\_front\_max}} \\
+    \texttt{ratio\_rear} &= \frac{\texttt{F\_y\_rear}}{\texttt{F\_y\_rear\_max}}
+\end{align}
+
+Ensuite, nous pouvons utiliser ce rapport pour modéliser la saturation. Ainsi, la force latérale effective est donnée par :
+
+\begin{itemize}
+    \item \texttt{F\_y\_front} : $$\texttt{F\_y\_max\_front} \times \tanh(\texttt{ratio\_front})$$
+    \item \texttt{F\_y\_rear} : $$\texttt{F\_y\_max\_rear} \times \tanh(\texttt{ratio\_rear})$$
+\end{itemize}
+
+Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de ratios, et elle tend vers une valeur asymptomatique $(1)$ lorsque le ratio augmente, ce qui limite la force latérale. À terme, la force d'adhérence générée par le pneu ne peut pas dépasser sa limite. Grâce à ces nouvelles limites, nous pouvons donc simuler la saturation des pneumatiques, ce qui nous permet d'éviter d'avoir des forces latérales irréalistes dans notre simulation. Mais également de reproduire le phénomène de survirage et de sous-virage, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
+
+Cependant, nous avons rencontré un problème fondamental en essayant de faire fonctionner notre simulation, la précision et la stabilité numérique des équations différentielles de notre système nous donnaient des valeurs totalement incohérentes. Après une grande analyse des différents systèmes implémentés dans notre modèle, nous avons compris que c'était notre utilisation de la méthode d'Euler. Après avoir fait des tests approfondis, nous avons constaté que cette approche générait des erreurs significatives qui compromettaient totalement la fidélité de notre modèle. Après avoir réétudié la méthode d'Euler, nous avons compris qu'elle n'était plus adaptée, car elle introduit une erreur d'approximation, en particulier lorsque le système présente des dynamiques rapides ou non linéaires. Dans notre cas, plusieurs phénomènes incohérents sont apparus lors des simulations :
+\begin{itemize}
+    \item Des oscillations dans les trajectoires,
+    \item Une instabilité totale de toutes les données pour des pas de temps trop élevés,
+    \item Une divergence des valeurs dans certaines conditions.
+\end{itemize}
+Ce tout rendait notre modèle totalement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'intégration numérique. Après une recherche étoffée, nous avons décidé d'utiliser une méthode d'intégration plus avancée : \textbf{Runge-Kutta d'ordre 4 (RK4}. En effet, RK4 s'est révélée être un compromis idéal entre précision et performance. Contrairement à la méthode d'Euler qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision. Elle suit le schéma suivant :
+
+\begin{align}
+    k_1 &= f(x_n+t_n)\\
+    k_2 &= f(x_n+ {\frac{h}{2}}k_1, t_n + {\frac{h}{2}})\\
+    k_3 &= f(x_n+ {\frac{h}{2}}k_2, t_n + {\frac{h}{2}})\\
+    k_4 &= f(x_n+ hk_3, t_n + h)
+\end{align}
+\begin{center}
+    Formule disponible sur : \cite{RK4}
+\end{center}
+Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \ k_3, \ k_4)$ qui correspondent aux dérivées estimées du système à différents instants au sein d'un même pas de temps. Dans notre cas, ces dérivées représentent les variations des états dynamiques du véhicule qui comprennent :
+
+\begin{itemize}
+    \item La position $(x,y)$,
+    \item L'orientation $(\theta)$,
+    \item Les vitesses longitudinales et latérales $(v_x, v_y)$,
+    \item La vitesse angulaire $(\omega)$.
+\end{itemize}
+
+Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$, ce qui restaure la stabilité et la fidélité du modèle. Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de sous-virage.
