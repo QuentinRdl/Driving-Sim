@@ -21,6 +21,7 @@
 \makeglossaries
 \newglossaryentry{dynamique_vehicule}{
     name={dynamique de véhicule},
+    plural={dynamique des véhicules}
     description={Ensemble des lois physiques qui régissent le mouvement, la stabilité et le comportement d’un véhicule}
 }
 
@@ -40,9 +41,25 @@
     Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).}
 }
 
+\newglossaryentry{vitesseAngulaire}{
+    name={vitesse angulaire},
+    description={Taux de variation de l'angle de rotation d'un objet en fonction du temps.
+    Elle est notée \( \omega \) et s'exprime en radians par seconde (\(\text{rad/s}\)).
+    Elle est définie par \( \omega = \frac{d\theta}{dt} \), où \( \theta \) est l'angle de rotation.}
+}
+
+\newglossaryentry{equationDifferentielle}{
+    name={équation différentielle},
+    plural={équation différentielles},
+    description={Équation reliant une fonction inconnue à ses dérivées.
+    Elle permet de modéliser des phénomènes dynamiques en physique, en ingénierie et en mathématiques appliquées.
+    Une équation différentielle ordinaire s'écrit sous la forme \( F(x, y, y', y'', \dots) = 0 \), tandis qu'une équation aux dérivées partielles fait intervenir des dérivées par rapport à plusieurs variables.}
+}
+
+
 \newglossaryentry{accelerationAngulaire}{
     name={accélération angulaire},
-    description={Variation du vecteur vitesse angulaire au cours du temps. Elle est notée \( \alpha \) et s'exprime en radians par seconde au carré (\(\text{rad/s}^2\)).}
+    description={Variation du vecteur \gls{vitesseAngulaire} au cours du temps. Elle est notée \( \alpha \) et s'exprime en radians par seconde au carré (\(\text{rad/s}^2\)).}
 }
 
 \newglossaryentry{rotationAngulaire}{
@@ -52,11 +69,13 @@ description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotati
 
 \newglossaryentry{modele_bicycle}{
     name={modèle bicycle},
+    plural{modèle Bicycle},
     description={Modèle mathématique regroupant les roues avant et arrière en deux entités distinctes afin de simplifier la simulation de la dynamique du véhicule}
 }
 
 \newglossaryentry{angle_glissement}{
-    name={angle de glissement (Slip angle)},
+    name={angle de glissement},
+    plural={angles de glissement}
     description={Angle formé entre la direction réelle d’un pneu et son orientation, déterminant la force latérale développée}
 }
 
@@ -97,12 +116,14 @@ description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotati
 }
 
 \newglossaryentry{raideur_longitudinale}{
-    name={raideur longitudinale (Cx)},
+    name={Raideur longitudinale},
+    plural={raideur longitudinale},
     description={Mesure de la réactivité des pneus aux forces de traction ou de freinage}
 }
 
 \newglossaryentry{raideur_laterale}{
-    name={raideur latérale (Cy)},
+    name={Raideur latérale},
+    plural={raideur latérale},
     description={Mesure de la réponse des pneus aux forces générées lors des virages}
 }
 
