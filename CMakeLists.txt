@@ -30,7 +30,6 @@ add_executable(Driving_Sim
         src/Headers/plotting.h
         src/Headers/gnuplot-iostream.h
         src/plotting.cpp
-#        OldPhysics/OldPhysics.cpp     # Ajout du fichier OldPhysics.cpp
 )
 
 target_include_directories(Driving_Sim PRIVATE
