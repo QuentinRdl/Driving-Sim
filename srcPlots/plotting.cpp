@@ -101,13 +101,13 @@ void Plotting::convertToArray(
     // We iterate through our array of vehicleData
     for (size_t i = 0; i < size; ++i) {
         // Access each element using data[i]
-        std::cout << data[i].vx << std::endl;
+        // std::cout << data[i].vx << std::endl;
         vx_data.emplace_back(static_cast<float>(i), data[i].vx);
         vy_data.emplace_back(static_cast<float>(i), data[i].vy);
         r_data.emplace_back(static_cast<float>(i), data[i].lacet);
         traj_data.emplace_back(data[i].x, data[i].y);
         slip_data.emplace_back(static_cast<float>(i), data[i].slip);
-        std::cout << "convertToArray => Iteration number: " << i << std::endl;
+        // std::cout << "convertToArray => Iteration number: " << i << std::endl;
     }
 }
 
