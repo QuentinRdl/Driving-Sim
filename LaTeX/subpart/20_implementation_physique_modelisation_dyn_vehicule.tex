@@ -1,7 +1,7 @@
-\usepackage{glossaries}\section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
+\usepackage{glossaries}\section{L'implémentation de la physique / Modélisation d'un système de \gls{dynamique_vehicule}}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
 \subsection{Introduction}\label{subsec:introduction}
 Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur.
-De plus, comme l'étude et la représentation d'un système de dynamique de véhicule est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative.
+De plus, comme l'étude et la représentation d'un système de \gls{dynamique_vehicule} est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative.
 Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
 Ceci nous a mené à un plan en 4 étapes.
 Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, ensuite implémenter un \gls{modele_bicycle} simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
@@ -68,7 +68,7 @@ Ici, on utilise $a_x(t)$, car c'est la \gls{derivee} de $v_x(t)$ par rapport au 
 C'est la même chose pour $a_y(t)$ qui résulte de $a_y(t)$.
 Ensuite, pour trouver $\dot{r}(t)$, qui est l'\gls{accelerationAngulaire}, on applique la loi de la dynamique de \gls{rotationAngulaire} qui est la suivante :
 $$I\dot{r}(t) = \texttt{torque}$$
-où $I$ est le moment d'inertie de l'objet.
+où $I$ est le \gls{moment_inertie} de l'objet.
 En isolant $\dot{r}(t)$, on obtient :
 $$\dot{r}(t)= \frac{\texttt{torque}}{I}$$
 Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAcceleration(torque);} où cette relation est implémentée.
@@ -125,17 +125,17 @@ Les graphiques donnés par notre implémentation donnent alors :
     \item \textbf{Graphique de la vitesse latérale ($vy$)} : De même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
 
     \item \textbf{Graphique du taux de lacet ({$\texttt{lacet}$})} : Et dernièrement, ce graphique-ci nous permet de voir l'évolution de l'orientation du véhicule.
-    Grâce à la loi de la dynamique de rotation ($I\dot{r} = \texttt{torque}$), nous constatons que l'accélération angulaire est directement proportionnelle au couple appliqué, ce qui se traduit par une variation linéaire de $\texttt{lacet}$ au fil du temps.
+    Grâce à la loi de la dynamique de rotation ($I\dot{r} = \texttt{torque}$), nous constatons que l'\gls{accelerationAngulaire} est directement proportionnelle au couple appliqué, ce qui se traduit par une variation linéaire de $\texttt{lacet}$ au fil du temps.
 \end{itemize}
 
-\subsection{Le modèle Bicycle simplifié}\label{subsec:le-modele-bicycle-simplifie}
+\subsection{Le \glspl{modele_bicycle}e simplifié}\label{subsec:le-modele-bicycle-simplifie}
 
-\subsubsection{Explication du modèle Bicycle}
+\subsubsection{Explication du \glspl{modele_bicycle}}
 Après avoir implémenté ces phénomènes physiques de base, nous devions rajouter une façon de pouvoir contrôler notre véhicule de manière réaliste.
 C'est pourquoi nous avons choisi d'implémenter le \textbf{\gls{modele_bicycle} simplifié}.
 C'est un modèle couramment utilisé en \glspl{dynamique_vehicule}, plutôt que de traiter séparément les quatre roues d'un véhicule, il regroupe les roues avant en une seule roue, et fait de même pour les roues arrière.
 En procédant de cette manière, nous pouvons capturer les comportements dynamiques des pneus d'un véhicule tout en réduisant la complexité des équations utilisées.
-Comme le but de cette partie était de pouvoir calculer la trajectoire d'un véhicule, nous avons utilisé le modèle bicycle pour trouver l'angle de glissement des pneus, ainsi que pour trouver les forces appliquées sur ceux-ci, pour pouvoir modéliser la trajectoire.
+Comme le but de cette partie était de pouvoir calculer la trajectoire d'un véhicule, nous avons utilisé le \gls{modele_bicycle} pour trouver l'\gls{angle_glissement} des pneus, ainsi que pour trouver les forces appliquées sur ceux-ci, pour pouvoir modéliser la trajectoire.
 
 Mais qu'est-ce que l'\textbf{\gls{angle_glissement}} ? L'\gls{angle_glissement} est l'angle formé entre la direction réelle d'un pneu et l'orientation de la roue.
 Il est induit par les forces latérales lors d'un virage.
@@ -262,7 +262,7 @@ $$a_y=-v_x\times lacet + \frac{1}{mass}(F_{x\_front} \times \sin(\delta) + F_{y\
 
 Pour l'accélération de lacet ($r_{dot}$) :
 $$r_{dot} = \frac{1}{I}(a \times (F_{x\_front} \times \sin(\delta) + F_{y\_front} \times \cos(\delta)) - b \times F_{y\_rear})$$
-Avec $I$ qui est le moment d'inertie, que nous fixons au début de notre simulation grâce à la formule : $$I = m \times ({\frac{{a+b}}{2}})^2$$
+Avec $I$ qui est le \gls{moment_inertie}, que nous fixons au début de notre simulation grâce à la formule : $$I = m \times ({\frac{{a+b}}{2}})^2$$
 Et \texttt{airResCoeff} qui est le coefficient de la résistance de l'air que nous fixons également en construisant notre objet véhicule. \newline
 
 {\Large Question => Faire un rappel sur ce qu'est $a$, $b$ $\delta$ ?}
@@ -291,7 +291,7 @@ void updateBicycle(double dt, double delta, double slip) {
 \end{lstlisting}
 
 Et par la suite, dans notre implémentation, nous intégrons les valeurs avec la \gls{euler_explicite}, puis dans notre boucle de simulation, nous appelons, \texttt{myVehicle.updateBicycle(dt, delta, slip);} au lieu de \texttt{myVehicle.update(dt, Fx, Fy, torque);}comme à l'étape 1.
-Et pour initialiser $I$, le moment d'inertie, nous le faisons donc dans notre constructeur de l'objet véhicule :
+Et pour initialiser $I$, le \gls{moment_inertie}, nous le faisons donc dans notre constructeur de l'objet véhicule :
 
 \begin{lstlisting}[style=CStyle,label={lst:constructor_vehicle_1}]
 Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
@@ -311,7 +311,7 @@ Voici les différents graphiques qui découlent de cette implémentation :
 \includegraphics[width=0.70\linewidth]{resources/Plots/Etape2/trajectory}
 \end{center}
 
-\subsection{Introduction d'un glissement dynamique}\label{subsec:introduction-dun-glissement-dynamique}
+\subsection{Introduction d'un \gls{glissement_dynamique}}\label{subsec:introduction-dun-glissement-dynamique}
 
 Comme nous avons vu dans la partie précédente, nous avons introduit un nouveau paramètre, appelé \texttt{slip}, qui représente le glissement entre la surface du pneu et la route.
 Il influence la force longitudinale générée par le pneu avant.
@@ -336,7 +336,7 @@ Avec toutes ces nouvelles données, nous pouvons donc modéliser la dynamique du
 $$\dot{\texttt{slip}} = \frac{s_{\texttt{desired}} - \texttt{slip}}{\texttt{slip}_{\texttt{desired}}}$$
 
 Cette équation traduit donc le fait que le taux de variation du \texttt{slip} $(\dot{\texttt{slip}})$, est proportionnel à l'écart entre la valeur désirée et la valeur actuelle.
-Par la suite, on intègre cette donnée avec la méthode d'Euler pour la mettre à jour, ce qui donne donc dans notre fonction \texttt{updateBicycle} :
+Par la suite, on intègre cette donnée avec la \gls{euler_explicite} pour la mettre à jour, ce qui donne donc dans notre fonction \texttt{updateBicycle} :
 
 \begin{lstlisting}[style=CStyle,label={lst:code_update_bicycle_etape3}]
 void updateBicycleEtape3(double dt, double delta) {
@@ -351,13 +351,13 @@ Ici, on remarque dans la fonction que le paramètre \texttt{slip} n'est plus don
 
 \subsection{Limites des pneumatiques}
 
-Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes avec lesquels la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un sous-virage ou survirage.
+Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes avec lesquels la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un \gls{sous_virage} ou \gls{survirage}.
 Nous allons ainsi intégrer les limites physiques des pneumatiques à notre simulation pour représenter la force latérale maximale qu'un pneu peut générer avant de perdre son adhérence.
-Pour faire cela, nous allons introduire une saturation non linéaire des forces latérales, qui ne peuvent pas fournir une force infinie lors d'un virage.
+Pour faire cela, nous allons introduire une \gls{saturation_forces_laterales}, qui ne peuvent pas fournir une force infinie lors d'un virage.
 
-\subsubsection{Calcul des Charges sur les Essieux}
+\subsubsection{Calcul des Charges sur les \glspl{essieu}}
 
-Pour déterminer la force latérale maximale que peut générer chaque essieu, nous devons déjà connaître la charge verticale des pneus.
+Pour déterminer la force latérale maximale que peut générer chaque \gls{essieu}, nous devons déjà connaître la charge verticale des pneus.
 Ces charges sont obtenues à partir de la répartition du poids du véhicule.
 Nous utilisons donc les formules suivantes :
 
@@ -368,15 +368,15 @@ $$F_{z\_front} = m \times g \times \frac{b}{a+b}$$
 $$F_{z\_rear} = m \times g \times \frac{b}{a+b}$$
 
 Avec :\\
-$a$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu avant},\\
-$b$ = Distance entre le \textbf{centre de gravité} et l'\textbf{essieu arrière},\\
+$a$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
+$b$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} arrière},\\
 $m$ = La masse du véhicule, \\
 $g$ = La constante gravitationnelle \\
 %%\center{\text{(Formules tirées de \cite{axle_weights})}} % TODO create bib entry
 \end{itemize}
 
 Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction.
-Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu.
+Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le \gls{coefficient_adherence} propre à chaque \gls{essieu}.
 Le coefficient d'adhérence des pneus avant et arrières est représenté respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$.
 Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence.
 Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée.
@@ -415,19 +415,19 @@ Ainsi, la force latérale effective est donnée par :
 Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de ratios, et elle tend vers une valeur asymptomatique $(1)$ lorsque le ratio augmente, ce qui limite la force latérale.
 À terme, la force d'adhérence générée par le pneu ne peut pas dépasser sa limite.
 Grâce à ces nouvelles limites, nous pouvons donc simuler la saturation des pneumatiques, ce qui nous permet d'éviter d'avoir des forces latérales irréalistes dans notre simulation.
-Mais également de reproduire le phénomène de survirage et de sous-virage, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
+Mais également de reproduire le phénomène de \gls{survirage} et de \gls{sous_virage}, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
 
 Cependant, nous avons rencontré un problème fondamental en essayant de faire fonctionner notre simulation, la précision et la stabilité numérique des équations différentielles de notre système nous donnaient des valeurs totalement incohérentes.
-Après une grande analyse des différents systèmes implémentés dans notre modèle, nous avons compris que c'était notre utilisation de la méthode d'Euler.
+Après une grande analyse des différents systèmes implémentés dans notre modèle, nous avons compris que c'était notre utilisation de la \gls{euler_explicite}.
 Après avoir fait des tests approfondis, nous avons constaté que cette approche générait des erreurs significatives qui compromettaient complètement la fidélité de notre modèle.
-Après avoir réétudié la méthode d'Euler, nous avons compris qu'elle n'était plus adaptée, car elle introduit une erreur d'approximation, en particulier lorsque le système présente des dynamiques rapides ou non linéaires.
+Après avoir réétudié la \gls{euler_explicite}, nous avons compris qu'elle n'était plus adaptée, car elle introduit une erreur d'approximation, en particulier lorsque le système présente des dynamiques rapides ou non linéaires.
 Dans notre cas, plusieurs phénomènes incohérents sont apparus lors des simulations :
 \begin{itemize}
     \item Des oscillations dans les trajectoires,
     \item Une instabilité totale de toutes les données pour des pas de temps trop élevés,
     \item Une divergence des valeurs dans certaines conditions.
 \end{itemize}
-Ce tout rendait notre modèle complètement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'intégration numérique.
+Ce tout rendait notre modèle complètement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'\gls{integration_numerique}.
 Après une recherche étoffée, nous avons décidé d'utiliser une méthode d'intégration plus avancée : \textbf{Runge-Kutta d'ordre 4} (RK4).
 En effet, RK4 s'est révélée être un compromis idéal entre précision et performance.
 Contrairement à la \gls{euler_explicite} qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision.
@@ -440,7 +440,7 @@ Elle suit le schéma suivant :
     k_4 &= f(x_n+ hk_3, t_n + h)
 \end{align}
 \begin{center}
-    Formule disponible sur : \cite{RK4}
+    Formule disponible sur ~\cite{RK4}:
 \end{center}
 Concrètement RK4 repose sur quatre évaluations intermédiaires $(k_1, \ k_2, \ k_3, \ k_4)$ qui correspondent aux
 dérivées estimées du système à différents instants au sein d'un même pas de temps.
@@ -455,7 +455,7 @@ représentent les variations des états dynamiques du véhicule qui comprennent 
 \end{itemize}
 
 Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$, ce qui restaure la stabilité et la fidélité du modèle.
-Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de sous-virage.
+Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de \gls{sous_virage}.
 
 Après avoir conçu une physique qui répondait aux besoins de notre simulateur, nous avons décidé d'utiliser \gls{Gnuplot} pour pouvoir afficher les données produites par notre modèle, et ainsi pouvoir visualiser les réactions des différents paramètres utilisés dans notre simulation.
 Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce à notre classe \texttt{vehicle.cpp}, et sa fonction \texttt{void Vehicle::plot();}.
