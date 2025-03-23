@@ -257,7 +257,7 @@ public:
         }
 
         // Calcul des forces sur les pneus (hypothèse : les forces sont identiques sur les deux roues de l'essieu)
-        double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels)
+        double F_x_front = 2.0 * Cx * slip; // Force longitudinale sur l'essieu avant (drive wheels /car voiture traction)
         double F_x_rear = 0.0; // Pas de force longitudinale à l'arrière
         double F_y_front = 2.0 * Cy * alpha_F; // Force latérale sur l'essieu avant
         double F_y_rear = 2.0 * Cy * alpha_R; // Force latérale sur l'essieu arrière
