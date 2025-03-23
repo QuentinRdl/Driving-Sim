@@ -458,11 +458,10 @@ Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur 
 Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de sous-virage.
 
 Après avoir conçu une physique qui répondait aux besoins de notre simulateur, nous avons décidé d'utiliser \gls{Gnuplot} pour pouvoir afficher les données produites par notre modèle, et ainsi pouvoir visualiser les réactions des différents paramètres utilisés dans notre simulation.
-Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce à notre classe \texttt{vehicule.cpp}, et sa fonction \texttt{void Vehicle::plot();}.
+Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce à notre classe \texttt{vehicle.cpp}, et sa fonction \texttt{void Vehicle::plot();}.
 
 Pour terminer, comme nous avons procédé de manière itérative, les phénomènes physiques expliqués par exemple dans la partie~\ref{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}, ne sont plus retrouvables dans le code final de la manière dont ils étaient décrits, car ceux-ci ont été améliorés.
 Nous avons donc fait un fichier sur lequel se trouve l'ensemble de l'implémentation de la physique étape par étape.
 Vous pouvez le retrouver dans le fichier \texttt{src/oldVehicule/oldVehicle.cpp}, dans notre archive et l'implémentation finale de notre physique dans \texttt{src/vehicle.cpp}.
 De plus, pour lancer la génération de tracés des différentes données de notre implémentation, il faut lancer l'exécutable \texttt{build/DrivingSim\_Plots} \texbf{\underline{avec} les permissions administrateur}, ce qui générera les graphiques du scénario qui est décrit dans le fichier \texttt{srcPlots/vehicle.cpp}.
-Les graphiques généres seront trouvable dans le dossier \texttt{}
-% TODO : REMPLACER EXE
+Les graphiques générés seront trouvable dans le dossier \texttt{Plots/}.
