@@ -74,8 +74,11 @@ Pour une future amélioration du projet, nous avons identifié plusieurs axes d'
     \item La physique du modèle, pensée, initialement, uniquement pour l'interface graphique ne permet pas de générer une trajectoire sur un \texttt{dt} dépassant 9999.
     Bien que ce soit amplement suffisant pour l'interface, cette limite restraint la visualisation d'un scénario fixe en traçant les graphiques des différentes données.
     \item Pour une meilleure expérience utilisateur, nous pourrions également ajouter un moteur audio à notre simulateur.
+    \item Ajouter une limite à certains paramètres de la physique, par exemple limiter l'angle de braquage maximum pour éviter d'avoir un véhicule qui peut faire un demi-tour presque sur lui-même.
+    \item Améliorer la génération de graphiques, on pourrait par exemple, intégrer une fonctionnalité qui nous permettrait de superposer plusieurs courbes issues de deux scénarios quasi identiques, différant de juste une (ou plusieurs) variables, afin de voir ce qu'elles changent à la simulation.
 
 \end{itemize}
+
 
 \subsection{Ce que nous ferions différemment}\label{subsec:ce-que-nous-ferions-differemment}
 Avec le recul, nous aurions intégré dès le départ des tests unitaires et d'intégration afin de détecter plus rapidement les erreurs et d'améliorer la robustesse du code.
