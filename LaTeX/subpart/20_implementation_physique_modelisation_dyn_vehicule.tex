@@ -1,13 +1,17 @@
-\section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
+\usepackage{glossaries}\section{L'implémentation de la physique / Modélisation d'un système de dynamique de véhicule}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
 \subsection{Introduction}\label{subsec:introduction}
-Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur. De plus, comme l'étude et la représentation d'un système  de dynamique de véhicule est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative. Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique,  puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
-Ceci nous a mené à un plan en 5 étapes.
-Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, puis implémenter un modèle bicycle simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
+Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur.
+De plus, comme l'étude et la représentation d'un système de dynamique de véhicule est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative.
+Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
+Ceci nous a mené à un plan en 4 étapes.
+Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, ensuite implémenter un \gls{modele_bicycle} simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
 Nous allons maintenant vous détailler les principes physiques et l'implémentation que nous avons fournis pour chacune de ces étapes :
 
 \subsection{Implémentation des lois de Newton pour la dynamique du véhicule}\label{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}
 
-Comme base de notre projet, nous avons donc commencé par implémenter la première Loi de Newton qui est le principe d'inertie, elle stipule que tout corps conservera son état de repos ou de mouvement rectiligne uniforme dans lequel il se trouve, à moins qu'une force ne soit appliquée sur ce corps. Ainsi, un système ou corps quelconque ne peut pas se déplacer à moins qu'une force ne lui soit appliquée. Et c'est pareil pour qu'un système passe d'un état de mouvement à un état arrêté.
+Comme base de notre projet, nous avons donc commencé par implémenter la première Loi de Newton qui est le principe d'inertie, elle stipule que tout corps conservera son état de repos ou de mouvement rectiligne uniforme dans lequel il se trouve, à moins qu'une force ne soit appliquée sur ce corps.
+Ainsi, un système ou corps quelconque ne peut pas se déplacer à moins qu'une force ne lui soit appliquée.
+Et c'est pareil pour qu'un système passe d'un état de mouvement à un état arrêté.
 Dans notre implémentation, cette loi est traduite par le fait que si aucune force n'agit sur le véhicule, alors ses vitesses vont rester nulles (ou constantes si le véhicule est initialisé avec une vitesse).
 Pourquoi et comment avons-nous implémenté cette loi ?
 Rappelons d'abord que l'équation fondamentale de la dynamique est donnée par :
@@ -30,15 +34,18 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
 \end{lstlisting}
 
 Ici si $F_x = 0$ et $F_y = 0$, alors $a_x$ et $a_y$, s'annulent, ce qui signifie que les vitesses restent constantes conformément au principe d'inertie.
-Cependant, dès qu'on applique une force sur un objet, on génère une accélération. Cette accélération va alors modifier la vitesse de l'objet, et, comme la position est liée à la vitesse de l'objet, alors, elle évoluera dans le temps. Ce processus est décrit par des équations différentielles. Dans notre cas, nous aurons :
+Cependant, dès qu'on applique une force sur un objet, on génère une accélération.
+Cette accélération va alors modifier la vitesse de l'objet, et, comme la position est liée à la vitesse de l'objet, alors, elle évoluera dans le temps.
+Ce processus est décrit par des équations différentielles. Dans notre cas, nous aurons :
 $$\frac{d v_x}{dt} = a_x, \quad \frac{d v_y}{dt} = a_y, \quad \frac{d r}{dt} = r_{\dot{}}$$
 où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ le lacet, l'orientation, du véhicule.
 
-Cependant, comme notre simulateur est en temps réel, résoudre ces équations à chaque itération demanderait de nombreux cycles CPU, alors pour préserver leur usage, nous utilisons une méthode numérique, celle qui est la plus simple et efficace : la \textbf{méthode d'Euler explicite}.
+Cependant, comme notre simulateur est en temps réel, résoudre ces équations à chaque itération demanderait de nombreux \gls{cyclesCPU}, alors pour préserver leur usage, nous utilisons une méthode numérique, celle qui est la plus simple et efficace : la \textbf{\gls{euler_explicite} explicite}.
 
-Cette méthode repose sur le fait que la dérivée d'une variable $x$ notée $\dot{x}$ reste constante sur un petit intervalle de temps $dt$. Donc, on peut approximer son évolution par :
+Cette méthode repose sur le fait que la dérivée d'une \gls{derivee} $x$ notée $\dot{x}$ reste constante sur un petit intervalle de temps $dt$.
+Donc, on peut approximer son évolution par :
 $$x(t+dt) \approx x(t) + \dot{x}(t) \times dt$$
-Dans la première implémentation de notre simulateur, nous utilisons donc cette formule pour mettre à jour les vitesses et l'orientation de la voiture :
+Dans la première implémentation de notre simulateur, nous utilisons ainsi cette formule pour mettre à jour les vitesses et l'orientation de la voiture :
 \\
 
 
@@ -56,9 +63,9 @@ Dans la première implémentation de notre simulateur, nous utilisons donc cette
     Formules disponibles sur~\cite{euler_explicite}:
 \end{center}
 
-Ici, on utilise $a_x(t)$, car c'est la dérivée de $v_x(t)$ par rapport au temps.
+Ici, on utilise $a_x(t)$, car c'est la \gls{derivee} de $v_x(t)$ par rapport au temps.
 C'est la même chose pour $a_y(t)$ qui résulte de $a_y(t)$.
-Ensuite, pour trouver $\dot{r}(t)$, qui est l'accélération angulaire, on applique la loi de la dynamique de rotation angulaire qui est la suivante :
+Ensuite, pour trouver $\dot{r}(t)$, qui est l'\gls{accelerationAngulaire}, on applique la loi de la dynamique de \gls{rotationAngulaire} qui est la suivante :
 $$I\dot{r}(t) = \texttt{torque}$$
 où $I$ est le moment d'inertie de l'objet.
 En isolant $\dot{r}(t)$, on obtient :
@@ -66,7 +73,9 @@ $$\dot{r}(t)= \frac{\texttt{torque}}{I}$$
 Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAcceleration(torque);} où cette relation est implémentée.
 
 Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des équations différentielles, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
-Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes. Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable. C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
+Cependant, la précision de la méthode d'Euler dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes.
+Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable.
+C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
 Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrit et implémenté, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 

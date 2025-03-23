@@ -25,62 +25,84 @@
 }
 
 \newglossaryentry{integration_numerique}{
-    name={Intégration numérique},
+    name={intégration numérique},
     description={Méthode permettant d’approximer la solution des équations différentielles dans les simulations en temps réel}
 }
 
 \newglossaryentry{euler_explicite}{
-    name={Méthode d'Euler explicite},
+    name={méthode d'Euler},
     description={Technique d’intégration numérique simple utilisée pour mettre à jour l’état d’un système (vitesse, position, etc.)}
 }
 
+\newglossaryentry{derivee}{
+    name={dérivée},
+    description={Taux de variation instantané d'une fonction par rapport à une variable.
+    Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).}
+}
+
+\newglossaryentry{accelerationAngulaire}{
+    name={accélération angulaire},
+    description={Variation du vecteur vitesse angulaire au cours du temps. Elle est notée \( \alpha \) et s'exprime en radians par seconde au carré (\(\text{rad/s}^2\)).}
+}
+
+\newglossaryentry{rotationAngulaire}{
+name={rotation angulaire},
+description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotation est généralement mesuré en radians et peut être décrit par la fonction \( \theta(t) \) représentant la position angulaire en fonction du temps.}
+}
+
 \newglossaryentry{modele_bicycle}{
-    name={Modèle Bicycle simplifié},
+    name={modèle bicycle},
     description={Modèle mathématique regroupant les roues avant et arrière en deux entités distinctes afin de simplifier la simulation de la dynamique du véhicule}
 }
 
 \newglossaryentry{angle_glissement}{
-    name={Angle de glissement (Slip angle)},
+    name={angle de glissement (Slip angle)},
     description={Angle formé entre la direction réelle d’un pneu et son orientation, déterminant la force latérale développée}
 }
 
 \newglossaryentry{sous_virage}{
-    name={Sous-virage},
+    name={sous-virage},
     description={Comportement où le véhicule tourne moins que la trajectoire attendue, généralement dû à une perte d’adhérence à l’avant}
 }
 
 \newglossaryentry{survirage}{
-    name={Survirage},
+    name={survirage},
     description={Comportement où le véhicule tourne plus que prévu, souvent lié à une perte d’adhérence à l’arrière}
 }
 
 \newglossaryentry{centre_gravite}{
-    name={Centre de gravité},
+    name={centre de gravité},
     description={Point de concentration de la masse d’un véhicule, influençant sa stabilité et la répartition des forces}
 }
 
 \newglossaryentry{essieu}{
-    name={Essieu},
+    name={essieu},
     description={Composant reliant les roues d’un véhicule sur le même axe, dont la répartition du poids influe sur la dynamique}
 }
 
 \newglossaryentry{moment_inertie}{
-    name={Moment d'inertie},
+    name={moment d'inertie},
     description={Mesure de la résistance d’un corps à un changement de rotation, calculée à partir de la masse et de la répartition des distances par rapport au centre de gravité}
 }
 
+\newglossaryentry{cyclesCPU}{
+    name={cycles CPU},
+    description={Unité de mesure représentant le temps nécessaire pour qu'un processeur exécute une instruction ou un ensemble d'instructions. Chaque cycle correspond à une impulsion d'horloge du processeur, et la performance d'un programme dépend souvent du nombre de cycles CPU consommés.}
+}
+
+
 \newglossaryentry{raideur_pneus}{
-    name={Raideur des pneus},
+    name={raideur des pneus},
     description={Caractéristique des pneus qui détermine leur réponse aux forces appliquées. Voir aussi \gls{raideur_longitudinale} et \gls{raideur_laterale}}
 }
 
 \newglossaryentry{raideur_longitudinale}{
-    name={Raideur longitudinale (Cx)},
+    name={raideur longitudinale (Cx)},
     description={Mesure de la réactivité des pneus aux forces de traction ou de freinage}
 }
 
 \newglossaryentry{raideur_laterale}{
-    name={Raideur latérale (Cy)},
+    name={raideur latérale (Cy)},
     description={Mesure de la réponse des pneus aux forces générées lors des virages}
 }
 
