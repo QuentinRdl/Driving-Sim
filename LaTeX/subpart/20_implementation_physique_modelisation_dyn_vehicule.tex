@@ -78,7 +78,8 @@ Cependant, la précision de la \gls{euler_explicite} dépend forcément de la ta
 Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable.
 C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
-Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu. Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
+Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
+Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]
 void simulation_etape1() {
@@ -118,7 +119,8 @@ Les graphiques donnés par notre implémentation donnent alors :
 \end{center}
 
 \begin{itemize}
-    \item \textbf{Graphique de la vitesse longitudinale ($vx$)} : Sur ce premier graphique, on observe bien que l'évolution de la vitesse sur l'axe $y$, se traduit par l'application de la force longitudinale ($ F = m \cdot a $). Et nous avons donc une accélération constante, ce qui mène à une augmentation linéaire de $vx$ au fil du temps.
+    \item \textbf{Graphique de la vitesse longitudinale ($vx$)} : Sur ce premier graphique, on observe bien que l'évolution de la vitesse sur l'axe $y$, se traduit par l'application de la force longitudinale ($ F = m \cdot a $).
+    Et nous avons donc une accélération constante, ce qui mène à une augmentation linéaire de $vx$ au fil du temps.
 
     \item \textbf{Graphique de la vitesse latérale ($vy$)} : De même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
 
@@ -288,7 +290,8 @@ void updateBicycle(double dt, double delta, double slip) {
 }
 \end{lstlisting}
 
-Et par la suite, dans notre implémentation, nous intégrons les valeurs avec la méthode d'Euler, puis dans notre boucle de simulation, nous appelons, \texttt{myVehicle.updateBicycle(dt, delta, slip);} au lieu de \texttt{myVehicle.update(dt, Fx, Fy, torque);}comme à l'étape 1. Et pour initialiser $I$, le moment d'inertie, nous le faisons donc dans notre constructeur de l'objet véhicule :
+Et par la suite, dans notre implémentation, nous intégrons les valeurs avec la \gls{euler_explicite}, puis dans notre boucle de simulation, nous appelons, \texttt{myVehicle.updateBicycle(dt, delta, slip);} au lieu de \texttt{myVehicle.update(dt, Fx, Fy, torque);}comme à l'étape 1.
+Et pour initialiser $I$, le moment d'inertie, nous le faisons donc dans notre constructeur de l'objet véhicule :
 
 \begin{lstlisting}[style=CStyle,label={lst:constructor_vehicle_1}]
 Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, double cy)
@@ -298,7 +301,8 @@ Vehicle(double mass, double a_front, double b_rear, double airRes, double cx, do
 }
 \end{lstlisting}
 
-Et, nous pouvons donc maintenant visualiser, grâce à \glspl{gnuplot}, la trajectoire de notre véhicule, en lui donnant un certain angle de braquage, une certaine vitesse, orientation, etc. Voici un exemple de simulation sur 1000 itérations, avec un angle de braquage delta fixe, que l'on inverse au bout de 500 itérations.
+Et, nous pouvons ainsi visualiser, grâce à \glspl{gnuplot}, la trajectoire de notre véhicule, en lui donnant un certain angle de braquage, une certaine vitesse, orientation, etc.
+Voici un exemple de simulation sur 1000 itérations, avec un angle de braquage delta fixe, que l'on inverse au bout de 500 itérations.
 Voici les différents graphiques qui découlent de cette implémentation :
 
 \begin{center}
@@ -307,11 +311,15 @@ Voici les différents graphiques qui découlent de cette implémentation :
 \includegraphics[width=0.70\linewidth]{resources/Plots/Etape2/trajectory}
 \end{center}
 
-\subsection{Introduction d'un glissement dynamique}
+\subsection{Introduction d'un glissement dynamique}\label{subsec:introduction-dun-glissement-dynamique}
 
-Comme nous avons vu dans la partie précédente, nous avons introduit un nouveau paramètre, appelé \texttt{slip}, qui représente le glissement entre la surface du pneu et la route. Il influence la force longitudinale générée par le pneu avant. En d'autres termes, il détermine combien de force de traction est appliquée en fonction du glissement effectif entre le pneu et la surface. Cependant, jusqu'à présent, sa valeur était constante ; dans cette partie, nous allons donc nous intéresser à le rendre dynamique.
+Comme nous avons vu dans la partie précédente, nous avons introduit un nouveau paramètre, appelé \texttt{slip}, qui représente le glissement entre la surface du pneu et la route.
+Il influence la force longitudinale générée par le pneu avant.
+En d'autres termes, il détermine combien de force de traction est appliquée en fonction du glissement effectif entre le pneu et la surface.
+Cependant, jusqu'à présent, sa valeur était constante ; dans cette partie, nous allons donc nous intéresser à le rendre dynamique.
 
-Une valeur de \texttt{slip} dynamique évolue donc au fil du temps pour atteindre une valeur désirée, car dans la réalité le glissement d'un pneu ne change pas instantanément, mais suit une dynamique bien spécifique. Pour introduire le dynamisme de cette variable, nous devons introduire de nouvelles variables :
+Une valeur de \texttt{slip} dynamique évolue ainsi au fil du temps pour atteindre une valeur désirée, car dans la réalité le glissement d'un pneu ne change pas instantanément, mais suit une dynamique bien spécifique.
+Pour introduire le dynamisme de cette variable, nous devons introduire de nouvelles variables :
 
 \begin{itemize}
 \item \texttt{initSlip} : La valeur initiale du slip,
@@ -343,11 +351,15 @@ Ici, on remarque dans la fonction que le paramètre \texttt{slip} n'est plus don
 
 \subsection{Limites des pneumatiques}
 
-Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes où la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un sous-virage ou survirage. Nous allons donc intégrer les limites physiques des pneumatiques à notre simulation pour représenter la force latérale maximale qu'un pneu peut générer avant de perdre son adhérence. Pour faire cela, nous allons introduire une saturation non linéaire des forces latérales, qui ne peuvent pas fournir une force infinie lors d'un virage.
+Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes avec lesquels la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un sous-virage ou survirage.
+Nous allons ainsi intégrer les limites physiques des pneumatiques à notre simulation pour représenter la force latérale maximale qu'un pneu peut générer avant de perdre son adhérence.
+Pour faire cela, nous allons introduire une saturation non linéaire des forces latérales, qui ne peuvent pas fournir une force infinie lors d'un virage.
 
 \subsubsection{Calcul des Charges sur les Essieux}
 
-Pour déterminer la force latérale maximale que peut générer chaque essieu, nous devons déjà connaître la charge verticale des pneus. Ces charges sont obtenues à partir de la répartition du poids du véhicule. Nous utilisons donc les formules suivantes :
+Pour déterminer la force latérale maximale que peut générer chaque essieu, nous devons déjà connaître la charge verticale des pneus.
+Ces charges sont obtenues à partir de la répartition du poids du véhicule.
+Nous utilisons donc les formules suivantes :
 
 \begin{itemize}
 \item \textbf{Essieu avant} :
@@ -363,7 +375,12 @@ $g$ = La constante gravitationnelle \\
 %%\center{\text{(Formules tirées de \cite{axle_weights})}} % TODO create bib entry
 \end{itemize}
 
-Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction. Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu. Le coefficient d'adhérence des pneus avant et arrières est représenté respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$. Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence. Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée. Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
+Avec ces forces verticales, nous pouvons ensuite déterminer les forces latérales maximales en fonction des coefficients de friction.
+Ces forces sont notées $F_{y, max}$ et sont calculées en multipliant la charge verticale par le coefficient d'adhérence propre à chaque essieu.
+Le coefficient d'adhérence des pneus avant et arrières est représenté respectivement par $\mu_{\texttt{front}}$ et $\mu_{\texttt{rear}}$.
+Grâce à ceux-ci, nous pouvons donc également modifier la capacité des pneus à générer de l'adhérence.
+Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ une route mouillée.
+Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
 
 \begin{itemize}
     \item \textbf{Essieu avant} :
@@ -379,23 +396,32 @@ Premièrement, nous calculons les forces latérales, on rappelle que la formule 
     \item \texttt{F\_y\_rear} : $$2 \times C_y \times \alpha_R$$
 \end{itemize}
 
-Cependant, à ce moment-ci, elles sont linéaires et, pour les différencier des forces finales, on les notera : \texttt{F\_y\_front\_linear} et \texttt{F\_y\_rear\_linear}. Maintenant, pour tenir compte de l'adhérence limitée, nous définissons deux rapports :
+Cependant, à ce moment-ci, elles sont linéaires et, pour les différencier des forces finales, on les notera : \texttt{F\_y\_front\_linear} et \texttt{F\_y\_rear\_linear}.
+Maintenant, pour tenir compte de l'adhérence limitée, nous définissons deux rapports :
 
 \begin{align}
     \texttt{ratio\_front} &= \frac{\texttt{F\_y\_front}}{\texttt{F\_y\_front\_max}} \\
     \texttt{ratio\_rear} &= \frac{\texttt{F\_y\_rear}}{\texttt{F\_y\_rear\_max}}
 \end{align}
 
-Ensuite, nous pouvons utiliser ce rapport pour modéliser la saturation. Ainsi, la force latérale effective est donnée par :
+Ensuite, nous pouvons utiliser ce rapport pour modéliser la saturation.
+Ainsi, la force latérale effective est donnée par :
 
 \begin{itemize}
     \item \texttt{F\_y\_front} : $$\texttt{F\_y\_max\_front} \times \tanh(\texttt{ratio\_front})$$
     \item \texttt{F\_y\_rear} : $$\texttt{F\_y\_max\_rear} \times \tanh(\texttt{ratio\_rear})$$
 \end{itemize}
 
-Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de ratios, et elle tend vers une valeur asymptomatique $(1)$ lorsque le ratio augmente, ce qui limite la force latérale. À terme, la force d'adhérence générée par le pneu ne peut pas dépasser sa limite. Grâce à ces nouvelles limites, nous pouvons donc simuler la saturation des pneumatiques, ce qui nous permet d'éviter d'avoir des forces latérales irréalistes dans notre simulation. Mais également de reproduire le phénomène de survirage et de sous-virage, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
+Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de ratios, et elle tend vers une valeur asymptomatique $(1)$ lorsque le ratio augmente, ce qui limite la force latérale.
+À terme, la force d'adhérence générée par le pneu ne peut pas dépasser sa limite.
+Grâce à ces nouvelles limites, nous pouvons donc simuler la saturation des pneumatiques, ce qui nous permet d'éviter d'avoir des forces latérales irréalistes dans notre simulation.
+Mais également de reproduire le phénomène de survirage et de sous-virage, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
 
-Cependant, nous avons rencontré un problème fondamental en essayant de faire fonctionner notre simulation, la précision et la stabilité numérique des équations différentielles de notre système nous donnaient des valeurs totalement incohérentes. Après une grande analyse des différents systèmes implémentés dans notre modèle, nous avons compris que c'était notre utilisation de la méthode d'Euler. Après avoir fait des tests approfondis, nous avons constaté que cette approche générait des erreurs significatives qui compromettaient totalement la fidélité de notre modèle. Après avoir réétudié la méthode d'Euler, nous avons compris qu'elle n'était plus adaptée, car elle introduit une erreur d'approximation, en particulier lorsque le système présente des dynamiques rapides ou non linéaires. Dans notre cas, plusieurs phénomènes incohérents sont apparus lors des simulations :
+Cependant, nous avons rencontré un problème fondamental en essayant de faire fonctionner notre simulation, la précision et la stabilité numérique des équations différentielles de notre système nous donnaient des valeurs totalement incohérentes.
+Après une grande analyse des différents systèmes implémentés dans notre modèle, nous avons compris que c'était notre utilisation de la méthode d'Euler.
+Après avoir fait des tests approfondis, nous avons constaté que cette approche générait des erreurs significatives qui compromettaient complètement la fidélité de notre modèle.
+Après avoir réétudié la méthode d'Euler, nous avons compris qu'elle n'était plus adaptée, car elle introduit une erreur d'approximation, en particulier lorsque le système présente des dynamiques rapides ou non linéaires.
+Dans notre cas, plusieurs phénomènes incohérents sont apparus lors des simulations :
 \begin{itemize}
     \item Des oscillations dans les trajectoires,
     \item Une instabilité totale de toutes les données pour des pas de temps trop élevés,
@@ -404,7 +430,7 @@ Cependant, nous avons rencontré un problème fondamental en essayant de faire f
 Ce tout rendait notre modèle complètement inutilisable, nous avons donc décidé d'explorer différentes alternatives d'intégration numérique.
 Après une recherche étoffée, nous avons décidé d'utiliser une méthode d'intégration plus avancée : \textbf{Runge-Kutta d'ordre 4} (RK4).
 En effet, RK4 s'est révélée être un compromis idéal entre précision et performance.
-Contrairement à la méthode d'Euler qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision.
+Contrairement à la \gls{euler_explicite} qui se base sur une seule estimation du taux de variation, RK4 effectue plusieurs évaluations intermédiaires pour améliorer la précision.
 Elle suit le schéma suivant :
 
 \begin{align}
