@@ -12,7 +12,7 @@ Néanmoins, comme nous avons adopté une architecture de code modulaire, intégr
 
 En conclusion, notre prototype intègre une physique plus que correcte, et malgré qu'il manque des scénarios de conduite, leur ajout serait sans difficultés majeures.
 
-\subsection{Problèmes rencontrés et surmontés}\label{subsec:problemes-rencontres-et-surmontes}
+\subsection{Problèmes rencontrés et surmontés}\label{subsec:problemes-rencontres-et-surmontes} %TODO : J'enleverrai 'et surmontés', car en plus je vais ajouter un truc qu'on a pas surmonté
 Durant le développement du simulateur de conduite, nous avons rencontré et surmonté plusieurs difficultés, ce qui nous a permis d'approfondir nos compétences techniques et d'améliorer notre capacité à mener un bon travail en groupe.
 
 \subsubsection{Gestion de Git}\label{subsubsec:git}
@@ -29,15 +29,21 @@ Bien que nous travaillions tous les deux sous Linux, l'un utilisait \gls{arch-li
 Nous avons dû nous familiariser avec la bibliothèque \gls{sfml}, alors inconnue pour nous, et concevoir une interface graphique adaptée aux besoins du projet.
 Cette phase d'apprentissage a été déterminante pour exploiter pleinement les fonctionnalités de \gls{sfml} et réaliser un rendu graphique efficace sans recourir à des techniques trop complexes.
 
+\subsubsection{Contrôle du véhicule}\label{subsubsec:ctrlVehicule}
+Après avoir connecté l'interface graphique à notre moteur physique, nous avons constaté que lorsqu'on contrôle notre véhicule, celui-ci semble toujours être en glisse, comme s'il avait peu d'adhérence.
+Comme c'était un phénomène que nous n'avons pas réussi à reproduire avec nos graphiques, nous avons déduit que cela doit venir de la manière dont nous avons connecté physique et interface graphique.
+
 \subsubsection{Gestion du temps et synchronisation}\label{subsubsec:la-gestion-du-temps}
 La synchronisation des mises à jour, notamment la gestion du delta de temps entre les frames, a constitué un défi important.
 Il a fallu ajuster nos méthodes de calcul du temps afin d’assurer une fluidité de l’animation et une réactivité optimale de l’interface.
+
 
 \subsection{Retour sur les technologies utilisées}\label{subsec:retour-sur-les-technologies-utilisees}
 Le choix du langage \gls{cpp} s'est révélé judicieux en raison de sa polyvalence et de ses performances.
 Malgré une connaissance initiale limitée, ce projet nous a permis de progresser significativement dans sa maîtrise.
 L'utilisation de \gls{sfml} a également été un atout majeur, simplifiant le développement d'interfaces graphiques interactives sans nécessiter de techniques trop complexes.
 De plus \gls{gnuplot} nous a permis de pouvoir visualiser toutes les données produites par notre modèle, ce qui nous a permis de valider certaines fonctionnalités du modèle physique, et d'en corriger d'autres.
+
 
 \subsection{Implémentation de la physique}\label{subsec:implem-phys}
 En commançant notre projet, nous avons voulu implémenter trop de principes physiques en même temps, ce qui nous menait à de nombreuses erreurs.
