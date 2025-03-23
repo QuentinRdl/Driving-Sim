@@ -37,18 +37,22 @@
 
 \newglossaryentry{derivee}{
     name={dérivée},
-    description={Taux de variation instantané d'une fonction par rapport à une variable. Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).}
+    description={Taux de variation instantané d'une fonction par rapport à une variable.
+    Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).}
 }
 
 \newglossaryentry{vitesseAngulaire}{
     name={vitesse angulaire},
-    description={Taux de variation de l'angle de rotation d'un objet en fonction du temps. Elle est notée \( \omega \) et s'exprime en radians par seconde (\(\text{rad/s}\)). Elle est définie par \( \omega = \frac{d\theta}{dt} \), où \( \theta \) est l'angle de rotation.}
+    description={Taux de variation de l'angle de rotation d'un objet en fonction du temps.
+    Elle est notée \( \omega \) et s'exprime en radians par seconde (\(\text{rad/s}\)). Elle est définie par \( \omega = \frac{d\theta}{dt} \), où \( \theta \) est l'angle de rotation.}
 }
 
 \newglossaryentry{equationDifferentielle}{
     name={équation différentielle},
     plural={équation différentielles},
-    description={Équation reliant une fonction inconnue à ses dérivées. Elle permet de modéliser des phénomènes dynamiques en physique, en ingénierie et en mathématiques appliquées. Une équation différentielle ordinaire s'écrit sous la forme \( F(x, y, y', y'', \dots) = 0 \), tandis qu'une équation aux dérivées partielles fait intervenir des dérivées par rapport à plusieurs variables.}
+    description={Équation reliant une fonction inconnue à ses dérivées.
+    Elle permet de modéliser des phénomènes dynamiques en physique, en ingénierie et en mathématiques appliquées.
+    Une équation différentielle ordinaire s'écrit sous la forme \( F(x, y, y', y'', \dots) = 0 \), tandis qu'une équation aux dérivées partielles fait intervenir des dérivées par rapport à plusieurs variables.}
 }
 
 
@@ -61,7 +65,6 @@
     name={rotation angulaire},
     description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotation est généralement mesuré en radians et peut être décrit par la fonction \( \theta(t) \) représentant la position angulaire en fonction du temps.}
 }
-
 
 \newglossaryentry{modele_bicycle}{
     name={modèle bicycle},
@@ -92,6 +95,7 @@
 
 \newglossaryentry{essieu}{
     name={essieu},
+    plural={essieux},
     description={Composant reliant les roues d’un véhicule sur le même axe, dont la répartition du poids influe sur la dynamique}
 }
 
@@ -105,36 +109,33 @@
     description={Unité de mesure représentant le temps nécessaire pour qu'un processeur exécute une instruction ou un ensemble d'instructions. Chaque cycle correspond à une impulsion d'horloge du processeur, et la performance d'un programme dépend souvent du nombre de cycles CPU consommés.}
 }
 
-
 \newglossaryentry{raideur_pneus}{
     name={raideur des pneus},
     description={Caractéristique des pneus qui détermine leur réponse aux forces appliquées. Voir aussi \gls{raideur_longitudinale} et \gls{raideur_laterale}}
 }
 
 \newglossaryentry{raideur_longitudinale}{
-    name={Raideur longitudinale},
-    plural={raideur longitudinale},
+    name={raideur longitudinale},
     description={Mesure de la réactivité des pneus aux forces de traction ou de freinage}
 }
 
 \newglossaryentry{raideur_laterale}{
-    name={Raideur latérale},
-    plural={raideur latérale},
+    name={raideur latérale},
     description={Mesure de la réponse des pneus aux forces générées lors des virages}
 }
 
 \newglossaryentry{glissement_dynamique}{
-    name={Glissement dynamique},
+    name={glissement dynamique},
     description={Évolution dans le temps du glissement d’un pneu par rapport à la surface de la route}
 }
 
 \newglossaryentry{saturation_forces_laterales}{
-    name={Saturation non linéaire des forces latérales},
+    name={saturation non linéaire des forces latérales},
     description={Phénomène limitant la force latérale qu’un pneu peut générer une fois qu’un certain angle de glissement est dépassé}
 }
 
 \newglossaryentry{coefficient_adherence}{
-    name={Coefficient d'adhérence},
+    name={coefficient d'adhérence},
     description={Paramètre définissant l’adhérence maximale d’un pneu sur la route, influençant les comportements de sous-virage et survirage}
 }
 
@@ -212,7 +213,7 @@
 
 \newglossaryentry{deque}{
     name={deque},
-    description={De l'anglais \og Double-ended queue \fg{}, structure de données permettant d’ajouter ou de retirer des éléments à chaque extrémité}
+    description={De l'anglais \og Double-ended queue \fg{}, structure de données permettant d’ajouter ou de retirer des éléments à chaque extrémité. Implémenter dans la \gls{stl} sous la forme \texttt{std::deque}}
 }
 
 \newglossaryentry{std_unique_ptr}{
@@ -231,8 +232,9 @@
 }
 
 \newglossaryentry{git_branches}{
-    name={branches},
-    description={Branches de développement dans \gls{git}, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale}
+    name={branche},
+    plural={branches},
+    description={Branche de développement dans \gls{git}, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale}
 }
 
 \newglossaryentry{stackoverflow}{
@@ -320,6 +322,16 @@
 \newglossaryentry{java} {
     name={Java},
     description={Langage de programmation orienté objet, conçu pour être portable et indépendant de la plateforme, largement utilisé pour le développement d'applications d'entreprise et mobiles}
+}
+
+\newglossaryentry{xxd}{
+    name={xxd},
+    description={Outil de ligne de commande permettant de convertir en représentation hexadécimale et inversement un fichier binaire}
+}
+
+\newglossaryentry{cstyle_array}{
+    name={C-Style},
+    description={Se réfère aux conventions de programmation héritées du langage C, qui utilisent directement des tableaux, pointeurs et autres types primitifs pour manipuler la mémoire, sans recourir aux abstractions de la programmation orientée objet du \gls{cpp}}
 }
 
 

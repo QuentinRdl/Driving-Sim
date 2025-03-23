@@ -32,7 +32,7 @@ Elle contient 3 fonctions principales :
     void render() const;
     void manageEvents();
 \end{lstlisting}
-Chaque fonction est appelée une fois par itération de la boucle principale de l'application et donc par image générée.
+Chaque fonction est appelée une fois par itération de la boucle principale de l'application et donc une fois par image générée.
 Voici leurs rôles respectifs :
 \begin{itemize}
     \item \texttt{update()}, met à jour l'état de l'application en fonction du temps écoulé et des événements utilisateurs.
@@ -115,7 +115,7 @@ Dans le projet, nous avons principalement deux types de ressources :
 
 \paragraph{Les textures}
 Au sein de la librairie \gls{sfml}, une image est représentée avec une classe \texttt{sf::Texture}\cite{sfml_sf_texture} qui contient la représentation en mémoire de ses pixels.
-Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de les identifier de manière unique, cela concerne les segments de route ainsi que l'image de la voiture.
+Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de l'identifier de manière unique, cela concerne les segments de route ainsi que l'image de la voiture.
 Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient les valeurs suivantes :
 \begin{itemize}
     \item \texttt{SEGMENT\_SMALL\_STRAIGHT} : Une petite ligne droite.
@@ -130,19 +130,28 @@ Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient le
 
 \paragraph{La police d'écriture}
 La police d'écriture utilisée dans le projet est la \textit{DejaVu Sans Mono}.
-Pour plus de portabilité de notre code, nous avons décidé de l'inclure dans le projet.
+Pour une portabilité maximale de notre code, nous avons décidé de l'inclure directement dans le binaire de l'application.
 
-Nous avons généré un fichier \gls{cpp} contenant les données binaires de la police \textit{DejaVu Sans Mono} en utilisant la commande suivante :
+Pour cela, nous avons généré un fichier \gls{cpp} contenant les données binaires de la police \textit{DejaVu Sans Mono} en utilisant la commande Bash suivante sous Linux:
 \begin{lstlisting}[style=BashStyle,label={lst:generation_dejavusansmonottf_h}]
 xxd -i DejaVuSansMono.ttf > dejavu_sans_mono_ttf.cpp
 \end{lstlisting}
-Cette commande convertit le fichier binaire de la police d'écriture en un tableau de bytes \gls{cpp} que nous pouvons inclure directement dans notre projet.
+Cette commande (\gls{xxd}) convertit le fichier binaire de la police en un tableau d'octets de style C que nous pouvons inclure directement dans notre projet.
 Le fichier généré contient deux éléments :
 \begin{itemize}
-    \item Un tableau de bytes contenant les données binaires de la police d'écriture.
-    \item La taille du tableau de bytes.
+    \item Un tableau d'octets contenant les données binaires de la police.
+    \item La taille de ce tableau.
 \end{itemize}
+
 Cette solution, trouvée sur \gls{stackoverflow}\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
+Cette fonctionnalité est rendue possible grâce à la bibliothèque \gls{sfml} qui permet de charger une police à partir d'un tableau d'octets via la fonction suivante :
+
+\begin{lstlisting}[style=CStyle,label={lst:load_from_memory}]
+bool Font::loadFromMemory(const void* data, std::size_t sizeInBytes);
+\end{lstlisting}
+
+Cette fonction prend en paramètre un pointeur vers le tableau contenant les données binaires de la police et la taille de ce tableau.
+Il est important de noter que le tableau attendu est de type \gls{cstyle_array}, c'est-à-dire qu'il s'agit d'un simple bloc de mémoire brut, et non d'un objet C++ encapsulé.
 
 \paragraph{Gestionnaire de ressources}
 Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différentes étant donné leurs utilisations différentes.
