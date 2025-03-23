@@ -37,6 +37,21 @@ Comme c'était un phénomène que nous n'avons pas réussi à reproduire avec no
 La synchronisation des mises à jour, notamment la gestion du delta de temps entre les frames, a constitué un défi important.
 Il a fallu ajuster nos méthodes de calcul du temps afin d’assurer une fluidité de l’animation et une réactivité optimale de l’interface.
 
+\subsubsection{Implémentation de la physique}\label{subsubsec:implem-phys}
+En commençant notre projet, nous avons voulu implémenter trop de principes physiques en même temps, ce qui nous menait à de nombreuses erreurs.
+Ceci nous a contraints à recommencer l'implémentation de la physique plusieurs fois.
+Cette erreur nous a cependant appris qu'il ne faut pas essayer d'implémenter toutes les fonctionnalités en un bloc, mais de faire pas à pas.
+C'est finalement en adoptant une manière itérative, en implémentant les différents phénomènes physique un à un, que nous avons réussi à avoir un modèle physique fonctionnel.
+
+\subsubsection{Le manque de ressources}\label{subsubsec:manque-ressources}
+L'étude de la dynamique des véhicules est quelque chose d'assez documenté, cependant aucune ressource que nous avons trouvée lie chaque phénomène physique que nous avons implémenté ensemble.
+Nous avons donc dû fournir un travail de recherche approfondi pour pouvoir lier tous les phénomènes physiques entre eux.
+
+\subsubsection{Le manque de données}\label{subsubsec:manque-data}
+Similaire au manque de ressources, il y avait encore moins de données disponibles, cela voulait dire qu'après avoir implémenté les différentes formules trouvées, nous devions lancer notre modèle avec différentes données pour trouver les données qui donnaient les résultats obtenus.
+De plus, cela nous a mené à plusieurs reprises, lorsqu'on implémentait une nouvelle fonctionnalité que cela casse totalement le code.
+Celui-ci nous donnait alors des données dépassantes $9e^{12}$.
+À chaque implémentation de nouvelles fonctionnalités, nous devions donc mener un travail de recherche pour identifier les variables qui nous posaient problème, puis en itérant notre modèle de nombreuses fois avec des données différentes, trouver les valeurs adaptées.
 
 \subsection{Retour sur les technologies utilisées}\label{subsec:retour-sur-les-technologies-utilisees}
 Le choix du langage \gls{cpp} s'est révélé judicieux en raison de sa polyvalence et de ses performances.
@@ -45,21 +60,6 @@ L'utilisation de \gls{sfml} a également été un atout majeur, simplifiant le d
 De plus \gls{gnuplot} nous a permis de pouvoir visualiser toutes les données produites par notre modèle, ce qui nous a permis de valider certaines fonctionnalités du modèle physique, et d'en corriger d'autres.
 
 
-\subsection{Implémentation de la physique}\label{subsec:implem-phys}
-En commançant notre projet, nous avons voulu implémenter trop de principes physiques en même temps, ce qui nous menait à de nombreuses erreurs.
-Ceci nous a contraint à recommencer l'implémentation de la physique plusieurs fois.
-Cette erreur nous a cependant appris qu'il ne faut pas essayer d'implémenter toutes les fonctionnalités en un bloc, mais de faire pas à pas.
-C'est finalement en adoptant une manière itérative, en implémentant les différents phénomènes physique un à un, que nous avons réussi à avoir un modèle physique fonctionnel.
-
-\subsection{Le manque de ressources}\label{subsec:manque-ressources}
-L'étude de la dynamique des véhicules est quelque chose d'assez documenté, cependant aucune ressource que nous avons trouvée lie chaque phénomène physique que nous avons implémenté ensemble.
-Nous avons donc dû fournir un travail de recherche approfondi pour pouvoir lier tous les phénomènes physiques entre eux.
-
-\subsection{Le manque de données}\label{subsec:manque-data}
-Similaire au manque de ressources, il y avait encore moins de données disponibles, cela voulait dire qu'après avoir implémenté les différentes formules trouvées, nous devions lancer notre modèle avec différentes données pour trouver les données qui donnaient les résultats obtenus.
-De plus, cela nous a mené à plusieurs reprises, lorsqu'on implémentait une nouvelle fonctionnalité que cela casse totalement le code.
-Celui-ci nous donnait alors des données dépassantes $9e^{12}$.
-À chaque implémentation de nouvelles fonctionnalités, nous devions donc mener un travail de recherche pour identifier les variables qui nous posaient problème, puis en itérant notre modèle de nombreuses fois avec des données différentes, trouver les valeurs adaptées.
 
 
 
