@@ -2,14 +2,15 @@
 \subsection{Introduction}\label{subsec:introduction}
 Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur.
 De plus, comme l'étude et la représentation d'un système de \gls{dynamique_vehicule} est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative.
-Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, puis d'encore itérer sur ce système, etc.
+Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, pour ensuite encore itérer sur ce système, etc.
 Ceci nous a mené à un plan en 4 étapes.
 Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, ensuite implémenter un \gls{modele_bicycle} simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
 Nous allons maintenant vous détailler les principes physiques et l'implémentation que nous avons fournis pour chacune de ces étapes :
 
 \subsection{Implémentation des lois de Newton pour la dynamique du véhicule}\label{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}
 
-Comme base de notre projet, nous avons donc commencé par implémenter la première Loi de Newton qui est le principe d'inertie, elle stipule que tout corps conservera son état de repos ou de mouvement rectiligne uniforme dans lequel il se trouve, à moins qu'une force ne soit appliquée sur ce corps.
+Comme base de notre projet, on émet avant tout, l'hypothèse que le véhicle du modèle est une voiture traction.
+De ce qui est de l'implémentation de notre modèle, nous avons donc commencé par programmer la première Loi de Newton qui est le principe d'inertie, elle stipule que tout corps conservera son état de repos ou de mouvement rectiligne uniforme dans lequel il se trouve, à moins qu'une force ne soit appliquée sur ce corps.
 Ainsi, un système ou corps quelconque ne peut pas se déplacer à moins qu'une force ne lui soit appliquée.
 Et c'est pareil pour qu'un système passe d'un état de mouvement à un état arrêté.
 Dans notre implémentation, cette loi est traduite par le fait que si aucune force n'agit sur le véhicule, alors ses vitesses vont rester nulles (ou constantes si le véhicule est initialisé avec une vitesse).
