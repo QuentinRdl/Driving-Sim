@@ -3,7 +3,7 @@
 #include <cassert>
 
 /**
- * TODO complete documentation / @gubgub
+ * Met à jour l'état du véhicule en utilisant la méthode de Runge-Kutta d'ordre 4 (RK4) pour le modèle Bicycle.
  * @param dt the delta of time.
  * @param delta the steering angle.
  * @param currentState the current state of the vehicle
@@ -35,8 +35,8 @@ std::array<float, 7> Vehicle::updateBicycleRK4(const float dt, const float delta
 }
 
 /**
- * TODO complete documentation / @gubgub
- * @param dt the delta of time.
+ * Met à jour l'état du véhicule en utilisant la méthode RK4 avec l'état courant interne.
+ * * @param dt the delta of time.
  * @param delta the steering angle.
  */
 std::array<float, 7> Vehicle::updateBicycleRK4(const float dt, const float delta) const {
@@ -44,7 +44,7 @@ std::array<float, 7> Vehicle::updateBicycleRK4(const float dt, const float delta
 }
 
 /**
- * TODO complete documentation / @gubgub
+ * Calcule les dérivées de l'état du véhicule pour l'intégration numérique.
  * @param state the state of the vehicle
  * @param dsdt the derivative of the state
  * @param delta the steering angle
@@ -108,7 +108,7 @@ void Vehicle::computeDerivatives(const float state[7], float dsdt[7], const floa
 }
 
 /**
- *
+ * Calcule les itérations suivantes de la simulation de la dynamique du véhicule et remplit le tableau de données.
  * @param nbIterations the number of iterations to compute
  * @param data the data array to fill
  * @param dt the delta of time between two iterations (in seconds, often related to fps in the interface used)
@@ -143,7 +143,11 @@ void Vehicle::getNextIterations(const size_t nbIterations, vehicleData* data, co
         data[idx].g = g;
     }
 }
-
+/**
+ * Met à jour les attributs internes du véhicule à partir d'une structure de données.
+ *
+ * @param data La structure contenant les valeurs à assigner aux attributs du véhicule.
+ */
 void Vehicle::setData(const vehicleData &data) {
     mass = data.mass;
     dist_cog_front_axle = data.dist_cog_front_axle;
@@ -166,6 +170,11 @@ void Vehicle::setData(const vehicleData &data) {
     g = data.g;
 }
 
+/**
+ * Récupère les attributs du véhicule pour les stocker dans la structure de données passée en paramètres.
+ *
+ * @param data La structure qui sera remplie avec les valeurs actuelles du véhicule.
+ */
 void Vehicle::getData(vehicleData &data) const {
     data.mass = mass;
     data.dist_cog_front_axle = dist_cog_front_axle;
@@ -189,7 +198,9 @@ void Vehicle::getData(vehicleData &data) const {
     // data[i].delta = // L'angle de braquage reste constant durant un round de simulation
 }
 
-
+/**
+ * Exécute une simulation itérative de la dynamique du véhicule et génère les graphiques résultants.
+ */
 void Vehicle::plotTestIterative() {
 
     // Initialisation du véhicule avec modèle Bicycle
@@ -221,6 +232,10 @@ void Vehicle::plotTestIterative() {
     p.plotStepFromArray(data, steps, "../Plots/Iterative");
 }
 
+/**
+ * Exécute une simulation itérative (mais sans utiliser la méthode itérative de notre classe, on utilise une boucle
+ * classique ici) de la dynamique du véhicule et génère les graphiques résultants.
+ */
 void Vehicle::plot() {
     // Initialisation du véhicule avec modèle Bicycle
     // Paramètres : Masse = 1700 kg, a = 1.5 m, b = 1.5 m, CA = 0.5, Cx = 150000 N, Cy = 40000 N/rad
