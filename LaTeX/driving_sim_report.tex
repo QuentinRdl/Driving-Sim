@@ -401,8 +401,8 @@
 \lstdefinestyle{CStyle}{
     language=C++,
     basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue},
-    commentstyle=\color{gray},
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
     stringstyle=\color{red},
     numbers=left,
     numberstyle=\tiny\color{gray},
@@ -410,14 +410,16 @@
     breaklines=true,
     frame=single,
     inputencoding=utf8,
-    extendedchars=\true,
+    extendedchars=true,
     literate={é}{{\'e}}1
              {è}{{\`e}}1
              {à}{{\`a}}1
              {ê}{{\^e}}1
              {ô}{{\^o}}1
-             {ù}{{\`u}}1
+             {ù}{{\`u}}1,
+    morekeywords={override, nullptr, final, constexpr, noexcept, static_cast, reinterpret_cast, dynamic_cast, const_cast}
 }
+
 
 \lstdefinestyle{BashStyle}{
     language=bash,
