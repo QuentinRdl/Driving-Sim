@@ -12,19 +12,28 @@ En interne, elle s'appuie sur \gls{opengl}, une API plus bas niveau, ce qui perm
     \item \textbf{Multiplateforme} : La compatibilité avec Windows, Linux et macOS permet de développer l'application sans penser à la portabilité.
 \end{itemize}
 
-\subsection{Architecture de l'interface graphique}\label{subsec:architecture-de-l-interface-graphique} % TODO modif cmplt
+\subsection{Architecture de l'interface graphique}\label{subsec:architecture-de-l-interface-graphique}
 \subsubsection{Organisation modulaire du code}\label{subsubsec:organisation-modulaire-du-code}
 Afin d'assurer une bonne lisibilité et une maintenance du code plus simple, l'interface graphique a été développée de manière modulaire.
 Chaque fonctionnalité est séparée dans une classe spécifique.
 Par exemple, la gestion du véhicule, du circuit et des indicateurs de débogage est confiée à des modules distincts.
 Cette organisation rend également l'intégration de nouvelles fonctionnalités plus aisée sans nécessiter de modifications majeures dans la structure existante.
 
+Le diagramme de classe UML de l'interface graphique est disponible en page suivante (fig.~\ref{fig:uml_diagram}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{resources/classdiagram}
+    \caption{Diagramme de classe UML de l'interface graphique}
+    \label{fig:uml_diagram}
+\end{figure}
+
 \subsubsection{Présentation des classes principales}\label{subsubsec:presentation-des-classes-principales}
 Plusieurs classes essentielles interagissent pour constituer une interface graphique à la fois cohérente et fluide.
 
 \paragraph[Game]{La classe \textbf{Game}}\label{par:class_game}
 La classe \textbf{Game} constitue le noyau central du projet, orchestrant l'ensemble de l'application.
-Elle se charge notamment d'initialiser la fenêtre \gls{sfml}, de configurer les différentes \glspl{view} (notamment la \texttt{Game \glslink{view}{View}} et la \texttt{\gls{hud} \glslink{view}{View}}), de gérer le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et de coordonner les interactions entre les divers modules.
+Elle se charge notamment d'initialiser la fenêtre \gls{sfml}, de configurer les différentes \glspl{view}\textsuperscript{*} (notamment la \texttt{Game \glslink{view}{View}} et la \texttt{\gls{hud} \glslink{view}{View}}), de gérer le cycle de vie de la simulation (mise à jour, gestion des événements et rendu) et de coordonner les interactions entre les divers modules.
 
 Elle contient 3 fonctions principales :
 \begin{lstlisting}[style=CStyle, label={lst:game_class}]
