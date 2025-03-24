@@ -155,6 +155,7 @@ Il est important de noter que le tableau attendu est de type \gls{cstyle_array},
 
 \paragraph{Gestionnaire de ressources}
 Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différentes étant donné leurs utilisations différentes.
+
 La classe \texttt{TextureManager} gère le chargement des images dans la mémoire de l'application.
 Lorsque l'on a besoin d'utiliser une instance de la classe \texttt{sf::Texture}\cite{sfml_sf_texture}, on fait appel à la méthode \texttt{TextureManager::getTexture()} qui prend en paramètre un \texttt{ResourceType::Value} et renvoie une \gls{cpp_reference} vers la texture correspondante.
 Deux cas sont possibles :
@@ -185,7 +186,7 @@ struct RoadTexture {
 Elle contient 4 éléments :
 \begin{itemize}
     \item \texttt{texture} : Un \gls{pointer} vers la texture de la route chargée par le \texttt{TextureManager}.
-    \item \texttt{\gls{sprite}} : Le \textit{\gls{sprite}} associé à la texture, utilisé pour le rendu.
+    \item \texttt{sprite} : Le \textit{\gls{sprite}} associé à la texture, utilisé pour le rendu.
     \item \texttt{point1} et \texttt{point2} : Deux positions relatives à la texture représentant les points de connexion entre deux segments de route du type \texttt{sf::Vector2f}, objet venant de la bibliothèque \gls{sfml} représentant un point, et donc deux coordonnées.
 \end{itemize}
 
