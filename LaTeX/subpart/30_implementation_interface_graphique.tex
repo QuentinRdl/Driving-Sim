@@ -109,8 +109,8 @@ Au départ, nous avions choisi la fonction \texttt{\gls{std_sort}()}, qui trie u
 \paragraph{Type de ressources}
 Dans le projet, nous avons principalement deux types de ressources :
 \begin{itemize}
-    \item Les \textbf{Textures} : Utilisées pour le rendu graphique des segments de route et du véhicule.
-    \item Les \textbf{Polices de caractères} : Utilisées pour le rendu du texte dans l'interface graphique.
+    \item les \textbf{textures} : utilisées pour le rendu graphique des segments de route et du véhicule.
+    \item les \textbf{olices de caractères} : utilisées pour le rendu du texte dans l'interface graphique.
 \end{itemize}
 
 \paragraph{Les textures}
@@ -118,14 +118,14 @@ Au sein de la librairie \gls{sfml}, une image est représentée avec une classe 
 Chaque texture (ou image) correspond à une entrée dans une enum \texttt{ResourceType::Value} qui permet de l'identifier de manière unique, cela concerne les segments de route ainsi que l'image de la voiture.
 Cette enum est définie dans le fichier \texttt{resource\_type.h} et contient les valeurs suivantes :
 \begin{itemize}
-    \item \texttt{SEGMENT\_SMALL\_STRAIGHT} : Une petite ligne droite.
-    \item \texttt{SEGMENT\_LONG\_STRAIGHT} : Une grande ligne droite.
-    \item \texttt{SEGMENT\_SMALL\_TURN} : Un virage moyen.
-    \item \texttt{SEGMENT\_MEDIUM\_TURN} : Un virage moyen.
-    \item \texttt{SEGMENT\_LARGE\_TURN} : Un virage large.
-    \item \texttt{SEGMENT\_S\_TURN} : Un virage en S (plus communément appelé une chicane)
-    \item \texttt{SEGMENT\_U\_TURN} : Un virage en U\@.
-    \item \texttt{CAR} : La voiture.
+    \item \texttt{SEGMENT\_SMALL\_STRAIGHT} : une petite ligne droite.
+    \item \texttt{SEGMENT\_LONG\_STRAIGHT} : une grande ligne droite.
+    \item \texttt{SEGMENT\_SMALL\_TURN} : un virage moyen.
+    \item \texttt{SEGMENT\_MEDIUM\_TURN} : un virage moyen.
+    \item \texttt{SEGMENT\_LARGE\_TURN} : un virage large.
+    \item \texttt{SEGMENT\_S\_TURN} : un virage en \texttt{S} (plus communément appelé une chicane)
+    \item \texttt{SEGMENT\_U\_TURN} : un virage en \texttt{U}\@.
+    \item \texttt{CAR} : la voiture.
 \end{itemize}
 
 \paragraph{La police d'écriture}
@@ -143,7 +143,7 @@ Le fichier généré contient deux éléments :
     \item La taille de ce tableau.
 \end{itemize}
 
-Cette solution, trouvée sur \gls{stackoverflow}\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le binaire de l'application, assurant ainsi une portabilité maximale.
+Cette solution, trouvée sur le site \gls{stackoverflow}\cite{stackoverflow_embed_font}, nous permet d'intégrer la police directement dans le fichier binaire de l'application, assurant ainsi une portabilité maximale.
 Cette fonctionnalité est rendue possible grâce à la bibliothèque \gls{sfml} qui permet de charger une police à partir d'un tableau d'octets \textit{via} la fonction suivante :
 
 \begin{lstlisting}[style=CStyle,label={lst:load_from_memory}]
@@ -275,7 +275,7 @@ void DebugMode::addLine(const std::string &content, const unsigned int size, con
 \end{figure}
 
 \paragraph{Compteur de FPS}
-La classe \texttt{FPSCounter} affiche le nombre d'images par seconde (\gls{fps}) dans la \texttt{\gls{hud} \glslink{view}{View}}, permettant ainsi de surveiller la fluidité de l'application.
+La classe \texttt{FPSCounter} affiche dynamiquement le nombre d'images par seconde (\gls{fps}) dans la \texttt{\gls{hud} \glslink{view}{View}}, permettant ainsi de surveiller la fluidité de l'application.
 Elle nous permet, tout au long du développement, de remarquer si une fonctionnalité que l'on vient d'implémenter est trop gourmande en ressources et de l'optimiser en conséquence.
 \textsuper
 Pour calculer le nombre d'images par seconde, on compte le nombre d'images générées en une seconde.
@@ -313,7 +313,7 @@ Cette fonctionnalité permet de mieux comprendre l'impact immédiat des commande
 Pour obtenir la trajectoire prédictive, nous simulons l'évolution du véhicule en itérant la dynamique physique sur plusieurs pas de temps à chaque image.
 La méthode \texttt{computePredictionLine} procède de la manière suivante :
 \begin{itemize}
-    \item Le \gls{delta_temps} utilisé pour ces itérations est déterminé de manière robuste grâce à la méthode \texttt{updateAndGetMedian} (définition dans le paragraphe \textbf{La classe Car} :~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
+    \item Le \gls{delta_temps} utilisé pour ces itérations est déterminé de manière robuste grâce à la méthode \texttt{updateAndGetMedian} (le code est définis au \S~\ref{lst:code_dequeue_dt}), qui calcule la médiane des deltas de temps récents afin de lisser les variations liées à la volatilité du temps entre images.
     \item À partir de l'état courant du véhicule, la dynamique est simulée en utilisant la méthode \texttt{getNextIterations()} de la classe \texttt{Vehicle}.
     Pour chaque itération, la nouvelle position et l'orientation sont calculées et stockées dans un tableau.
     \item Ces points, une fois convertis en coordonnées écran \textit{via} le facteur de conversion (\texttt{METER\_TO\_PIXEL} définis dans le fichier \texttt{constants.h}), représentent la trajectoire future du véhicule.
