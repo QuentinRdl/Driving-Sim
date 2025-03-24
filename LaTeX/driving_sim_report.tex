@@ -22,29 +22,34 @@
 \newglossaryentry{dynamique_vehicule}{
     name={dynamique de véhicule},
     plural={dynamique des véhicules},
-    description={Ensemble des lois physiques qui régissent le mouvement, la stabilité et le comportement d’un véhicule}
+    description={Ensemble des lois physiques qui régissent le mouvement, la stabilité et le comportement d’un véhicule},
+    first={dynamique de véhicule}
 }
 
 \newglossaryentry{integration_numerique}{
     name={intégration numérique},
-    description={Méthode permettant d’approximer la solution des équations différentielles dans les simulations en temps réel}
+    description={Méthode permettant d’approximer la solution des équations différentielles dans les simulations en temps réel},
+    first={intégration numérique}
 }
 
 \newglossaryentry{euler_explicite}{
     name={méthode d'Euler},
-    description={Technique d’intégration numérique simple utilisée pour mettre à jour l’état d’un système (vitesse, position, etc.)}
+    description={Technique d’intégration numérique simple utilisée pour mettre à jour l’état d’un système (vitesse, position, etc.)},
+    first={dérivée}
 }
 
 \newglossaryentry{derivee}{
     name={dérivée},
     description={Taux de variation instantané d'une fonction par rapport à une variable.
-    Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).}
+    Si \( f(x) \) est une fonction, sa dérivée \( f'(x) \) représente la pente de la tangente en \( x \) et s'exprime sous la forme \( \frac{d}{dx} f(x) \).},
+    first={dérivée}
 }
 
 \newglossaryentry{vitesseAngulaire}{
     name={vitesse angulaire},
     description={Taux de variation de l'angle de rotation d'un objet en fonction du temps.
-    Elle est notée \( \omega \) et s'exprime en radians par seconde (\(\text{rad/s}\)). Elle est définie par \( \omega = \frac{d\theta}{dt} \), où \( \theta \) est l'angle de rotation.}
+    Elle est notée \( \omega \) et s'exprime en radians par seconde (\(\text{rad/s}\)). Elle est définie par \( \omega = \frac{d\theta}{dt} \), où \( \theta \) est l'angle de rotation.},
+    first={vitesse angulaire}
 }
 
 \newglossaryentry{equationDifferentielle}{
@@ -52,128 +57,152 @@
     plural={équation différentielles},
     description={Équation reliant une fonction inconnue à ses dérivées.
     Elle permet de modéliser des phénomènes dynamiques en physique, en ingénierie et en mathématiques appliquées.
-    Une équation différentielle ordinaire s'écrit sous la forme \( F(x, y, y', y'', \dots) = 0 \), tandis qu'une équation aux dérivées partielles fait intervenir des dérivées par rapport à plusieurs variables.}
+    Une équation différentielle ordinaire s'écrit sous la forme \( F(x, y, y', y'', \dots) = 0 \), tandis qu'une équation aux dérivées partielles fait intervenir des dérivées par rapport à plusieurs variables.},
+    first={équation différentielle}
 }
 
 
 \newglossaryentry{accelerationAngulaire}{
     name={accélération angulaire},
-    description={Variation du vecteur \protect\gls{vitesseAngulaire} au cours du temps. Elle est notée \( \alpha \) et s'exprime en radians par seconde au carré (\(\text{rad/s}^2\)).}
+    description={Variation du vecteur \protect\gls{vitesseAngulaire} au cours du temps. Elle est notée \( \alpha \) et s'exprime en radians par seconde au carré (\(\text{rad/s}^2\)).},
+    first={accélération angulaire}
 }
 
 \newglossaryentry{rotationAngulaire}{
     name={rotation angulaire},
-    description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotation est généralement mesuré en radians et peut être décrit par la fonction \( \theta(t) \) représentant la position angulaire en fonction du temps.}
+    description={Mouvement de rotation d'un objet autour d'un axe. L'angle de rotation est généralement mesuré en radians et peut être décrit par la fonction \( \theta(t) \) représentant la position angulaire en fonction du temps.},
+    first={rotation angulaire}
 }
 
 \newglossaryentry{modele_bicycle}{
     name={modèle bicycle},
     plural={modèle Bicycle},
-    description={Modèle mathématique très utilisé dans la création de modèle de dynamique de véhicules. Il regroupe les roues avant et arrière ensemble, dans l'idée de former deux entités distinctes afin de simplifier les différents calculs appliqués sur un véhicule}
+    description={Modèle mathématique très utilisé dans la création de modèle de dynamique de véhicules. Il regroupe les roues avant et arrière ensemble, dans l'idée de former deux entités distinctes afin de simplifier les différents calculs appliqués sur un véhicule},
+    first={modèle bicycle}
 }
 
 \newglossaryentry{angle_glissement}{
     name={angle de glissement},
     plural={angles de glissement},
-    description={Angle formé entre la direction réelle d’un pneu et son orientation, déterminant la force latérale développée}
+    description={Angle formé entre la direction réelle d’un pneu et son orientation, déterminant la force latérale développée},
+    first={angle de glissement\textsuperscript{*}}}
 }
 
 \newglossaryentry{sous_virage}{
     name={sous-virage},
-    description={Comportement où le véhicule tourne moins que la trajectoire attendue, généralement dû à une perte d’adhérence à l’avant}
+    description={Comportement où le véhicule tourne moins que la trajectoire attendue, généralement dû à une perte d’adhérence à l’avant},
+    first={sous-virage\textsuperscript{*}}
 }
 
 \newglossaryentry{survirage}{
     name={survirage},
-    description={Comportement où le véhicule tourne plus que prévu, souvent lié à une perte d’adhérence à l’arrière}
+    description={Comportement où le véhicule tourne plus que prévu, souvent lié à une perte d’adhérence à l’arrière},
+    first={survirage\textsuperscript{*}}}
 }
 
 \newglossaryentry{centre_gravite}{
     name={centre de gravité},
-    description={Point de concentration de la masse d’un véhicule, influençant sa stabilité et la répartition des forces}
+    description={Point de concentration de la masse d’un véhicule, influençant sa stabilité et la répartition des forces},
+    first={centre de gravité\textsuperscript{*}}}
 }
 
 \newglossaryentry{essieu}{
     name={essieu},
     plural={essieux},
-    description={Composant reliant les roues d’un véhicule sur le même axe, dont la répartition du poids influe sur la dynamique}
+    description={Composant reliant les roues d’un véhicule sur le même axe, dont la répartition du poids influe sur la dynamique},
+    first={centre de gravité\textsuperscript{*}}}
 }
 
 \newglossaryentry{moment_inertie}{
     name={moment d'inertie},
-    description={Mesure de la résistance d’un corps à un changement de rotation, calculée à partir de la masse et de la répartition des distances par rapport au centre de gravité}
+    description={Mesure de la résistance d’un corps à un changement de rotation, calculée à partir de la masse et de la répartition des distances par rapport au centre de gravité},
+    first={moment d'inertie\textsuperscript{*}}}
 }
 
 \newglossaryentry{cyclesCPU}{
     name={cycles CPU},
-    description={Unité de mesure représentant le temps nécessaire pour qu'un processeur exécute une instruction ou un ensemble d'instructions. Chaque cycle correspond à une impulsion d'horloge du processeur, et la performance d'un programme dépend souvent du nombre de cycles CPU consommés.}
+    description={Unité de mesure représentant le temps nécessaire pour qu'un processeur exécute une instruction ou un ensemble d'instructions. Chaque cycle correspond à une impulsion d'horloge du processeur, et la performance d'un programme dépend souvent du nombre de cycles CPU consommés},
+    first={cycles CPU\textsuperscript{*}}}
 }
 
 \newglossaryentry{raideur_pneus}{
     name={raideur des pneus},
-    description={Caractéristique des pneus qui détermine leur réponse aux forces appliquées. Voir aussi \gls{raideur_longitudinale} et \gls{raideur_laterale}}
+    description={Caractéristique des pneus qui détermine leur réponse aux forces appliquées. Voir aussi \gls{raideur_longitudinale} et \gls{raideur_laterale}},
+    first={raideur des pneus}
 }
 
 \newglossaryentry{raideur_longitudinale}{
     name={raideur longitudinale},
-    description={Mesure de la réactivité des pneus aux forces de traction ou de freinage}
+    description={Mesure de la réactivité des pneus aux forces de traction ou de freinage},
+    first={raideur longitudinale}
 }
 
 \newglossaryentry{raideur_laterale}{
     name={raideur latérale},
-    description={Mesure de la réponse des pneus aux forces générées lors des virages}
+    description={Mesure de la réponse des pneus aux forces générées lors des virages},
+    first={raideur latérale}
 }
 
 \newglossaryentry{glissement_dynamique}{
     name={glissement dynamique},
-    description={Évolution dans le temps du glissement d’un pneu par rapport à la surface de la route}
+    description={Évolution dans le temps du glissement d’un pneu par rapport à la surface de la route},
+    first={glissement dynamique}
 }
 
 \newglossaryentry{saturation_forces_laterales}{
     name={saturation non linéaire des forces latérales},
-    description={Phénomène limitant la force latérale qu’un pneu peut générer une fois qu’un certain angle de glissement est dépassé}
+    description={Phénomène limitant la force latérale qu’un pneu peut générer une fois qu’un certain angle de glissement est dépassé},
+    first={saturation non linéaire des forces latérales}
 }
 
 \newglossaryentry{coefficient_adherence}{
     name={coefficient d'adhérence},
-    description={Paramètre définissant l’adhérence maximale d’un pneu sur la route, influençant les comportements de sous-virage et survirage}
+    description={Paramètre définissant l’adhérence maximale d’un pneu sur la route, influençant les comportements de sous-virage et survirage},
+    first={coefficient d'adhérence}
 }
 
 \newglossaryentry{delta_temps}{
     name={delta de temps},
-    description={Intervalle de temps entre deux itérations de la simulation, essentiel pour l’intégration numérique}
+    description={Intervalle de temps entre deux itérations de la simulation, essentiel pour l’intégration numérique},
+    name={delta de temps}
 }
 
 \newglossaryentry{gnuplot}{
     name={Gnuplot},
     plural={gnuplot},
-    description={Outil de traçage graphique utilisé pour visualiser les résultats de la simulation (courbes de vitesse, trajectoire, etc.)}
+    description={Outil de traçage graphique utilisé pour visualiser les résultats de la simulation (courbes de vitesse, trajectoire, etc.)},
+    first={Gnuplot}
 }
 
 \newglossaryentry{cpp}{
     name={C++},
-    description={Langage de programmation orienté objet, utilisé pour le développement du simulateur}
+    description={Langage de programmation orienté objet, utilisé pour le développement du simulateur},
+    first={C++}
 }
 
 \newglossaryentry{sfml}{
     name={SFML},
-    description={\og Simple and Fast Multimedia Library \fg{}, Bibliothèque \gls{cpp} facilitant la création d’applications graphiques et multimédia}
+    description={\og Simple and Fast Multimedia Library \fg{}, Bibliothèque \gls{cpp} facilitant la création d’applications graphiques et multimédia},
+    first={SFML}
 }
 
 \newglossaryentry{opengl}{
     name={OpenGL},
-    description={API de rendu graphique 2D et 3D, utilisée par \gls{sfml} pour le rendu graphique}
+    description={API de rendu graphique 2D et 3D, utilisée par \gls{sfml} pour le rendu graphique},
+    first={OpenGL}
 }
 
 \newglossaryentry{hud}{
     name={HUD},
-    description={Système d’affichage superposé sur l’écran, utilisé ici pour présenter des informations telles que le compteur de \gls{fps} et les données de débogage}
+    description={Système d’affichage superposé sur l’écran, utilisé ici pour présenter des informations telles que le compteur de \gls{fps} et les données de débogage},
+    first={HUD}
 }
 
 \newglossaryentry{cmake}{
     name={CMake},
     plural={cmake},
-    description={Outil de configuration et de gestion de compilation des projets \gls{cpp}}
+    description={Outil de configuration et de gestion de compilation des projets \gls{cpp}},
+    name={CMake},
 }
 
 \newglossaryentry{sprite}{
