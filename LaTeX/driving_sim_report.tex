@@ -376,8 +376,8 @@
 \def\UrlBreaks{\do\/\do-}
 
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
-\renewcommand\thesubsection{\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
-\renewcommand\thesubsubsection{\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules
+\renewcommand\thesubsection{\thesection. \arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
+\renewcommand\thesubsubsection{\thesubsection. \alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules
 \setcounter{secnumdepth}{3} % Activer la numérotation jusqu'aux sous-sous-sections
 
 % Pour gerer l'espace dans la table of contents
