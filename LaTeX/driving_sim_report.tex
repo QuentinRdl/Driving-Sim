@@ -334,6 +334,11 @@
     description={Se réfère aux conventions de programmation héritées du langage C, qui utilisent directement des tableaux, pointeurs et autres types primitifs pour manipuler la mémoire, sans recourir aux abstractions de la programmation orientée objet du \gls{cpp}}
 }
 
+\newglossaryentry{heap}{
+    name={tas},
+    description={Zone de mémoire dynamique utilisée pour allouer de la mémoire à la volée, permettant de gérer des objets dont la taille peut varier au cours de l'exécution du programme}
+}
+
 
 % Définition du style pour le code Cpp
 \lstdefinestyle{CStyle}{
@@ -382,8 +387,8 @@
 
 % Pour gerer l'espace dans la table of contents
 \usepackage{tocloft}
-\renewcommand{\cftsecnumwidth}{2.3em}
-\renewcommand{\cftsubsecnumwidth}{2.3em}
+\renewcommand{\cftsecnumwidth}{1.8em}
+\renewcommand{\cftsubsecnumwidth}{2.8em}
 
 \hypersetup{
     colorlinks=true,
