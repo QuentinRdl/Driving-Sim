@@ -16,12 +16,12 @@ Et c'est pareil pour qu'un système passe d'un état de mouvement à un état ar
 Dans notre implémentation, cette loi est traduite par le fait que si aucune force n'agit sur le véhicule, alors ses vitesses vont rester nulles (ou constantes si le véhicule est initialisé avec une vitesse).
 Pourquoi et comment avons-nous implémenté cette loi ?
 Rappelons d'abord que l'équation fondamentale de la dynamique est donnée par :
-$$F = m \ .\  a$$
+$$\vec{F} = m \ .\  \vec{a}$$
 Avec :
 \begin{itemize}
-    \item $F$ la force appliquée sur le corps,
+    \item $\vec{F}$ la force appliquée sur le corps,
     \item $m$ la masse du corps,
-    \item $a$ l'accélération résultante.
+    \item $\vec{a}$ l'accélération résultante.
 \end{itemize}
 
 Dans notre code, nous avons appliqué cette relation en calculant les accélérations $a_x$ et $a_y$ du véhicule à partir des forces appliquées :
@@ -53,11 +53,11 @@ Dans la première implémentation de notre simulateur, nous utilisons ainsi cett
 
 
 \begin{itemize}
-    \item \textbf{Pour la vitesse sur l'axe $x$ :}
+    \item \textbf{pour la vitesse sur l'axe $x$ :}
     $$v_x(t+dt) = v_x(t)+a_x(t)\times(dt)$$
-    \item \textbf{Pour la vitesse sur l'axe $y$ :}
+    \item \textbf{pour la vitesse sur l'axe $y$ :}
     $$v_y(t+dt) = v_y(t)+a_y(t)\times(dt)$$
-    \item \textbf{Pour l'orientation $r$ :}
+    \item \textbf{pour l'orientation $r$ :}
     $$r(t+dt) = r(t)+\dot{r}(t)\times(dt)$$
 \end{itemize}
 
@@ -79,7 +79,8 @@ Cependant, la précision de la \gls{euler_explicite} dépend forcément de la ta
 Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la simulation deviendra instable.
 C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
-Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
+Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation.
+Celle-ci s'étend sur une durée de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
 Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]
@@ -104,12 +105,47 @@ void simulation_etape1() {
         r_data.push_back({t, myVehicle.lacet});
         myVehicle.update(dt, Fx, Fy, torque);
     }
-    // ... Plot des donnees stockees dans les vecteurs avec Gnuplot
 
+    // Affichage des données stockées dans les vecteurs avec Gnuplot
+    Gnuplot gp;
+
+    // Pour vx :
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'vx.png'\n";
+    gp << "set title 'Vitesse Longitudinale (vx)'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vx (mass/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vx'\n";
+    gp.send1d(vx_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Pour vy :
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'vy.png'\n";
+    gp << "set title 'Vitesse Latérale (vy)'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'vy (mass/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'vy'\n";
+    gp.send1d(vy_data);
+    gp << "unset output\n";
+    gp.flush();
+
+    // Pour lacet :
+    gp << "reset\n";
+    gp << "set terminal pngcairo size 800,600 enhanced font 'Verdana,10'\n";
+    gp << "set output 'lacet.png'\n";
+    gp << "set title 'Taux de Lacet (lacet)'\n";
+    gp << "set xlabel 'Temps (s)'\n";
+    gp << "set ylabel 'lacet (rad/s)'\n";
+    gp << "plot '-' with lines lw 2 title 'lacet'\n";
+    gp.send1d(r_data);
+    gp << "unset output\n";
+    gp.flush();
 }
 \end{lstlisting}
-
-{\LARGE Question => Doit-on ajouter la partie code \gls{gnuplot} à la figure précédente ?}
 
 Les graphiques donnés par notre implémentation donnent alors :
 
@@ -120,12 +156,12 @@ Les graphiques donnés par notre implémentation donnent alors :
 \end{center}
 
 \begin{itemize}
-    \item \textbf{Graphique de la vitesse longitudinale ($vx$)} : Sur ce premier graphique, on observe bien que l'évolution de la vitesse sur l'axe $y$, se traduit par l'application de la force longitudinale ($ F = m \cdot a $).
+    \item \textbf{graphique de la vitesse longitudinale ($vx$)} : sur ce premier graphique, on observe bien que l'évolution de la vitesse sur l'axe $y$, se traduit par l'application de la force longitudinale ($ F = m \cdot a $).
     Et nous avons donc une accélération constante, ce qui mène à une augmentation linéaire de $vx$ au fil du temps.
 
-    \item \textbf{Graphique de la vitesse latérale ($vy$)} : De même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
+    \item \textbf{graphique de la vitesse latérale ($vy$)} : de même, le graphique représentant $vy$ permet d'observer l'effet de la force latérale appliquée.
 
-    \item \textbf{Graphique du taux de lacet ({$\texttt{lacet}$})} : Et dernièrement, ce graphique-ci nous permet de voir l'évolution de l'orientation du véhicule.
+    \item \textbf{graphique du taux de lacet ({$\texttt{lacet}$})} : et dernièrement, ce graphique-ci nous permet de voir l'évolution de l'orientation du véhicule.
     Grâce à la loi de la dynamique de rotation ($I\dot{r} = \texttt{torque}$), nous constatons que l'\gls{accelerationAngulaire} est directement proportionnelle au couple appliqué, ce qui se traduit par une variation linéaire de $\texttt{lacet}$ au fil du temps.
 \end{itemize}
 
@@ -157,18 +193,18 @@ Dans l'illustration ci-dessous, l'\gls{angle_glissement} est $\alpha$.
 Premièrement, nous devons calculer les \glspl{angle_glissement}, ce qui se fait avec les formules suivantes :
 
 \begin{itemize}
-    \item Pour l'\gls{essieu} avant (\texttt{alpha\_F} dans notre code) :
+    \item pour l'\gls{essieu} avant (\texttt{alpha\_F} dans notre code) :
     $$\alpha_F = \delta - \frac{(a \dot{\theta}+V_{\xi})}{V_\eta}$$
-    \item Pour l'\gls{essieu} arrière (\texttt{alpha\_R} dans notre code) :
+    \item pour l'\gls{essieu} arrière (\texttt{alpha\_R} dans notre code) :
     $$\alpha_R = \frac{(b \dot{\theta}+V_{\xi})}{V_\eta} $$
 
-    Avec :\\
-    $\delta$ = L'angle de braquage, \\
-    $a$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
-    $b$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} arrière},\\
-    $\theta$ = La vitesse de \textbf{lacet}, \\
-    $V_\xi$ = La vitesse \textbf{latérale}, \\
-    $V_\eta$ = La vitesse \textbf{longitudinale}. \\
+    avec :\\
+    $\delta$ = l'angle de braquage, \\
+    $a$ = distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
+    $b$ = distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} arrière},\\
+    $\theta$ = la vitesse de \textbf{lacet}, \\
+    $V_\xi$ = la vitesse \textbf{latérale}, \\
+    $V_\eta$ = la vitesse \textbf{longitudinale}. \\
     \center{\text{(Formules tirées de \cite{vtech})}}
 \end{itemize}
 
@@ -202,17 +238,17 @@ Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs
 
 \textbf{\gls{raideur_longitudinale} ($C_x$) }:
 \begin{itemize}
-    \item \textbf{Raideur $C_x$ très faible}:
+    \item \textbf{raideur $C_x$ très faible}:
     \begin{itemize}[label=$\star$]
-        \item Le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
-        \item Mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
-        \item Sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
+        \item le pneu glisse beaucoup avant de générer une force de traction ou de freinage,
+        \item mauvaise adhérence, car une forte accélération ou un freinage puissant ne produira pas beaucoup de force longitudinale,
+        \item sensation de conduite similaire à celle d’une route verglacée ou de pneus très usés.
     \end{itemize}
 
-    \item \textbf{Raideur $C_x$ très élevée}:
+    \item \textbf{raideur $C_x$ très élevée}:
     \begin{itemize}[label=$\star$]
-        \item Le pneu génère immédiatement une grande force pour un petit glissement,
-        \item Améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
+        \item le pneu génère immédiatement une grande force pour un petit glissement,
+        \item améliore l’adhérence lorsqu'on accélère et lorsqu'on freine.
     \end{itemize}
 \end{itemize}
 
@@ -221,32 +257,32 @@ Voici, concrètement, les impacts qu'ont ces deux variables en fonction de leurs
 Influence la disposition à prendre les virages et la stabilité du véhicule.
 
 \begin{itemize}
-    \item \textbf{Raideur $C_y$ très faible}:
+    \item \textbf{raideur $C_y$ très faible}:
     \begin{itemize}[label=$\star$]
-        \item Le pneu dérive beaucoup avant de générer une force latérale,
-        \item En virage, le véhicule sous-vire énormément.
+        \item le pneu dérive beaucoup avant de générer une force latérale,
+        \item en virage, le véhicule sous-vire énormément.
     \end{itemize}
 
-    \item \textbf{Raideur $C_y$ très élevée}:
+    \item \textbf{raideur $C_y$ très élevée}:
     \begin{itemize}[label=$\star$]
-        \item Le pneu génère immédiatement une forte force latérale pour un petit \gls{angle_glissement},
-        \item Meilleure tenue de route, réponse précise aux virages,
-        \item Mais risque de \gls{survirage} et perte soudaine d’adhérence si les limites sont dépassées.
+        \item le pneu génère immédiatement une forte force latérale pour un petit \gls{angle_glissement},
+        \item meilleure tenue de route, réponse précise aux virages,
+        \item mais risque de \gls{survirage} et perte soudaine d’adhérence si les limites sont dépassées.
     \end{itemize}
 \end{itemize}
 
 Après avoir fixé ces valeurs, nous avons pu faire le \textbf{calcul des forces sur les pneus}, qui se font de la sorte :
 \begin{itemize}
-    \item \textbf{Forces Longitudinales} :
+    \item \textbf{forces longitudinales} :
     \begin{itemize}[label=$\star$]
-        \item \texttt{F\_x\_front} : C'est la force de traction générée par les pneus avant en fonction du glissement longitudinal (\texttt{slip}). Calculée par : $$2 \times C_x \times \texttt{slip}$$
+        \item \texttt{F\_x\_front} : c'est la force de traction générée par les pneus avant en fonction du glissement longitudinal (\texttt{slip}). Calculée par : $$2 \times C_x \times \texttt{slip}$$
 
-        \item \texttt{F\_x\_rear} : Dans ce modèle, aucune force longitudinale n'est appliquée à l'arrière.
+        \item \texttt{F\_x\_rear} : dans ce modèle, aucune force longitudinale n'est appliquée à l'arrière.
     \end{itemize}
-    \item \textbf{Forces Latérales} :
+    \item \textbf{forces latérales} :
     \begin{itemize}[label=$\star$]
-        \item \texttt{F\_y\_front} : C'est la force latérale sur l'\gls{essieu}, calculée par : $$2 \times C_y \times a_F$$
-        \item \texttt{F\_y\_rear} : C'est la force latérale sur l'\gls{essieu} arrière : $$2 \times C_y \times a_R$$
+        \item \texttt{F\_y\_front} : c'est la force latérale sur l'\gls{essieu}, calculée par : $$2 \times C_y \times a_F$$
+        \item \texttt{F\_y\_rear} : c'est la force latérale sur l'\gls{essieu} arrière : $$2 \times C_y \times a_R$$
     \end{itemize}
 \end{itemize}
 
@@ -266,11 +302,14 @@ $$r_{dot} = \frac{1}{I}(a \times (F_{x\_front} \times \sin(\delta) + F_{y\_front
 Avec $I$ qui est le \gls{moment_inertie}, que nous fixons au début de notre simulation grâce à la formule : $$I = m \times ({\frac{{a+b}}{2}})^2$$
 Et \texttt{airResCoeff} qui est le coefficient de la résistance de l'air que nous fixons également en construisant notre objet véhicule. \newline
 
-{\Large Question => Faire un rappel sur ce qu'est $a$, $b$ $\delta$ ?}
 \begin{center}
-Formules disponibles sur ~\cite{VDS_MathWorks}:
+    Formules disponibles sur \cite{VDS_MathWorks}:
 \end{center}
 
+Pour rappel, nous avons :\\
+$\delta$ = l'angle de braquage, \\
+$a$ = distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
+$b$ = distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} arrière},\\
 
 Ce qui se traduit dans notre code par :
 
@@ -323,17 +362,17 @@ Une valeur de \texttt{slip} dynamique évolue ainsi au fil du temps pour atteind
 Pour introduire le dynamisme de cette variable, nous devons introduire de nouvelles variables :
 
 \begin{itemize}
-\item \texttt{initSlip} : La valeur initiale du slip,
+\item \texttt{initSlip} : la valeur initiale du slip,
 
-\item \texttt{initSlip\_tau} : La constante de temps qui va déterminer à quelle rapidité \texttt{slip} évolue vers sa valeur cible
+\item \texttt{initSlip\_tau} : la constante de temps qui va déterminer à quelle rapidité \texttt{slip} évolue vers sa valeur cible
 
-\item \texttt{initS\_desired} : La valeur cible du slip que le système cherche à atteindre.
+\item \texttt{initS\_desired} : la valeur cible du slip que le système cherche à atteindre.
 
 \end{itemize}
 
 Ces nouvelles variables vont donc nous aider à définir le comportement du \texttt{slip} sur une durée.
 Une constante de temps \texttt{initSlip\_tau} faible fait que \texttt{slip} atteindra sa valeur cible rapidement, et au contraire une constante de temps élevée induit une réponse plus lente.
-Avec toutes ces nouvelles données, nous pouvons donc modéliser la dynamique du \texttt{slip} par une équation du premier ordre :
+Avec toutes ces nouvelles données, nous pouvons ainsi modéliser la dynamique du \texttt{slip} par une équation du premier ordre :
 $$\dot{\texttt{slip}} = \frac{s_{\texttt{desired}} - \texttt{slip}}{\texttt{slip}_{\texttt{desired}}}$$
 
 Cette équation traduit donc le fait que le taux de variation du \texttt{slip} $(\dot{\texttt{slip}})$, est proportionnel à l'écart entre la valeur désirée et la valeur actuelle.
@@ -350,7 +389,7 @@ void updateBicycleEtape3(double dt, double delta) {
 
 Ici, on remarque dans la fonction que le paramètre \texttt{slip} n'est plus donné en argument, il est maintenant un argument de notre classe, et est initialisé à une valeur quelconque, puis sa valeur est calculée et change dynamiquement.
 
-\subsection{Limites des pneumatiques}
+\subsection{Limites des pneumatiques}\label{subsec:limites-des-pneumatiques}
 
 Grâce aux parties précédentes, nous pouvons donc déterminer la trajectoire d'une voiture, mais nous ne pouvons pas encore représenter et visualiser les phénomènes avec lesquels la charge maximale des pneumatiques a été dépassée, ce qui mène ensuite à un \gls{sous_virage} ou \gls{survirage}.
 Nous allons ainsi intégrer les limites physiques des pneumatiques à notre simulation pour représenter la force latérale maximale qu'un pneu peut générer avant de perdre son adhérence.
@@ -363,12 +402,12 @@ Ces charges sont obtenues à partir de la répartition du poids du véhicule.
 Nous utilisons donc les formules suivantes :
 
 \begin{itemize}
-\item \textbf{Essieu avant} :
+\item \textbf{essieu avant} :
 $$F_{z\_front} = m \times g \times \frac{b}{a+b}$$
-\item \textbf{Essieu arrière} :
+\item \textbf{essieu arrière} :
 $$F_{z\_rear} = m \times g \times \frac{b}{a+b}$$
 
-Avec :\\
+avec :\\
 $a$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
 $b$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} arrière},\\
 $m$ = La masse du véhicule, \\
