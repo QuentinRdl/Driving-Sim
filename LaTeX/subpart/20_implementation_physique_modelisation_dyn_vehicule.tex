@@ -44,7 +44,7 @@ où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ le lacet, 
 
 Cependant, comme notre simulateur est en temps réel, résoudre ces équations à chaque itération demanderait de nombreux \gls{cyclesCPU}, alors pour préserver leur usage, nous utilisons une méthode numérique, celle qui est la plus simple et efficace : la \textbf{\gls{euler_explicite} explicite}.
 
-Cette méthode repose sur le fait que la dérivée d'une \gls{derivee} $x$ notée $\dot{x}$ reste constante sur un petit intervalle de temps $dt$.
+Cette méthode repose sur le fait qu'une \gls{derivee} $x$ notée $\dot{x}$ reste constante sur un petit intervalle de temps $dt$.
 Donc, on peut approximer son évolution par :
 $$x(t+dt) \approx x(t) + \dot{x}(t) \times dt$$
 Dans la première implémentation de notre simulateur, nous utilisons ainsi cette formule pour mettre à jour les vitesses et l'orientation de la voiture :
@@ -405,7 +405,7 @@ Nous utilisons donc les formules suivantes :
 \item \textbf{essieu avant} :
 $$F_{z\_front} = m \times g \times \frac{b}{a+b}$$
 \item \textbf{essieu arrière} :
-$$F_{z\_rear} = m \times g \times \frac{b}{a+b}$$
+$$F_{z\_rear} = m \times g \times \frac{a}{a+b}$$
 
 avec :\\
 $a$ = Distance entre le \textbf{\gls{centre_gravite}} et l'\textbf{\gls{essieu} avant},\\
