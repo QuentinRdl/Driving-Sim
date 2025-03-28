@@ -1,6 +1,6 @@
-\section{L'implémentation de la physique / Modélisation d'un système de \gls{dynamique_vehicule}}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
+\section{L'implémentation de la physique}\label{sec:l'implementation-de-la-physique-/-modelisation-d'un-systeme-de-dynamique-de-vehicule}
 \subsection{Introduction}\label{subsec:introduction}
-Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter des phénomènes physiques venant des sciences de l'ingénieur.
+Pour représenter la relation entre un véhicule et la route d'une manière se rapprochant de la réalité, nous avons donc dû implémenter différents phénomènes physiques.
 De plus, comme l'étude et la représentation d'un système de \gls{dynamique_vehicule} est une tâche plutôt difficile, nous avons décidé de procéder de manière itérative.
 Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, pour ensuite encore itérer sur ce système, etc.
 Ceci nous a mené à un plan en 4 étapes.
@@ -14,7 +14,6 @@ De ce qui est de l'implémentation de notre modèle, nous avons donc commencé p
 Ainsi, un système ou corps quelconque ne peut pas se déplacer à moins qu'une force ne lui soit appliquée.
 Et c'est pareil pour qu'un système passe d'un état de mouvement à un état arrêté.
 Dans notre implémentation, cette loi est traduite par le fait que si aucune force n'agit sur le véhicule, alors ses vitesses vont rester nulles (ou constantes si le véhicule est initialisé avec une vitesse).
-Pourquoi et comment avons-nous implémenté cette loi ?
 Rappelons d'abord que l'équation fondamentale de la dynamique est donnée par :
 $$\vec{F} = m \ .\  \vec{a}$$
 Avec :
@@ -72,7 +71,7 @@ $$I\dot{r}(t) = \texttt{torque}$$
 où $I$ est le \gls{moment_inertie} de l'objet.
 En isolant $\dot{r}(t)$, on obtient :
 $$\dot{r}(t)= \frac{\texttt{torque}}{I}$$
-Nous calculons cette valeur via un appel à la fonction \texttt{computeYawAcceleration(torque);} où cette relation est implémentée.
+Nous calculons cette valeur \textit{via} un appel à la fonction \texttt{computeYawAcceleration(torque);} où cette relation est implémentée.
 
 Grâce à cela, l'état de notre véhicule est mis à jour en obtenant une approximation de la solution des \glspl{equationDifferentielle}, plutôt que de les résoudre, ce qui prendrait plus de temps de calcul.
 Cependant, la précision de la \gls{euler_explicite} dépend forcément de la taille du pas qu'on lui donne ($dt$), et c'est la même chose pour des systèmes plus complexes.
@@ -423,9 +422,9 @@ Une valeur fixée à $0.9$, représentera ainsi une route mouillée, à $0.7$ un
 Plus on monte sa valeur, plus le véhicule arrive à générer une force d'adhérence avec le revêtement, et contrairement, plus sa valeur est faible, moins d'adhérence est générée.
 
 \begin{itemize}
-    \item \textbf{Essieu avant} :
+    \item \textbf{essieu avant} :
     $$F_{y\_\texttt{max\_front}}= \mu_{\texttt{front}} \times F_{z\_\texttt{front}}$$
-    \item \textbf{Essieu arrière} :
+    \item \textbf{essieu arrière} :
     $$F_{y\_\texttt{max\_rear}} = \mu_{\texttt{rear}} \times F_{z\_\texttt{rear}}$$
 \end{itemize}
 
@@ -440,19 +439,19 @@ Cependant, à ce moment-ci, elles sont linéaires et, pour les différencier des
 Maintenant, pour tenir compte de l'adhérence limitée, nous définissons deux rapports :
 
 \begin{align}
-    \texttt{ratio\_front} &= \frac{\texttt{F\_y\_front}}{\texttt{F\_y\_front\_max}} \\
-    \texttt{ratio\_rear} &= \frac{\texttt{F\_y\_rear}}{\texttt{F\_y\_rear\_max}}
+    \texttt{quotient\_front} &= \frac{\texttt{F\_y\_front}}{\texttt{F\_y\_front\_max}} \\
+    \texttt{quotient\_rear} &= \frac{\texttt{F\_y\_rear}}{\texttt{F\_y\_rear\_max}}
 \end{align}
 
 Ensuite, nous pouvons utiliser ce rapport pour modéliser la saturation.
 Ainsi, la force latérale effective est donnée par :
 
 \begin{itemize}
-    \item \texttt{F\_y\_front} : $$\texttt{F\_y\_max\_front} \times \tanh(\texttt{ratio\_front})$$
-    \item \texttt{F\_y\_rear} : $$\texttt{F\_y\_max\_rear} \times \tanh(\texttt{ratio\_rear})$$
+    \item \texttt{F\_y\_front} : $$\texttt{F\_y\_max\_front} \times \tanh(\texttt{quotient\_front})$$
+    \item \texttt{F\_y\_rear} : $$\texttt{F\_y\_max\_rear} \times \tanh(\texttt{quotient\_rear})$$
 \end{itemize}
 
-Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de ratios, et elle tend vers une valeur asymptomatique $(1)$ lorsque le ratio augmente, ce qui limite la force latérale.
+Ici, nous utilisons la fonction $\tanh$, car elle se comporte de manière linéaire pour des faibles valeurs de quotient, et elle tend vers une valeur asymptomatique $(1)$ lorsque le quotient augmente, ce qui limite la force latérale.
 À terme, la force d'adhérence générée par le pneu ne peut pas dépasser sa limite.
 Grâce à ces nouvelles limites, nous pouvons donc simuler la saturation des pneumatiques, ce qui nous permet d'éviter d'avoir des forces latérales irréalistes dans notre simulation.
 Mais également de reproduire le phénomène de \gls{survirage} et de \gls{sous_virage}, en effet quand la force latérale requise dépasse la limite d'adhérence, le véhicule ne peut pas suivre la trajectoire désirée.
@@ -488,10 +487,10 @@ Dans notre cas, ces dérivées
 représentent les variations des états dynamiques du véhicule qui comprennent :
 
 \begin{itemize}
-    \item La position $(x,y)$,
-    \item L'orientation $(\theta)$,
-    \item Les vitesses longitudinales et latérales $(v_x, v_y)$,
-    \item La \gls{vitesseAngulaire} $(\omega)$.
+    \item la position $(x,y)$,
+    \item l'orientation $(\theta)$,
+    \item les vitesses longitudinales et latérales $(v_x, v_y)$,
+    \item la \gls{vitesseAngulaire} $(\omega)$.
 \end{itemize}
 
 Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$, ce qui restaure la stabilité et la fidélité du modèle.
@@ -503,5 +502,5 @@ Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce à not
 Pour terminer, comme nous avons procédé de manière itérative, les phénomènes physiques expliqués par exemple dans la partie~\ref{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}, ne sont plus retrouvables dans le code final de la manière dont ils étaient décrits, car ceux-ci ont été améliorés.
 Nous avons donc fait un fichier sur lequel se trouve l'ensemble de l'implémentation de la physique étape par étape.
 Vous pouvez le retrouver dans le fichier \texttt{src/oldVehicule/oldVehicle.cpp}, dans notre archive et l'implémentation finale de notre physique dans \texttt{src/vehicle.cpp}.
-De plus, pour lancer la génération de tracés des différentes données de notre implémentation, il faut lancer l'exécutable \texttt{build/DrivingSim\_Plots} \texbf{\underline{avec} les permissions administrateur}, ce qui générera les graphiques du scénario qui est décrit dans le fichier \texttt{srcPlots/vehicle.cpp}.
+De plus, pour lancer la génération de tracés des différentes données de notre implémentation, il faut lancer l'exécutable \texttt{build/DrivingSim\_Plots} \texbf{avec les permissions administrateur}, ce qui générera les graphiques du scénario qui est décrit dans le fichier \texttt{srcPlots/vehicle.cpp}.
 Les graphiques générés seront trouvable dans le dossier \texttt{Plots/}.
