@@ -97,7 +97,7 @@ void Game::update() {
 
 void Game::updateCircuit() const {
     circuit->resetSegments();
-    circuit->setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT, { 500, 40 });
+    circuit->setOrigin(ResourceType::Value::SEGMENT_SMALL_STRAIGHT, { 0, -45 });
     circuit->join(ResourceType::Value::SEGMENT_S_TURN);
     circuit->join(ResourceType::Value::SEGMENT_MEDIUM_TURN);
 }

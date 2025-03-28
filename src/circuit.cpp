@@ -88,7 +88,7 @@ void Circuit::renderOn(sf::RenderWindow& window) const {
     for (const auto& seg : segments) {
         window.draw(seg.texture.sprite);
     }
-    if (game->getDebugMode().isEnabled()) {
+    if (game->getDebugMode().isEnabled() && false) {
         for (const auto& segment : segments) {
             constexpr float radius = 10.f;
             sf::CircleShape redCirc = createCircle(sf::Color::Red, radius);

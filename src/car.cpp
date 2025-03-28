@@ -25,7 +25,7 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
         0.0f, 0.0f, // x, y
         0.0f, // psi (initHeading)
         initSlip, initSlip_tau, initS_desired, // slip, slip_tau, s_desired
-        0.9f, 0.9f, // mu_front, mu_rear: coefficients of friction
+        .7f, 0.7f, // mu_front, mu_rear: coefficients of friction TODO 10 pour grip au max
         9.81f // g: gravity
         );
     this->vehicle = std::make_unique<Vehicle>(vehicle);
@@ -46,7 +46,7 @@ Car::Car(const Game* game): game(game), currentDelta(0.0f) {
 void Car::handleInput(const float dt) {
     constexpr float throttleRate      = 0.01f;     // Taux d'incrémentation par seconde
     constexpr float throttleDecayRate = 0.005f;    // Taux de décroissance par seconde
-    constexpr float steeringRate      = 0.15f;     // Taux de changement pour le volant
+    constexpr float steeringRate      = 0.30f;     // Taux de changement pour le volant
 
     const float throttleIncrement = throttleRate * dt;
     const float throttleDecay = throttleDecayRate * dt;
@@ -62,7 +62,7 @@ void Car::handleInput(const float dt) {
     }
 
     // --- Gestion du volant ---
-    constexpr float maxDelta = 0.3f;         // Angle maximal pour le volant
+    constexpr float maxDelta = 0.4f;         // Angle maximal pour le volant
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         currentDelta -= deltaIncrementScaled;
         if (currentDelta < -maxDelta)
