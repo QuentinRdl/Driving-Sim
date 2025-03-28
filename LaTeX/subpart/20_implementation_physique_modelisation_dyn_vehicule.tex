@@ -5,7 +5,7 @@ De plus, comme l'étude et la représentation d'un système de \gls{dynamique_ve
 Tout d'abord, le but était d'avoir une implémentation très basique d'un système de dynamique, puis une fois celui-ci fonctionnel, d'itérer ce système pour intégrer des phénomènes plus délicats à implémenter, pour ensuite encore itérer sur ce système, etc.
 Ceci nous a mené à un plan en 4 étapes.
 Premièrement, implémenter les lois de Newton pour la dynamique du véhicule, ensuite implémenter un \gls{modele_bicycle} simplifié, pour ensuite pouvoir représenter les forces sur les pneus et modéliser les glissements, et finalement pouvoir simuler les limites du pneumatique.
-Nous allons maintenant vous détailler les principes physiques et l'implémentation que nous avons fournis pour chacune de ces étapes :
+Nous allons maintenant vous détailler les principes physiques et l'implémentation que nous avons fournis pour chacune de ces étapes.
 
 \subsection{Implémentation des lois de Newton pour la dynamique du véhicule}\label{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}
 
@@ -37,7 +37,7 @@ void computeTranslation(const double Fx, const double Fy, double& ax, double& ay
 Ici si $F_x = 0$ et $F_y = 0$, alors $a_x$ et $a_y$, s'annulent, ce qui signifie que les vitesses restent constantes conformément au principe d'inertie.
 Cependant, dès qu'on applique une force sur un objet, on génère une accélération.
 Cette accélération va ainsi modifier la vitesse de l'objet, et, comme la position est liée à la vitesse de l'objet, alors, elle évoluera dans le temps.
-Ce processus est décrit par des \glspl{equationDifferentielle}.
+Ce processus est décrit par des \glspl{equationDifferentielle}\textsuperscript{*}.
 Dans notre cas, nous aurons :
 $$\frac{d v_x}{dt} = a_x, \quad \frac{d v_y}{dt} = a_y, \quad \frac{d r}{dt} = r_{\dot{}}$$
 où $v_x$ et $v_y$ représentent les composantes de la vitesse et $r$ le lacet, l'orientation, du véhicule.
@@ -80,7 +80,7 @@ Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la 
 C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
 Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation.
-Celle-ci s'étend sur une durée de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\glspl{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
+Celle-ci s'étend sur une durée de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\glspl{gnuplot}\textsuperscript{*}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
 Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]

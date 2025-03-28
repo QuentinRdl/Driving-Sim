@@ -3,7 +3,7 @@
 \gls{sfml} (\textit{Simple and Fast Multimedia Library}) est une bibliothèque \gls{cpp} qui permet de créer des applications multimédia.
 Elle est particulièrement adaptée pour le développement de jeux vidéo et d'applications graphiques.
 Elle fournit des fonctionnalités pour la gestion des fenêtres, le rendu graphique, la gestion des événements, le son et la communication réseau.
-En interne, elle s'appuie sur \gls{opengl}, une API plus bas niveau, ce qui permet d'obtenir d'excellentes performances graphiques tout en restant simple d'utilisation.
+En interne, elle s'appuie sur \gls{opengl}, une bibliothèque plus bas niveau, ce qui permet d'obtenir d'excellentes performances graphiques tout en restant simple d'utilisation.
 
 \gls{sfml} a été choisie pour plusieurs raisons :
 \begin{itemize}
@@ -104,9 +104,9 @@ float updateAndGetMedian(const float dt) {
 La \gls{complexity} de la méthode \texttt{updateAndGetMedian(const float dt)} est en \( O(n) \).
 Voici le détail du calcul :
 \begin{itemize}
-    \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la \gls{std_deque}.
-    \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la \gls{std_deque}.
-    \item \texttt{\gls{std_vector} tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector} pour copier la \gls{std_deque} dans un conteneur du type \texttt{\gls{std_vector}}.
+    \item \texttt{push\_back(dt)} : \( O(1) \)\cite{cpp_reference_push_back} pour ajouter un élément à la fin de la \texttt{\gls{std_deque}}.
+    \item \texttt{pop\_front()} : \( O(1) \)\cite{cpp_reference_pop_front} pour retirer le premier élément de la \texttt{\gls{std_deque}}.
+    \item \texttt{\gls{std_vector} tmp(dtBuffer.begin(), dtBuffer.end())} : \( O(n) \)\cite{cpp_reference_vector} pour copier la \texttt{\gls{std_deque}} dans un conteneur du type \texttt{\gls{std_vector}}.
     \item \texttt{\gls{std_nth_element}(tmp.begin(), mid, tmp.end())} : \( O(n) \)\cite{cpp_reference_std_nth_element} pour trier le conteneur jusqu'à l'élément médian.
 \end{itemize}
 
@@ -145,7 +145,7 @@ Pour cela, nous avons généré un fichier \gls{cpp} contenant les données bina
 \begin{lstlisting}[style=BashStyle,label={lst:generation_dejavusansmonottf_h}]
 xxd -i DejaVuSansMono.ttf > dejavu_sans_mono_ttf.cpp
 \end{lstlisting}
-Cette commande (\gls{xxd}) convertit le fichier binaire de la police en un tableau d'octets de style C que nous pouvons inclure directement dans notre projet.
+Cette commande (\texttt{\gls{xxd}}) convertit le fichier binaire de la police en un tableau d'octets de style C que nous pouvons inclure directement dans notre projet.
 Le fichier généré contient deux éléments :
 \begin{itemize}
     \item Un tableau d'octets contenant les données binaires de la police.
@@ -160,7 +160,7 @@ bool Font::loadFromMemory(const void* data, std::size_t sizeInBytes);
 \end{lstlisting}
 
 Cette fonction prend en paramètre un pointeur vers le tableau contenant les données binaires de la police et la taille de ce tableau.
-Il est important de noter que le tableau attendu est de type \gls{cstyle_array}, c'est-à-dire qu'il s'agit d'un simple bloc de mémoire brut, et non d'un objet C++ encapsulé.
+Il est important de noter que le tableau attendu est de type \gls{cstyle_array}, c'est-à-dire qu'il s'agit d'un simple bloc de mémoire brut, et non d'un objet \gls{cpp} encapsulé.
 
 \paragraph{Gestionnaire de ressources}
 Nous avons fait le choix de séparer la gestion de ces deux types de ressources en deux classes différentes étant donné leurs utilisations différentes.
@@ -218,7 +218,7 @@ Lorsque l'on ajoute un nouveau segment \textit{via} la méthode \texttt{join()},
     Afin de déterminer la position finale du nouveau segment, un décalage est calculé à partir de sa position initiale, selon les étapes suivantes :
     \begin{itemize}
         \item On commence par récupérer la position globale du \textit{\gls{sprite}} grâce à la méthode \texttt{spr->getGlobalBounds().getPosition()}.
-        \item Ce point est ensuite ajusté en y ajoutant la valeur de l'attribut \texttt{road\_texture.point2} (après application du zoom), permettant ainsi d'estimer la position finale du segment en l'absence de rotation.
+        \item Ce point est ensuite ajusté en y ajoutant la valeur de l'attribut \\\texttt{road\_texture.point2} (après application du zoom), permettant ainsi d'estimer la position finale du segment en l'absence de rotation.
         \item Enfin, la méthode \texttt{rotatePoint()} est utilisée pour faire pivoter ce point autour du point de raccord initial selon l'angle spécifié.
         Le résultat obtenu, désigné par la variable locale \texttt{rotatedPoint}, définit à la fois l'orientation et la position finale du segment après rotation.
     \end{itemize}
@@ -259,13 +259,12 @@ Il est possible de l'activer ou de la désactiver à l'aide de la touche \texttt
 Cette classe contient un attribut \texttt{\gls{std_vector}<sf::Text>}\cite{cpp_reference_vector} qui contient les textes à afficher dans la \texttt{\gls{hud} \glslink{view}{View}}.
 
 On ajoute un texte à la liste en utilisant la méthode \texttt{addLine()} de cette classe \texttt{DebugMode} qui prend en paramètre le texte à afficher, la position et la couleur du texte.
-Cette méthode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible lorsque le fond est trop chargé.
+Cette méthode rajoute aussi un fond semi-transparent au texte pour le rendre plus lisible.
 
 \begin{lstlisting}[style=CStyle, label={lst:code_addline}]
 void DebugMode::addLine(const std::string &content, const unsigned int size, const sf::Color &color) {
     sf::Text text;
-    text.setFont(font);
-    text.setCharacterSize(size);
+    text.setFont(font); text.setCharacterSize(size);
     text.setFillColor(color);
     text.setString(content);
 
@@ -353,7 +352,7 @@ Ce système s'appuie sur le mécanisme d'événements de la bibliothèque \gls{s
 Pour ce qui est du contrôle du véhicule, les interactions sont gérées par la méthode \texttt{Car::handleInput(const float dt)}, appelé à chaque iteration de l'application.
 Son but est de vérifier l'état des touches de direction (gauche, droite, haut, bas) et d'ajuster la vitesse et l'angle du véhicule en conséquence.
 
-On peut noter qu'elle prends en paramètre le \gls{delta_temps} pour éviter un biais liés aux \gls{FPS}.
+On peut noter qu'elle prends en paramètre le \gls{delta_temps} pour éviter un biais liés aux \gls{fps}.
 
 Ce système d'événements, en tirant parti des fonctionnalités offertes par \gls{sfml}, assure une interactivité réactive et une expérience utilisateur intuitive.
 
@@ -363,7 +362,7 @@ Dans le simulateur, on peut distinguer deux \glspl{view} :
 \begin{itemize}
     \item \textbf{\texttt{Game \glslink{view}{View}}} : C'est la \gls{view} principale où le circuit et le véhicule sont affichés.
     Elle est centrée sur le véhicule, offrant une perspective immersive de la conduite.
-    \item \textbf{\texttt{\gls{hud} \glslink{view}{View}}} : Cette \gls{view} affiche des informations supplémentaires, telles que le compteur de FPS et les données de débogage (voir section~\ref{subsubsec:visualisation-des-informations-dynamiques}).
+    \item \textbf{\texttt{\gls{hud} \glslink{view}{View}}} : Cette \gls{view} affiche des informations supplémentaires, telles que le compteur de \gls{fps} et les données de débogage (voir section~\ref{subsubsec:visualisation-des-informations-dynamiques}).
 \end{itemize}
 
 C'est ce qui nous permet de suivre le véhicule avec la \og caméra \fg{} sans que cela n'affecte les informations affichées dans la \gls{hud} \glslink{view}{View}.
