@@ -191,13 +191,13 @@
 
 \newglossaryentry{opengl}{
     name={OpenGL},
-    description={API de rendu graphique 2D et 3D, utilisée par \gls{sfml} pour le rendu graphique},
+    description={Bibliothèque de rendu graphique 2D et 3D, utilisée par \gls{sfml} pour le rendu graphique},
     first={OpenGL\textsuperscript{*}}
 }
 
 \newglossaryentry{hud}{
     name={HUD},
-    description={Système d’affichage superposé sur l’écran, utilisé ici pour présenter des informations telles que le compteur de \gls{fps} et les données de débogage},
+    description={\og\textit{Heads Up Display}\fg{} en anglais, un système d’affichage superposé sur l’écran, utilisé ici pour présenter des informations telles que le compteur de \gls{fps} et les données de débogage},
     first={HUD\textsuperscript{*}}
 }
 
@@ -258,7 +258,7 @@
 
 \newglossaryentry{stl}{
     name={bibliothèque standard},
-    description={\og Standard Template Library \fg{}, bibliothèque standard de \gls{cpp} fournissant des conteneurs, algorithmes et itérateurs},
+    description={\og \textit{Standard Template Library} \fg{}, bibliothèque standard de \gls{cpp} fournissant des conteneurs, algorithmes et itérateurs},
     first={bibliothèque standard\textsuperscript{*}},
 }
 
@@ -271,8 +271,7 @@
 \newglossaryentry{git_branches}{
     name={branche},
     plural={branches},
-    description={Branche de développement dans \gls{git}, permettant de travailler sur différentes fonctionnalités ou corrections de bugs sans affecter la branche principale},
-    first={branche\textsuperscript{*}},
+    description={Branche de développement dans \gls{git}, permettant de travailler sur différentes fonctionnalités ou corrections de \textit{bugs} sans affecter la branche principale},
 }
 
 \newglossaryentry{stackoverflow}{
@@ -313,26 +312,26 @@
 }
 
 \newglossaryentry{googletest}{
-    name={Google Test},
-    description={Framework de test unitaire pour \gls{cpp}, utilisé pour écrire et exécuter des tests automatisés},
-    first={Google Test\textsuperscript{*}},
+    name={GoogleTest},
+    description={\textit{Framework} de test unitaire pour \gls{cpp}, utilisé pour écrire et exécuter des tests automatisés},
+    first={GoogleTest\textsuperscript{*}},
 }
 
 \newglossaryentry{view}{
     name={vue},
     plural={vues},
-    description={View, en anglais. Dans le contexte de l'interface graphique, cela fait référence à la manière dont les éléments sont affichés à l'utilisateur},
+    description={\textit{View}, en anglais. Dans le contexte de l'interface graphique, cela fait référence à la manière dont les éléments sont affichés à l'utilisateur},
 }
 
 \newglossaryentry{multi_threading}{
     name={Multi-threading},
-    description={Technique de programmation permettant l'exécution concurrente de plusieurs threads (unités d'exécution) au sein d'un même processus, améliorant ainsi la réactivité et la performance des applications},
+    description={Technique de programmation permettant l'exécution concurrente de plusieurs \textit{threads} (unités d'exécution) au sein d'un même processus, améliorant ainsi la réactivité et la performance des applications},
     first={Multi-threading\textsuperscript{*}},
 }
 
 \newglossaryentry{fps}{
     name={FPS},
-    description={\og Frames Per Second \fg{}, mesure du nombre d'images affichées par seconde dans une animation ou un jeu vidéo, indiquant la fluidité de l'affichage},
+    description={\og \textit{Frames Per Second} \fg{}, mesure du nombre d'images affichées par seconde dans une animation ou un jeu vidéo, indiquant la fluidité de l'affichage},
     first={FPS\textsuperscript{*}},
 }
 
@@ -362,7 +361,7 @@
 
 \newglossaryentry{csharp} {
     name={C\#},
-    description={Langage de programmation orienté objet développé par Microsoft, utilisé pour le développement d'applications sur la plateforme .NET},
+    description={Langage de programmation orienté objet développé par Microsoft, utilisé pour le développement d'applications sur la plateforme \og .NET \fg{}},
     first={C\#\textsuperscript{*}},
 }
 
@@ -440,8 +439,8 @@
 \def\UrlBreaks{\do\/\do-}
 
 \renewcommand\thesection{\Roman{section}} % Numérotation des sections en chiffres romains
-\renewcommand\thesubsection{\thesection. \arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
-\renewcommand\thesubsubsection{\thesubsection. \alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules
+\renewcommand\thesubsection{\thesection.\arabic{subsection}} % Numérotation des sous-sections en chiffres arabes
+\renewcommand\thesubsubsection{\thesubsection.\alph{subsubsection}} % Numérotation des sous-sous-sections en lettres minuscules
 \setcounter{secnumdepth}{3} % Activer la numérotation jusqu'aux sous-sous-sections
 
 % Pour gerer l'espace dans la table of contents

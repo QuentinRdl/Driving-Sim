@@ -341,11 +341,11 @@ L'affichage de cette trajectoire prédictive est géré en temps réel grâce à
 \subsubsection{Gestion des intéractions entrée-sortie}\label{subsubsec:gestion-des-interactions-entree-sortie}
 \paragraph{Événements globaux}
 La gestion des interactions globale à l'application se fait \textit{via} la méthode \texttt{manageEvents()} de la classe \texttt{Game}.
-Ce système s'appuie sur le mécanisme d'événements de la bibliothèque \gls{sfml}, qui capture et gère de manière asynchrone toutes les interactions (clavier, souris, redimensionnement de fenêtre, etc.).
+Ce système s'appuie sur le mécanisme d'événements de la bibliothèque \gls{sfml}, qui capture et gère de manière asynchrone toutes les interactions (clavier, souris, redimensionnement de fenêtre, etc.)
 \gls{sfml} place les événements dans une file d'attente, permettant à l'application de les traiter un par un afin d'assurer une réponse immédiate aux actions de l'utilisateur.
 
 \begin{itemize}
-    \item \textbf{Clavier} : La touche F active/désactive le compteur de FPS, F3 bascule le mode Debug, F5 réinitialise la position du véhicule et ESC ferme l'application.
+    \item \textbf{Clavier} : La touche F active/désactive le compteur de \gls{fps}, F3 bascule le mode Debug, F5 réinitialise la position du véhicule et ESC ferme l'application.
     \item \textbf{Souris} : Le défilement de la molette permet d'ajuster le niveau de zoom sur la \texttt{Game \glslink{view}{View}}, offrant ainsi à l'utilisateur la possibilité de mieux suivre le véhicule ou d'obtenir une vue d'ensemble du circuit.
 \end{itemize}
 

@@ -80,7 +80,7 @@ Dans ces cas-ci, cette méthode produira alors des erreurs significatives et la 
 C'est pourquoi, plus tard dans l'implémentation de notre physique, nous avons choisi d'implémenter une méthode plus fiable dans ces cas-ci.
 
 Ensuite, pour valider le bon fonctionnement des principes physiques que nous avons décrits et implémentés, nous avons réalisé une simulation.
-Celle-ci s'étend sur une durée de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\gls{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
+Celle-ci s'étend sur une durée de 10 secondes (avec un pas de 0,1 s), et avons utilisé \textbf{\glspl{gnuplot}} pour visualiser les résultats obtenus et observer si le résultat obtenu est celui attendu.
 Voici la manière dont nous initialisons notre objet voiture, et indiquons la démarche à suivre pour avoir une simulation sur 10 secondes :
 
 \begin{lstlisting}[style=CStyle,label={lst:void_simulation_etape1}]
@@ -497,7 +497,7 @@ représentent les variations des états dynamiques du véhicule qui comprennent 
 Ce processus nous permet d'obtenir une estimation correcte, réduisant l'erreur d'approximation de $O(h^2)$ à $O(h^4)$, ce qui restaure la stabilité et la fidélité du modèle.
 Avec cette étape du modèle, qui est la dernière, nous pouvons donc observer différentes trajectoires, et en particulier, nous pouvons bien observer le phénomène de \gls{sous_virage}.
 
-Après avoir conçu une physique qui répondait aux besoins de notre simulateur, nous avons décidé d'utiliser \gls{Gnuplot} pour pouvoir afficher les données produites par notre modèle, et ainsi pouvoir visualiser les réactions des différents paramètres utilisés dans notre simulation.
+Après avoir conçu une physique qui répondait aux besoins de notre simulateur, nous avons décidé d'utiliser \glspl{Gnuplot} pour pouvoir afficher les données produites par notre modèle, et ainsi pouvoir visualiser les réactions des différents paramètres utilisés dans notre simulation.
 Tout ceci est géré dans notre fichier \texttt{plotting.cpp}, et gr�ce à notre classe \texttt{vehicle.cpp}, et sa fonction \texttt{void Vehicle::plot();}.
 
 Pour terminer, comme nous avons procédé de manière itérative, les phénomènes physiques expliqués par exemple dans la partie~\ref{subsec:implementation-des-lois-de-newton-pour-la-dynamique-du-vehicule}, ne sont plus retrouvables dans le code final de la manière dont ils étaient décrits, car ceux-ci ont été améliorés.
