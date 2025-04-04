@@ -7,4 +7,6 @@
 
 constexpr float METER_TO_PIXEL = 10.0f; // 1 meter = 100 pixels
 
+constexpr float M_PIf = 3.1415927f;
+
 #endif //CONSTANTS_H
