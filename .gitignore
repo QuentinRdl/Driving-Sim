@@ -35,5 +35,7 @@
 .idea/
 
 cmake-build-*
-prepare_to_md*
+build/
 out/
+
+CMakeUserPresets.json
